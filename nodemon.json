@@ -1,0 +1,14 @@
+{
+  "ignore": ["node_modules", "dist"],
+  "ext": "js,json,hbs",
+  "execMap": {
+    "js": "node --inspect"
+  },
+  "events": {
+    "start": "echo 'Nodemon started'",
+    "restart": "echo 'Nodemon restarted'"
+  },
+  "env": {
+    "NODE_ENV": "development"
+  }
+}
