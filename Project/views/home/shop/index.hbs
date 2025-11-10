@@ -162,10 +162,11 @@
                             </div>
                         </div>
                     </div>
- <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
+                    {{#each productList}}
+                     <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
       <div class="product-item bg-light mb-4">
         <div class="product-img position-relative overflow-hidden">
-          <img class="img-fluid w-100" src="img/Air-Jordan-1-Low-Golf-White-Aegean-Storm.jpg" alt="" />
+          <img class="img-fluid w-100" src="{{this.img}}" alt="" />
           <div class="product-action">
             <a class="btn btn-outline-dark btn-square" href=""><i
                 class="fa fa-shopping-cart"
@@ -181,162 +182,21 @@
               ></i></a>
           </div>
         </div>
-        <div class="text-center py-4">
-          <a class="h6 text-decoration-none text-truncate" href="">Air Jordan 1 Low Golf White Aegean Storm</a>
+        <div class="card-item text-center py-4">
+          <a class="h6 text-decoration-none text-truncate" href="">{{this.name}}</a>
           <div class="d-flex align-items-center justify-content-center mt-2">
-            <h5>$123.00</h5><h6 class="text-muted ml-2"><del>$153.00</del></h6>
+            <h5>${{this.price}}</h5><h6 class="text-muted ml-2"><del>${{this.sale}}</del></h6>
           </div>
           <div class="d-flex align-items-center justify-content-center mb-1">
+            {{#times this.rate}}
             <small class="fa fa-star text-primary mr-1"></small>
-            <small class="fa fa-star text-primary mr-1"></small>
-            <small class="fa fa-star text-primary mr-1"></small>
-            <small class="fa fa-star text-primary mr-1"></small>
-            <small class="fa fa-star text-primary mr-1"></small>
-            <small>(99)</small>
+            {{/times}}
+            <small>({{this.reviews}})</small>
           </div>
         </div>
       </div>
-    </div>
-    <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-      <div class="product-item bg-light mb-4">
-        <div class="product-img position-relative overflow-hidden">
-          <img class="img-fluid w-100" src="img/Air-Jordan-1-Low-TD-Cleat-Panda.jpg" alt="" />
-          <div class="product-action">
-            <a class="btn btn-outline-dark btn-square" href=""><i
-                class="fa fa-shopping-cart"
-              ></i></a>
-            <a class="btn btn-outline-dark btn-square" href=""><i
-                class="far fa-heart"
-              ></i></a>
-            <a class="btn btn-outline-dark btn-square" href=""><i
-                class="fa fa-sync-alt"
-              ></i></a>
-            <a class="btn btn-outline-dark btn-square" href=""><i
-                class="fa fa-search"
-              ></i></a>
-          </div>
-        </div>
-        <div class="text-center py-4">
-          <a class="h6 text-decoration-none text-truncate" href="">Air Jordan 1 Low TD Cleat Panda</a>
-          <div class="d-flex align-items-center justify-content-center mt-2">
-            <h5>$123.00</h5><h6 class="text-muted ml-2"><del>$123.00</del></h6>
-          </div>
-          <div class="d-flex align-items-center justify-content-center mb-1">
-            <small class="fa fa-star text-primary mr-1"></small>
-            <small class="fa fa-star text-primary mr-1"></small>
-            <small class="fa fa-star text-primary mr-1"></small>
-            <small class="fa fa-star text-primary mr-1"></small>
-            <small class="fa fa-star-half-alt text-primary mr-1"></small>
-            <small>(99)</small>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-      <div class="product-item bg-light mb-4">
-        <div class="product-img position-relative overflow-hidden">
-          <img class="img-fluid w-100" src="img/Crocs-Classic-Cozzzy-Sandal-Monsters-Inc-Sulley.jpg" alt="" />
-          <div class="product-action">
-            <a class="btn btn-outline-dark btn-square" href=""><i
-                class="fa fa-shopping-cart"
-              ></i></a>
-            <a class="btn btn-outline-dark btn-square" href=""><i
-                class="far fa-heart"
-              ></i></a>
-            <a class="btn btn-outline-dark btn-square" href=""><i
-                class="fa fa-sync-alt"
-              ></i></a>
-            <a class="btn btn-outline-dark btn-square" href=""><i
-                class="fa fa-search"
-              ></i></a>
-          </div>
-        </div>
-        <div class="text-center py-4">
-          <a class="h6 text-decoration-none text-truncate" href="">Crocs Classic Cozzzy Sandal Monsters Inc Sulley</a>
-          <div class="d-flex align-items-center justify-content-center mt-2">
-            <h5>$133.00</h5><h6 class="text-muted ml-2"><del>$173.00</del></h6>
-          </div>
-          <div class="d-flex align-items-center justify-content-center mb-1">
-            <small class="fa fa-star text-primary mr-1"></small>
-            <small class="fa fa-star text-primary mr-1"></small>
-            <small class="fa fa-star text-primary mr-1"></small>
-            <small class="fa fa-star-half-alt text-primary mr-1"></small>
-            <small class="far fa-star text-primary mr-1"></small>
-            <small>(99)</small>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-      <div class="product-item bg-light mb-4">
-        <div class="product-img position-relative overflow-hidden">
-          <img class="img-fluid w-100" src="img/New-Balance-Numeric-933-Andrew-Reynolds-Black-Olive.jpg" alt="" />
-          <div class="product-action">
-            <a class="btn btn-outline-dark btn-square" href=""><i
-                class="fa fa-shopping-cart"
-              ></i></a>
-            <a class="btn btn-outline-dark btn-square" href=""><i
-                class="far fa-heart"
-              ></i></a>
-            <a class="btn btn-outline-dark btn-square" href=""><i
-                class="fa fa-sync-alt"
-              ></i></a>
-            <a class="btn btn-outline-dark btn-square" href=""><i
-                class="fa fa-search"
-              ></i></a>
-          </div>
-        </div>
-        <div class="text-center py-4">
-          <a class="h6 text-decoration-none text-truncate" href="">New Balance Numeric 933 Andrew Reynolds Black Olive</a>
-          <div class="d-flex align-items-center justify-content-center mt-2">
-            <h5>$143.00</h5><h6 class="text-muted ml-2"><del>$183.00</del></h6>
-          </div>
-          <div class="d-flex align-items-center justify-content-center mb-1">
-            <small class="fa fa-star text-primary mr-1"></small>
-            <small class="fa fa-star text-primary mr-1"></small>
-            <small class="fa fa-star text-primary mr-1"></small>
-            <small class="far fa-star text-primary mr-1"></small>
-            <small class="far fa-star text-primary mr-1"></small>
-            <small>(99)</small>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-      <div class="product-item bg-light mb-4">
-        <div class="product-img position-relative overflow-hidden">
-          <img class="img-fluid w-100" src="img/Nike-Manoa-Haystack.jpg" alt="" />
-          <div class="product-action">
-            <a class="btn btn-outline-dark btn-square" href=""><i
-                class="fa fa-shopping-cart"
-              ></i></a>
-            <a class="btn btn-outline-dark btn-square" href=""><i
-                class="far fa-heart"
-              ></i></a>
-            <a class="btn btn-outline-dark btn-square" href=""><i
-                class="fa fa-sync-alt"
-              ></i></a>
-            <a class="btn btn-outline-dark btn-square" href=""><i
-                class="fa fa-search"
-              ></i></a>
-          </div>
-        </div>
-        <div class="text-center py-4">
-          <a class="h6 text-decoration-none text-truncate" href="">Nike Manoa Haystack</a>
-          <div class="d-flex align-items-center justify-content-center mt-2">
-            <h5>$113.00</h5><h6 class="text-muted ml-2"><del>$163.00</del></h6>
-          </div>
-          <div class="d-flex align-items-center justify-content-center mb-1">
-            <small class="fa fa-star text-primary mr-1"></small>
-            <small class="fa fa-star text-primary mr-1"></small>
-            <small class="fa fa-star text-primary mr-1"></small>
-            <small class="fa fa-star text-primary mr-1"></small>
-            <small class="fa fa-star text-primary mr-1"></small>
-            <small>(99)</small>
-          </div>
-        </div>
-      </div>
-    </div>
+                     </div>
+                    {{/each}}
     <div class="col-12">
                         <nav>
                           <ul class="pagination justify-content-center">

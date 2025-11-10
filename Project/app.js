@@ -17,6 +17,16 @@ app.engine(
     defaultLayout: "layouts",
     partialsDir: path.join(__dirname, "views", "partials"),
     layoutsDir: path.join(__dirname, "views", "layouts"),
+    helpers: {
+      times: function (n, block) {
+        // nhận vào số n vòng lặp sau đó render ra n số element
+        let init = "";
+        for (let i = 0; i < n; i++) {
+          init += block.fn(this);
+        }
+        return init;
+      },
+    },
   })
 );
 

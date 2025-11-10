@@ -23,8 +23,11 @@
           >
             <img
               class="position-absolute w-100 h-100"
-              src="images/menbanner.avif"
-              style="object-fit: cover;"
+              src="images/AIRJORDAN1LOWSE.avif"
+              style="
+              object-fit: cover;
+              object-position: 0% 60%;  
+              "
             />
             <div
               class="carousel-caption d-flex flex-column align-items-center justify-content-center"
@@ -32,11 +35,10 @@
               <div class="p-3" style="max-width: 700px;">
                 <h1
                   class="display-4 text-white mb-3 animate__animated animate__fadeInDown"
-                >Jordan Air</h1>
+                >Air Jordan</h1>
                 <p
                   class="mx-md-5 px-5 animate__animated animate__bounceIn"
-                >Lorem rebum magna amet lorem magna erat diam stet. Sadips duo
-                  stet amet amet ndiam elitr ipsum diam</p>
+                >The low-cut classic returns in an iconic colourway.</p>
                 <a
                   class="btn btn-outline-light py-2 px-4 mt-3 animate__animated animate__fadeInUp"
                   href="#"
@@ -47,8 +49,9 @@
           <div class="carousel-item position-relative" style="height: 430px;">
             <img
               class="position-absolute w-100 h-100"
-              src="images/womenbanner.avif"
-              style="object-fit: cover;"
+              src="images/converse.webp"
+              style="object-fit: cover;
+              object-position: 0% 70%"
             />
             <div
               class="carousel-caption d-flex flex-column align-items-center justify-content-center"
@@ -59,8 +62,7 @@
                 >Converse</h1>
                 <p
                   class="mx-md-5 px-5 animate__animated animate__bounceIn"
-                >Lorem rebum magna amet lorem magna erat diam stet. Sadips duo
-                  stet amet amet ndiam elitr ipsum diam</p>
+                >Converse knows what it takes to reach icon status. Timeless style, relentless innovation, and—you. That's why the Star Player 76 in full-grain leather was made for you and your lifestyle. The dialed-in, court shoe design of the Star Player 76 is entirely Converse, but still leaves room for your style to play.</p>
                 <a
                   class="btn btn-outline-light py-2 px-4 mt-3 animate__animated animate__fadeInUp"
                   href="#"
@@ -83,8 +85,7 @@
                 >ShoeX</h1>
                 <p
                   class="mx-md-5 px-5 animate__animated animate__bounceIn"
-                >Lorem rebum magna amet lorem magna erat diam stet. Sadips duo
-                  stet amet amet ndiam elitr ipsum diam</p>
+                >Special shop with all brand.</p>
                 <a
                   class="btn btn-outline-light py-2 px-4 mt-3 animate__animated animate__fadeInUp"
                   href="#"
@@ -97,7 +98,7 @@
     </div>
     <div class="col-lg-4">
       <div class="product-offer mb-30" style="height: 200px;">
-        <img class="img-fluid" src="img/offer-1.jpg" alt="" />
+        <img class="img-fluid" src="/images/offer1.jpg" alt="" />
         <div class="offer-text">
           <h6 class="text-white text-uppercase">Save 20%</h6>
           <h3 class="text-white mb-3">Special Offer</h3>
@@ -105,11 +106,11 @@
         </div>
       </div>
       <div class="product-offer mb-30" style="height: 200px;">
-        <img class="img-fluid" src="img/offer-2.jpg" alt="" />
+        <img class="img-fluid" src="/images/offer2.jpg" alt="" />
         <div class="offer-text">
           <h6 class="text-white text-uppercase">Save 20%</h6>
           <h3 class="text-white mb-3">Special Offer</h3>
-          <a href="" class="btn btn-primary">Shop Now</a>
+          <a href="" class="btn btn-primary ">Shop Now</a>
         </div>
       </div>
     </div>
@@ -294,10 +295,11 @@
       class="bg-secondary pr-3"
     >Featured Products</span></h2>
   <div class="row px-xl-5">
-    <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
+    {{#each productList}}
+   <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
       <div class="product-item bg-light mb-4">
         <div class="product-img position-relative overflow-hidden">
-          <img class="img-fluid w-100" src="img/Air-Jordan-1-Low-Golf-White-Aegean-Storm.jpg" alt="" />
+          <img class="img-fluid w-100" src="{{this.img}}" alt="" />
           <div class="product-action">
             <a class="btn btn-outline-dark btn-square" href=""><i
                 class="fa fa-shopping-cart"
@@ -313,162 +315,21 @@
               ></i></a>
           </div>
         </div>
-        <div class="text-center py-4">
-          <a class="h6 text-decoration-none text-truncate" href="">Air Jordan 1 Low Golf White Aegean Storm</a>
+        <div class="card-item text-center py-4">
+          <a class="h6 text-decoration-none text-truncate" href="">{{this.name}}</a>
           <div class="d-flex align-items-center justify-content-center mt-2">
-            <h5>$123.00</h5><h6 class="text-muted ml-2"><del>$153.00</del></h6>
+            <h5>${{this.price}}</h5><h6 class="text-muted ml-2"><del>${{this.sale}}</del></h6>
           </div>
           <div class="d-flex align-items-center justify-content-center mb-1">
+            {{#times this.rate}}
             <small class="fa fa-star text-primary mr-1"></small>
-            <small class="fa fa-star text-primary mr-1"></small>
-            <small class="fa fa-star text-primary mr-1"></small>
-            <small class="fa fa-star text-primary mr-1"></small>
-            <small class="fa fa-star text-primary mr-1"></small>
-            <small>(99)</small>
+            {{/times}}
+            <small>({{this.reviews}})</small>
           </div>
         </div>
       </div>
-    </div>
-    <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-      <div class="product-item bg-light mb-4">
-        <div class="product-img position-relative overflow-hidden">
-          <img class="img-fluid w-100" src="img/Air-Jordan-1-Low-TD-Cleat-Panda.jpg" alt="" />
-          <div class="product-action">
-            <a class="btn btn-outline-dark btn-square" href=""><i
-                class="fa fa-shopping-cart"
-              ></i></a>
-            <a class="btn btn-outline-dark btn-square" href=""><i
-                class="far fa-heart"
-              ></i></a>
-            <a class="btn btn-outline-dark btn-square" href=""><i
-                class="fa fa-sync-alt"
-              ></i></a>
-            <a class="btn btn-outline-dark btn-square" href=""><i
-                class="fa fa-search"
-              ></i></a>
-          </div>
-        </div>
-        <div class="text-center py-4">
-          <a class="h6 text-decoration-none text-truncate" href="">Air Jordan 1 Low TD Cleat Panda</a>
-          <div class="d-flex align-items-center justify-content-center mt-2">
-            <h5>$123.00</h5><h6 class="text-muted ml-2"><del>$123.00</del></h6>
-          </div>
-          <div class="d-flex align-items-center justify-content-center mb-1">
-            <small class="fa fa-star text-primary mr-1"></small>
-            <small class="fa fa-star text-primary mr-1"></small>
-            <small class="fa fa-star text-primary mr-1"></small>
-            <small class="fa fa-star text-primary mr-1"></small>
-            <small class="fa fa-star-half-alt text-primary mr-1"></small>
-            <small>(99)</small>
-          </div>
-        </div>
       </div>
-    </div>
-    <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-      <div class="product-item bg-light mb-4">
-        <div class="product-img position-relative overflow-hidden">
-          <img class="img-fluid w-100" src="img/Crocs-Classic-Cozzzy-Sandal-Monsters-Inc-Sulley.jpg" alt="" />
-          <div class="product-action">
-            <a class="btn btn-outline-dark btn-square" href=""><i
-                class="fa fa-shopping-cart"
-              ></i></a>
-            <a class="btn btn-outline-dark btn-square" href=""><i
-                class="far fa-heart"
-              ></i></a>
-            <a class="btn btn-outline-dark btn-square" href=""><i
-                class="fa fa-sync-alt"
-              ></i></a>
-            <a class="btn btn-outline-dark btn-square" href=""><i
-                class="fa fa-search"
-              ></i></a>
-          </div>
-        </div>
-        <div class="text-center py-4">
-          <a class="h6 text-decoration-none text-truncate" href="">Crocs Classic Cozzzy Sandal Monsters Inc Sulley</a>
-          <div class="d-flex align-items-center justify-content-center mt-2">
-            <h5>$133.00</h5><h6 class="text-muted ml-2"><del>$173.00</del></h6>
-          </div>
-          <div class="d-flex align-items-center justify-content-center mb-1">
-            <small class="fa fa-star text-primary mr-1"></small>
-            <small class="fa fa-star text-primary mr-1"></small>
-            <small class="fa fa-star text-primary mr-1"></small>
-            <small class="fa fa-star-half-alt text-primary mr-1"></small>
-            <small class="far fa-star text-primary mr-1"></small>
-            <small>(99)</small>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-      <div class="product-item bg-light mb-4">
-        <div class="product-img position-relative overflow-hidden">
-          <img class="img-fluid w-100" src="img/New-Balance-Numeric-933-Andrew-Reynolds-Black-Olive.jpg" alt="" />
-          <div class="product-action">
-            <a class="btn btn-outline-dark btn-square" href=""><i
-                class="fa fa-shopping-cart"
-              ></i></a>
-            <a class="btn btn-outline-dark btn-square" href=""><i
-                class="far fa-heart"
-              ></i></a>
-            <a class="btn btn-outline-dark btn-square" href=""><i
-                class="fa fa-sync-alt"
-              ></i></a>
-            <a class="btn btn-outline-dark btn-square" href=""><i
-                class="fa fa-search"
-              ></i></a>
-          </div>
-        </div>
-        <div class="text-center py-4">
-          <a class="h6 text-decoration-none text-truncate" href="">New Balance Numeric 933 Andrew Reynolds Black Olive</a>
-          <div class="d-flex align-items-center justify-content-center mt-2">
-            <h5>$143.00</h5><h6 class="text-muted ml-2"><del>$183.00</del></h6>
-          </div>
-          <div class="d-flex align-items-center justify-content-center mb-1">
-            <small class="fa fa-star text-primary mr-1"></small>
-            <small class="fa fa-star text-primary mr-1"></small>
-            <small class="fa fa-star text-primary mr-1"></small>
-            <small class="far fa-star text-primary mr-1"></small>
-            <small class="far fa-star text-primary mr-1"></small>
-            <small>(99)</small>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-      <div class="product-item bg-light mb-4">
-        <div class="product-img position-relative overflow-hidden">
-          <img class="img-fluid w-100" src="img/Nike-Manoa-Haystack.jpg" alt="" />
-          <div class="product-action">
-            <a class="btn btn-outline-dark btn-square" href=""><i
-                class="fa fa-shopping-cart"
-              ></i></a>
-            <a class="btn btn-outline-dark btn-square" href=""><i
-                class="far fa-heart"
-              ></i></a>
-            <a class="btn btn-outline-dark btn-square" href=""><i
-                class="fa fa-sync-alt"
-              ></i></a>
-            <a class="btn btn-outline-dark btn-square" href=""><i
-                class="fa fa-search"
-              ></i></a>
-          </div>
-        </div>
-        <div class="text-center py-4">
-          <a class="h6 text-decoration-none text-truncate" href="">Nike Manoa Haystack</a>
-          <div class="d-flex align-items-center justify-content-center mt-2">
-            <h5>$113.00</h5><h6 class="text-muted ml-2"><del>$163.00</del></h6>
-          </div>
-          <div class="d-flex align-items-center justify-content-center mb-1">
-            <small class="fa fa-star text-primary mr-1"></small>
-            <small class="fa fa-star text-primary mr-1"></small>
-            <small class="fa fa-star text-primary mr-1"></small>
-            <small class="fa fa-star text-primary mr-1"></small>
-            <small class="fa fa-star text-primary mr-1"></small>
-            <small>(99)</small>
-          </div>
-        </div>
-      </div>
-    </div>
+     {{/each}}
   </div>
 </div>
 <!-- Products End -->
@@ -478,7 +339,7 @@
   <div class="row px-xl-5">
     <div class="col-md-6">
       <div class="product-offer mb-30" style="height: 300px;">
-        <img class="img-fluid" src="img/offer-1.jpg" alt="" />
+        <img class="img-fluid" src="/images/offer1.jpg" alt="" />
         <div class="offer-text">
           <h6 class="text-white text-uppercase">Save 20%</h6>
           <h3 class="text-white mb-3">Special Offer</h3>
@@ -488,7 +349,7 @@
     </div>
     <div class="col-md-6">
       <div class="product-offer mb-30" style="height: 300px;">
-        <img class="img-fluid" src="img/offer-2.jpg" alt="" />
+        <img class="img-fluid" src="/images/offer2.jpg" alt="" />
         <div class="offer-text">
           <h6 class="text-white text-uppercase">Save 20%</h6>
           <h3 class="text-white mb-3">Special Offer</h3>

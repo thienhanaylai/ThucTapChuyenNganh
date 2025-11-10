@@ -13,28 +13,23 @@
     </div>
     <div class="card-body">
       <div class="table-responsive">
-        <div
-          id="dataTable_wrapper"
-          class="dataTables_wrapper dt-bootstrap4"
-        ><div class="row"><div class="col-sm-12 col-md-6"><div
-                class="dataTables_length"
-                id="dataTable_length"
-              ><label>Show
-                  <select
-                    name="dataTable_length"
-                    aria-controls="dataTable"
-                    class="custom-select custom-select-sm form-control form-control-sm"
-                  ><option value="10">10</option><option
-                      value="25"
-                    >25</option><option value="50">50</option><option
-                      value="100"
-                    >100</option></select>
-                  entries</label></div></div><div
-              class="col-sm-12 col-md-6"
-            ><div
+        <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4">
+          <div class="row">
+            <div class="col-sm-12 col-md-6">
+              <div class="dataTables_length" id="dataTable_length">
+                <button class="btn btn-primary mb-3">Add Product</button>
+              </div>
+            </div>
+            <div class="col-sm-12 col-md-6"><div
                 id="dataTable_filter"
                 class="dataTables_filter"
-              ></div></div></div><div class="row"><div class="col-sm-12"><table
+              >
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <table
                 class="table table-bordered dataTable"
                 id="dataTable"
                 width="100%"
@@ -44,7 +39,8 @@
                 style="width: 100%;"
               >
                 <thead>
-                  <tr role="row"><th
+                  <tr role="row">
+                    <th
                       class="sorting sorting_asc"
                       tabindex="0"
                       aria-controls="dataTable"
@@ -52,28 +48,32 @@
                       colspan="1"
                       aria-sort="ascending"
                       style="width: 424.2px;"
-                    >Name</th><th
+                    >Name</th>
+                    <th
                       class="sorting"
                       tabindex="0"
                       aria-controls="dataTable"
                       rowspan="1"
                       colspan="1"
                       style="width: 42.2px;"
-                    >Size</th><th
+                    >Size</th>
+                    <th
                       class="sorting"
                       tabindex="0"
                       aria-controls="dataTable"
                       rowspan="1"
                       colspan="1"
                       style="width: 70.2px;"
-                    >Color</th><th
+                    >Color</th>
+                    <th
                       class="sorting"
                       tabindex="0"
                       aria-controls="dataTable"
                       rowspan="1"
                       colspan="1"
                       style="width: 72.2px;"
-                    >Create At</th><th
+                    >Create At</th>
+                    <th
                       class="sorting"
                       tabindex="0"
                       aria-controls="dataTable"
@@ -88,7 +88,8 @@
                       rowspan="1"
                       colspan="1"
                       style="width: 150.2px;"
-                    >Action</th></tr>
+                    >Action</th>
+                  </tr>
                 </thead>
 
                 <tbody>
