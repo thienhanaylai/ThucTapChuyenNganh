@@ -2,24 +2,15 @@
   td { vertical-align: middle; }
 </style>
 <div class="container-fluid">
-  <h1 class="h3 mb-2 text-gray-800">Category List</h1>
+  <h1 class="h3 mb-2 text-gray-800">Order List</h1>
   <div class="card shadow mb-4">
     <div class="card-header py-3">
-      <h6 class="m-0 font-weight-bold text-primary">All Brands</h6>
+      <h6 class="m-0 font-weight-bold text-primary">All Order</h6>
     </div>
     <div class="card-body">
       <div class="table-responsive">
-        <div
-          id="dataTable_wrapper"
-          class="dataTables_wrapper dt-bootstrap4"
-        ><div class="row">
-            <div class="col-sm-12 col-md-6">
-              <div class="dataTables_length" id="dataTable_length">
-                <a href="/admin/category/add">
-                  <button class="btn btn-primary mb-3">Add Category</button>
-                </a>
-              </div>
-            </div>
+        <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4">
+          <div class="row">
             <div class="col-sm-12 col-md-6"><div
                 id="dataTable_filter"
                 class="dataTables_filter"
@@ -27,7 +18,9 @@
               </div>
             </div>
           </div>
-          <div class="row"><div class="col-sm-12"><table
+          <div class="row">
+            <div class="col-sm-12">
+              <table
                 class="table table-bordered dataTable"
                 id="dataTable"
                 width="100%"
@@ -37,28 +30,31 @@
                 style="width: 100%;"
               >
                 <thead>
-                  <tr role="row"><th
+                  <tr role="row">
+                    <th
                       class="sorting sorting_asc"
                       tabindex="0"
                       aria-controls="dataTable"
                       rowspan="1"
                       colspan="1"
                       aria-sort="ascending"
-                      style="width: 424.2px;"
-                    >Brand</th><th
+                      style="width: 324.2px;"
+                    >ID Order</th>
+                    <th
                       class="sorting"
                       tabindex="0"
                       aria-controls="dataTable"
                       rowspan="1"
                       colspan="1"
                       style="width: 42.2px;"
-                    >Product Quantity</th><th
+                    >Status</th>
+                    <th
                       class="sorting"
                       tabindex="0"
                       aria-controls="dataTable"
                       rowspan="1"
                       colspan="1"
-                      style="width: 72.2px;"
+                      style="width: 70.2px;"
                     >Create At</th>
                     <th
                       class="sorting"
@@ -66,115 +62,99 @@
                       aria-controls="dataTable"
                       rowspan="1"
                       colspan="1"
+                      style="width: 72.2px;"
+                    >Finish At</th>
+                    <th
+                      class="sorting"
+                      tabindex="0"
+                      aria-controls="dataTable"
+                      rowspan="1"
+                      colspan="1"
+                      style="width: 119.2px;"
+                    >Amount</th>
+                    <th
+                      class="sorting"
+                      tabindex="0"
+                      aria-controls="dataTable"
+                      rowspan="1"
+                      colspan="1"
                       style="width: 150.2px;"
-                    >Action</th></tr>
+                    >Action</th>
+                  </tr>
                 </thead>
 
                 <tbody>
                   <tr class="odd">
-                    <td class="sorting_1">Adidas</td>
-                    <td>21</td>
+                    <td class="sorting_1">OD0911251322ABA</td>
+                    <td>Pending</td>
                     <td>9/11/2025</td>
+                    <td>-/--/---</td>
+                    <td>$162,700</td>
                     <td>
-                      <a href="/admin/category/edit">
-                        <button class="btn btn-warning">Edit</button>
-                      </a>
+                      <button class="btn btn-warning">Edit</button>
                       |
                       <button class="btn btn-danger">Delete</button>
+                      |
+                      <button class="btn btn-success">Complete</button>
                     </td>
-                  </tr><tr class="even">
-                    <td class="sorting_1">Air Jordan 1 Low Golf White Aegean
-                      Storm</td>
-                    <td>21</td>
+                  </tr>
+                  <tr class="even">
+                    <td class="sorting_1">OD0911251322ABC</td>
+                    <td>Pending</td>
                     <td>9/11/2025</td>
-                    <td><a href="/admin/category/edit">
-                        <button class="btn btn-warning">Edit</button>
-                      </a>
+                    <td>-/--/---</td>
+                    <td>$162,700</td>
+                    <td>
+                      <button class="btn btn-warning">Edit</button>
                       |
-                      <button class="btn btn-danger">Delete</button></td>
+                      <button class="btn btn-danger">Delete</button>
+                      |
+                      <button class="btn btn-success">Complete</button>
+                    </td>
                   </tr>
                   <tr class="odd">
-                    <td class="sorting_1">New Balance</td>
-                    <td>21</td>
+                    <td class="sorting_1">OD0911251322ABE</td>
+                    <td>Pending</td>
                     <td>9/11/2025</td>
-                    <td><a href="/admin/category/edit">
-                        <button class="btn btn-warning">Edit</button>
-                      </a>
+                    <td>-/--/---</td>
+                    <td>$162,700</td>
+                    <td>
+                      <button class="btn btn-warning">Edit</button>
                       |
-                      <button class="btn btn-danger">Delete</button></td>
-                  </tr><tr class="even">
-                    <td class="sorting_1">Converse</td>
-                    <td>21</td>
+                      <button class="btn btn-danger">Delete</button>
+                      |
+                      <button class="btn btn-success">Complete</button>
+                    </td>
+                  </tr>
+                  <tr class="even">
+                    <td class="sorting_1">OD0911251322ABX</td>
+                    <td>Complete</td>
                     <td>9/11/2025</td>
-                    <td><a href="/admin/category/edit">
-                        <button class="btn btn-warning">Edit</button>
-                      </a>
+                    <td>12/11/2025</td>
+                    <td>$162,700</td>
+                    <td>
+                      <button class="btn btn-warning">Edit</button>
                       |
-                      <button class="btn btn-danger">Delete</button></td>
+                      <button class="btn btn-danger">Delete</button>
+                      |
+                      <button class="btn btn-success" disabled>Complete</button>
+                    </td>
                   </tr>
                   <tr class="odd">
-                    <td class="sorting_1">Fila</td>
-                    <td>21</td>
-
+                    <td class="sorting_1">OD0911251322ABS</td>
+                    <td>Complete</td>
                     <td>9/11/2025</td>
-
-                    <td><a href="/admin/category/edit">
-                        <button class="btn btn-warning">Edit</button>
-                      </a>
+                    <td>12/11/2025</td>
+                    <td>$162,700</td>
+                    <td>
+                      <button class="btn btn-warning">Edit</button>
                       |
-                      <button class="btn btn-danger">Delete</button></td>
-                  </tr><tr class="even">
-                    <td class="sorting_1">Hi-Tech</td>
-                    <td>21</td>
-                    <td>9/11/2025</td>
-                    <td><a href="/admin/category/edit">
-                        <button class="btn btn-warning">Edit</button>
-                      </a>
+                      <button class="btn btn-danger">Delete</button>
                       |
-                      <button class="btn btn-danger">Delete</button></td>
+                      <button class="btn btn-success" disabled>Complete</button>
+                    </td>
                   </tr>
-                  <tr class="odd">
-                    <td class="sorting_1">Jordan</td>
-                    <td>21</td>
 
-                    <td>9/11/2025</td>
-
-                    <td><a href="/admin/category/edit">
-                        <button class="btn btn-warning">Edit</button>
-                      </a>
-                      |
-                      <button class="btn btn-danger">Delete</button></td>
-                  </tr><tr class="even">
-                    <td class="sorting_1">Nike</td>
-                    <td>21</td>
-                    <td>9/11/2025</td>
-                    <td><a href="/admin/category/edit">
-                        <button class="btn btn-warning">Edit</button>
-                      </a>
-                      |
-                      <button class="btn btn-danger">Delete</button></td>
-                  </tr>
-                  <tr class="odd">
-                    <td class="sorting_1">Puma</td>
-                    <td>21</td>
-
-                    <td>9/11/2025</td>
-
-                    <td><a href="/admin/category/edit">
-                        <button class="btn btn-warning">Edit</button>
-                      </a>
-                      |
-                      <button class="btn btn-danger">Delete</button></td>
-                  </tr><tr class="even">
-                    <td class="sorting_1">Vans</td>
-                    <td>21</td>
-                    <td>9/11/2025</td>
-                    <td><a href="/admin/category/edit">
-                        <button class="btn btn-warning">Edit</button>
-                      </a>
-                      |
-                      <button class="btn btn-danger">Delete</button></td>
-                  </tr>
                 </tbody>
               </table></div></div><div class="row"><div
               class="col-sm-12 col-md-5"
