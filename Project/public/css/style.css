@@ -2487,6 +2487,10 @@ textarea.form-control.is-invalid {
   min-height: 160px;
 }
 
+.input-quanlity {
+  
+}
+
 .btn {
   display: inline-block;
   font-weight: 400;

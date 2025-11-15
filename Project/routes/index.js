@@ -84,4 +84,8 @@ router.get("/checkout", function (req, res, next) {
   res.render("home/checkout", { title: "Checkout" });
 });
 
+router.get("/customer", function (req, res, next) {
+  res.render("home/customer", { title: "customer" });
+});
+
 module.exports = router;

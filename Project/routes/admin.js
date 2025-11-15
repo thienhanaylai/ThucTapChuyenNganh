@@ -42,4 +42,8 @@ router.get("/category/edit", function (req, res, next) {
 router.get("/orders", function (req, res, next) {
   res.render("admin/orders");
 });
+
+router.get("/test", function (req, res, next) {
+  res.render("admin/test");
+});
 module.exports = router;
