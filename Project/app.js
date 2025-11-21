@@ -1,14 +1,18 @@
-var createError = require("http-errors");
-var express = require("express");
-var path = require("path");
-var cookieParser = require("cookie-parser");
-var logger = require("morgan");
+const createError = require("http-errors");
+const express = require("express");
+const path = require("path");
+const cookieParser = require("cookie-parser");
+const logger = require("morgan");
 const { engine } = require("express-handlebars");
+const session = require("express-session");
+const MongoStore = require("connect-mongo");
+const connectDB = require("./services/connectDB");
 
-var indexRouter = require("./routes/index");
-var adminRouter = require("./routes/admin");
+const indexRouter = require("./routes/index");
+const adminRouter = require("./routes/admin");
 
-var app = express();
+const app = express();
+connectDB();
 
 app.engine(
   "hbs",
@@ -40,6 +44,27 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
+app.use(
+  session({
+    secret: "1622004",
+    resave: false,
+    saveUninitialized: true,
+    store: MongoStore.create({
+      mongoUrl:
+        "mongodb+srv://thienhanaylai:wDlupvhB9FgxJX9j@cluster0.dmsd4gt.mongodb.net/shop_test?appName=Cluster0",
+      //tự động xóa session sau 1 tiếng (tính bằng giây)
+      ttl: 60,
+      autoRemove: "native",
+    }),
+
+    // 3. Cấu hình Cookie
+    cookie: {
+      secure: false,
+      httpOnly: true,
+      maxAge: 60 * 1000, //thời gian hết hạn của cookie (60 giây * 60 = 1 tiếng - tính bằng mili giây)
+    },
+  })
+);
 app.use("/", indexRouter);
 app.use("/admin", adminRouter);
 
