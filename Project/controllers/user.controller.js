@@ -79,7 +79,7 @@ const getEdit = async (req, res) => {
     const user = await User.findById(req.params.id).lean();
     if (!user) return res.redirect("/admin/users");
 
-    res.render("admin/users/edit", {
+    res.render("admin/users/editUser", {
       layout: "admin",
       user: user,
     });
@@ -124,7 +124,7 @@ const loginAdmin = async (req, res) => {
   try {
     const { username, password } = req.body;
 
-    const user = await User.findOne({ username: username });
+    const user = await User.findOne({ username: username }); //tìm nếu có user trong db thì tiếp tục
     if (!user) {
       return res.render("admin/login", {
         layout: false,
@@ -141,6 +141,7 @@ const loginAdmin = async (req, res) => {
     }
 
     if (user.role !== "admin") {
+      //kiểm tra quyền admin
       return res.render("admin/login", {
         layout: false,
         error: "Không có quyền truy cập!",

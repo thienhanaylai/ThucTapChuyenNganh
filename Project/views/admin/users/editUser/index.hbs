@@ -1,0 +1,157 @@
+<div class="container-fluid">
+  <div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Edit User</h1>
+    <a href="/admin/users" class="btn btn-secondary btn-sm">
+      <i class="fas fa-arrow-left"></i>
+      Back to User List
+    </a>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card shadow mb-4">
+        <div class="card-header py-3">
+          <h6 class="m-0 font-weight-bold text-primary">User Information</h6>
+        </div>
+        <div class="card-body">
+          {{#if error}}
+            <div class="alert alert-danger">{{error}}</div>
+          {{/if}}
+          <form method="POST" action="/admin/users/edit/{{user._id}}">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="fullname">Full Name
+                    <span class="text-danger">*</span></label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="fullname"
+                    name="fullname"
+                    placeholder="Enter full name"
+                    value="{{user.fullname}}"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="username">Username
+                    <span class="text-danger">*</span></label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="username"
+                    name="username"
+                    placeholder="Enter username"
+                    value="{{user.username}}"
+                    required
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="email">Email Address</label>
+                  <input
+                    type="email"
+                    class="form-control"
+                    id="email"
+                    name="email"
+                    value="{{user.email}}"
+                    placeholder="Enter email address"
+                  />
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="phone">Phone Number
+                    <span class="text-danger">*</span></label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="phone"
+                    name="phone"
+                    value="{{user.phone}}"
+                    pattern="0[0-9]{9}"
+                    maxlength="10"
+                    placeholder="Enter phone number (e.g., 0901234567)"
+                    title="Số điện thoại phải có 10 số và bắt đầu bằng số 0"
+                    required
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="password">Password
+                    <span class="text-danger"></span></label>
+                  <input
+                    type="password"
+                    class="form-control"
+                    id="password"
+                    name="password"
+                    placeholder="No change if left blank"
+                  />
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="confirmPassword">Confirm Password
+                    <span class="text-danger"></span></label>
+                  <input
+                    type="password"
+                    class="form-control"
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    placeholder="No change if left blank"
+                    oninput="checkPasswordMatch(user)"
+                  />
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="role">Role
+                    <span class="text-danger">*</span></label>
+                  <select class="form-control" id="role" name="role" required>
+                    <option value="user" selected>User</option>
+                    <option value="admin">Admin</option>
+                  </select>
+                  <small class="form-text text-muted">
+                    Select the permission level for user account.
+                  </small>
+                </div>
+              </div>
+            </div>
+            <hr />
+            <div class="form-group mb-0">
+              <form action="/admin/user/edit/{{user._id}}" method="post">
+                <button type="submit" class="btn btn-primary">
+                  <i class="fas fa-plus-circle"></i>
+                  Edit Account
+                </button>
+              </form>
+              <a href="/admin/users" class="btn btn-secondary">
+                <i class="fas fa-times"></i>
+                Cancel
+              </a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  function checkPasswordMatch(fieldConfirmPassword) { const password =
+  document.getElementById('password').value; const confirmPassword =
+  fieldConfirmPassword.value; if (password != confirmPassword) {
+  fieldConfirmPassword.setCustomValidity('Mật khẩu xác nhận không khớp!'); }
+  else { fieldConfirmPassword.setCustomValidity(''); } }
+</script>

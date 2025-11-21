@@ -53,7 +53,7 @@ app.use(
       mongoUrl:
         "mongodb+srv://thienhanaylai:wDlupvhB9FgxJX9j@cluster0.dmsd4gt.mongodb.net/shop_test?appName=Cluster0",
       //tự động xóa session sau 1 tiếng (tính bằng giây)
-      ttl: 60,
+      ttl: 60 * 60,
       autoRemove: "native",
     }),
 
@@ -61,7 +61,7 @@ app.use(
     cookie: {
       secure: false,
       httpOnly: true,
-      maxAge: 60 * 1000, //thời gian hết hạn của cookie (60 giây * 60 = 1 tiếng - tính bằng mili giây)
+      maxAge: 60 * 60 * 1000, //thời gian hết hạn của cookie (60 giây * 60 = 1 tiếng - tính bằng mili giây)
     },
   })
 );

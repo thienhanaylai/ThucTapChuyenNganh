@@ -71,110 +71,27 @@
                 </thead>
 
                 <tbody>
-                  <tr class="odd">
-                    <td class="sorting_1">Adidas</td>
-                    <td>21</td>
-                    <td>9/11/2025</td>
-                    <td>
-                      <a href="/admin/category/edit">
-                        <button class="btn btn-warning">Edit</button>
-                      </a>
-                      |
-                      <button class="btn btn-danger">Delete</button>
-                    </td>
-                  </tr><tr class="even">
-                    <td class="sorting_1">Air Jordan 1 Low Golf White Aegean
-                      Storm</td>
-                    <td>21</td>
-                    <td>9/11/2025</td>
-                    <td><a href="/admin/category/edit">
-                        <button class="btn btn-warning">Edit</button>
-                      </a>
-                      |
-                      <button class="btn btn-danger">Delete</button></td>
-                  </tr>
-                  <tr class="odd">
-                    <td class="sorting_1">New Balance</td>
-                    <td>21</td>
-                    <td>9/11/2025</td>
-                    <td><a href="/admin/category/edit">
-                        <button class="btn btn-warning">Edit</button>
-                      </a>
-                      |
-                      <button class="btn btn-danger">Delete</button></td>
-                  </tr><tr class="even">
-                    <td class="sorting_1">Converse</td>
-                    <td>21</td>
-                    <td>9/11/2025</td>
-                    <td><a href="/admin/category/edit">
-                        <button class="btn btn-warning">Edit</button>
-                      </a>
-                      |
-                      <button class="btn btn-danger">Delete</button></td>
-                  </tr>
-                  <tr class="odd">
-                    <td class="sorting_1">Fila</td>
-                    <td>21</td>
-
-                    <td>9/11/2025</td>
-
-                    <td><a href="/admin/category/edit">
-                        <button class="btn btn-warning">Edit</button>
-                      </a>
-                      |
-                      <button class="btn btn-danger">Delete</button></td>
-                  </tr><tr class="even">
-                    <td class="sorting_1">Hi-Tech</td>
-                    <td>21</td>
-                    <td>9/11/2025</td>
-                    <td><a href="/admin/category/edit">
-                        <button class="btn btn-warning">Edit</button>
-                      </a>
-                      |
-                      <button class="btn btn-danger">Delete</button></td>
-                  </tr>
-                  <tr class="odd">
-                    <td class="sorting_1">Jordan</td>
-                    <td>21</td>
-
-                    <td>9/11/2025</td>
-
-                    <td><a href="/admin/category/edit">
-                        <button class="btn btn-warning">Edit</button>
-                      </a>
-                      |
-                      <button class="btn btn-danger">Delete</button></td>
-                  </tr><tr class="even">
-                    <td class="sorting_1">Nike</td>
-                    <td>21</td>
-                    <td>9/11/2025</td>
-                    <td><a href="/admin/category/edit">
-                        <button class="btn btn-warning">Edit</button>
-                      </a>
-                      |
-                      <button class="btn btn-danger">Delete</button></td>
-                  </tr>
-                  <tr class="odd">
-                    <td class="sorting_1">Puma</td>
-                    <td>21</td>
-
-                    <td>9/11/2025</td>
-
-                    <td><a href="/admin/category/edit">
-                        <button class="btn btn-warning">Edit</button>
-                      </a>
-                      |
-                      <button class="btn btn-danger">Delete</button></td>
-                  </tr><tr class="even">
-                    <td class="sorting_1">Vans</td>
-                    <td>21</td>
-                    <td>9/11/2025</td>
-                    <td><a href="/admin/category/edit">
-                        <button class="btn btn-warning">Edit</button>
-                      </a>
-                      |
-                      <button class="btn btn-danger">Delete</button></td>
-                  </tr>
+                  {{#each brands}}
+                    <tr>
+                      <td class="sorting_1">{{this.name}}</td>
+                      <td>{{this.totalProducts}}</td>
+                      <td>{{this.createdAt}}</td>
+                      <td
+                        class="d-flex flex-nowrap align-self-center justify-content-center"
+                      >
+                        <a href="/admin/category/edit/{{this._id}}">
+                          <button class="btn btn-warning">Edit</button>
+                        </a>
+                        |
+                        <form
+                          action="/admin/category/delete/{{this._id}}"
+                          method="post"
+                        >
+                          <button class="btn btn-danger">Delete</button>
+                        </form>
+                      </td>
+                    </tr>
+                  {{/each}}
                 </tbody>
               </table></div></div><div class="row"><div
               class="col-sm-12 col-md-5"

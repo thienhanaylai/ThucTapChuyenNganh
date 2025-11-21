@@ -45,7 +45,7 @@
                       rowspan="1"
                       colspan="1"
                       aria-sort="ascending"
-                      style="width: 220px;"
+                      style="width: 210px;"
                     >Full Name</th>
                     <th
                       class="sorting"
@@ -61,7 +61,7 @@
                       aria-controls="dataTable"
                       rowspan="1"
                       colspan="1"
-                      style="width: 42.2px;"
+                      style="width: 72.2px;"
                     >Email</th>
                     <th
                       class="sorting"
@@ -69,7 +69,7 @@
                       aria-controls="dataTable"
                       rowspan="1"
                       colspan="1"
-                      style="width: 70.2px;"
+                      style="width: 60.2px;"
                     >Phone</th>
                     <th
                       class="sorting"
@@ -77,7 +77,7 @@
                       aria-controls="dataTable"
                       rowspan="1"
                       colspan="1"
-                      style="width: 72.2px;"
+                      style="width: 130.2px;"
                     >Create At</th>
                     <th
                       class="sorting"
@@ -93,7 +93,7 @@
                       aria-controls="dataTable"
                       rowspan="1"
                       colspan="1"
-                      style="width: 120.2px;"
+                      style="width: 30.2px;"
                     >Action</th>
                   </tr>
                 </thead>
@@ -107,11 +107,19 @@
                       <td>{{this.phone}} </td>
                       <td>{{this.createdAt}}</td>
                       <td>{{this.role}}</td>
-                      <td><a href="#"><button
+                      <td
+                        class="d-flex flex-nowrap align-self-center justify-content-center"
+                        style="border: 0; !important;width: fit-content;"
+                      ><a href="/admin/users/edit/{{this._id}}"><button
                             class="btn btn-warning"
                           >Edit</button></a>
                         |
-                        <button class="btn btn-danger">Delete</button>
+                        <button
+                          type="submit"
+                          class="btn btn-danger"
+                          data-toggle="modal"
+                          data-target="#logoutModal"
+                        >Delete</button>
                       </td>
                     </tr>
                   {{/each}}
@@ -207,4 +215,39 @@
     </div>
   </div>
 
+</div>
+
+<div
+  class="modal fade"
+  id="logoutModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Confirm to delete this
+          user ?</h5>
+        <button
+          class="close"
+          type="button"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-footer">
+        <button
+          class="btn btn-secondary"
+          type="button"
+          data-dismiss="modal"
+        >Cancel</button>
+        <form action="/admin/users/delete/{{this._id}}" method="post">
+          <button type="submit" class="btn btn-danger">Confirm</button></form>
+      </div>
+    </div>
+  </div>
 </div>
