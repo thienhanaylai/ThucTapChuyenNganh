@@ -34,7 +34,7 @@ const postAdd = async (req, res) => {
     // Hash mật khẩu trước khi lưu
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
-    console.log(hashedPassword);
+
     await User.create({
       username,
       password: hashedPassword,
