@@ -10203,3 +10203,9 @@ h6 {
   height: 500px;
   border-radius: 20px 0px 0px 20px;
 }
+
+.dropdown-menu {
+  margin: 20px;
+  left: 0;
+  right: 0;
+}

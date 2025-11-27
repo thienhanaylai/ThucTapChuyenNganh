@@ -6,7 +6,9 @@ const checkAdmin = (req, res, next) => {
   if (req.session.user && req.session.user.role === "admin") {
     next();
   } else {
-    res.send("Bạn không có quyền truy cập trang này!");
+    res.send(
+      "Bạn không có quyền truy cập trang này! Vui lòng đăng nhập tài khoản quản trị!"
+    );
   }
 };
 

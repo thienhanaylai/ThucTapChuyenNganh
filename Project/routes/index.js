@@ -167,6 +167,11 @@ router.post("/login", async (req, res) => {
     });
 });
 
+router.get("/logout", (req, res) => {
+  req.session.destroy();
+  res.redirect("/");
+});
+
 /* GET home page. */
 router.get("/", function (req, res, next) {
   res.render("home/index", { title: "Home", productList: productList });
