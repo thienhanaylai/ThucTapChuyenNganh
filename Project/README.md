@@ -1,12 +1,3 @@
 ﻿# ThucTapChuyenNganh ExpressJS
 
 Ngô Gia Bảo DH52200363
-
-# Báo cáo tuần 1 Git init
-
-# Báo cáo tuần 2 Layout shop
-
-# Báo cáo tuần 3 Layout admin
-
-
-

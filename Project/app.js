@@ -4,10 +4,12 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 const { engine } = require("express-handlebars");
+const session = require("express-session");
 
 var indexRouter = require("./routes/index");
 var adminRouter = require("./routes/admin");
-
+const { default: mongoose } = require("mongoose");
+const urlDb = "mongodb://127.0.0.1:27017/test";
 var app = express();
 
 app.engine(
@@ -30,6 +32,17 @@ app.engine(
   })
 );
 
+async function connectDB() {
+  try {
+    await mongoose.connect(urlDb);
+    console.log(`Connect to ${urlDb}`);
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+connectDB();
+
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "hbs");
@@ -39,6 +52,24 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
+
+app.use(
+  session({
+    secret: "1622004",
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+      secure: false,
+      httpOnly: true,
+      maxAge: 60 * 60 * 1000, //thời gian hết hạn của cookie (60 giây * 60 = 1 tiếng - tính bằng mili giây)
+    },
+  })
+);
+
+app.use((req, res, next) => {
+  res.locals.user = req.session.user;
+  next();
+});
 
 app.use("/", indexRouter);
 app.use("/admin", adminRouter);

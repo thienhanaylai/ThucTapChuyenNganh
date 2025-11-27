@@ -1,12 +1,21 @@
 var express = require("express");
 var router = express.Router();
 
+const checkAdmin = (req, res, next) => {
+  //check user có role admin ko nếu ko thì ko vào admin được
+  if (req.session.user && req.session.user.role === "admin") {
+    next();
+  } else {
+    res.send("Bạn không có quyền truy cập trang này!");
+  }
+};
+
 router.all("/*", function (req, res, next) {
   res.app.locals.layout = "admin";
   next();
 });
 
-router.get("/", function (req, res, next) {
+router.get("/", checkAdmin, function (req, res, next) {
   res.render("admin");
 });
 
@@ -14,36 +23,33 @@ router.get("/login", function (req, res, next) {
   res.render("admin/login");
 });
 
-router.get("/product", function (req, res, next) {
+router.get("/product", checkAdmin, function (req, res, next) {
   res.render("admin/product");
 });
 
-router.get("/product/add", function (req, res, next) {
+router.get("/product/add", checkAdmin, function (req, res, next) {
   res.render("admin/product/addProduct");
 });
 
 //edit sẽ truyền thêm id sản phẩm
-router.get("/product/edit", function (req, res, next) {
+router.get("/product/edit", checkAdmin, function (req, res, next) {
   res.render("admin/product/editProduct");
 });
 
-router.get("/category", function (req, res, next) {
+router.get("/category", checkAdmin, function (req, res, next) {
   res.render("admin/category");
 });
 
-router.get("/category/add", function (req, res, next) {
+router.get("/category/add", checkAdmin, function (req, res, next) {
   res.render("admin/category/addCategory");
 });
 
-router.get("/category/edit", function (req, res, next) {
+router.get("/category/edit", checkAdmin, function (req, res, next) {
   res.render("admin/category/editCategory");
 });
 
-router.get("/orders", function (req, res, next) {
+router.get("/orders", checkAdmin, function (req, res, next) {
   res.render("admin/orders");
 });
 
-router.get("/test", function (req, res, next) {
-  res.render("admin/test");
-});
 module.exports = router;

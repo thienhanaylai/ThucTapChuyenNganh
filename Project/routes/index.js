@@ -1,5 +1,7 @@
 var express = require("express");
+const User = require("../models/user.model");
 var router = express.Router();
+const bcryptjs = require("bcryptjs");
 
 const productList = [
   {
@@ -55,10 +57,116 @@ const productDetail = {
   img: "img/Air-Jordan-1-Low-Golf-White-Aegean-Storm.jpg", // có thể sẽ chuyển thành array để hiện thị thêm ảnh của giày
 };
 
+const requireLogin = (req, res, next) => {
+  //midleware kiem tra login chua
+  if (!req.session.userId) {
+    return res.redirect("/login");
+  }
+  next();
+};
+
 router.all("/*", function (req, res, next) {
   res.app.locals.layout = "home";
+  res.app.locals.user = req.session.user;
   next();
 });
+
+router.get("/register", (req, res) => {
+  res.render("home/register", { title: "Register", layout: false });
+});
+
+router.post("/register", (req, res) => {
+  const newUser = new User();
+  newUser.fullname = req.body.fullname;
+  newUser.username = req.body.username;
+  newUser.email = req.body.email;
+  newUser.phone = req.body.phone;
+  newUser.password = req.body.password;
+  bcryptjs.genSalt(10, function (err, salt) {
+    bcryptjs.hash(newUser.password, salt, function (err, hash) {
+      if (err) {
+        return err;
+      }
+      newUser.password = hash;
+
+      newUser
+        .save()
+        .then(() => {
+          res.redirect("/login");
+        })
+        .catch((error) => {
+          let errorMessage = "Đã có lỗi xảy ra, vui lòng thử lại.";
+          if (error.code === 11000) {
+            const field = Object.keys(error.keyValue)[0]; // trả về trường bị lỗi
+            if (field === "email") {
+              errorMessage =
+                "Email này đã có người sử dụng, vui lòng chọn email khác.";
+            } else if (field === "username") {
+              errorMessage = "Username này đã tồn tại, vui lòng chọn tên khác.";
+            } else if (field === "phone") {
+              errorMessage = "Số điện thoại này đã được đăng ký.";
+            } else {
+              errorMessage = `"${field}" đã có người sử dụng.`;
+            }
+          } else if (error.name === "ValidationError") {
+            const firstError = Object.values(error.errors)[0].message;
+            errorMessage = firstError;
+          } else {
+            errorMessage = error.message;
+          }
+          console.log(error);
+          console.log(errorMessage);
+          res.status(400).render("home/register", {
+            layout: false,
+            error: errorMessage,
+            oldData: req.body,
+          });
+        });
+    });
+  });
+});
+
+router.get("/login", (req, res) => {
+  res.render("home/login", { title: "Login", layout: false });
+});
+
+router.post("/login", async (req, res) => {
+  User.findOne({
+    username: req.body.username,
+  })
+    .then((user) => {
+      if (user) {
+        bcryptjs.compare(req.body.password, user.password, (e, matched) => {
+          if (e) res.send(e);
+          if (matched) {
+            req.session.userId = user._id;
+            req.session.user = user;
+            res.redirect("/");
+          } else {
+            e = "Mật khẩu không chính xác!";
+            console.log(e);
+            res.render("home/login", {
+              title: "Login",
+              error: e,
+              layout: false,
+            });
+          }
+        });
+      } else {
+        e = "Tài khoản không tồn tại!";
+        console.log(e);
+        res.render("home/login", {
+          title: "Login",
+          error: e,
+          layout: false,
+        });
+      }
+    })
+    .catch((e) => {
+      console.log(e);
+    });
+});
+
 /* GET home page. */
 router.get("/", function (req, res, next) {
   res.render("home/index", { title: "Home", productList: productList });
@@ -76,16 +184,12 @@ router.get("/contact", function (req, res, next) {
   res.render("home/contact", { title: "Contact" });
 });
 
-router.get("/cart", function (req, res, next) {
+router.get("/cart", requireLogin, function (req, res, next) {
   res.render("home/cart", { title: "Cart" });
 });
 
-router.get("/checkout", function (req, res, next) {
+router.get("/checkout", requireLogin, function (req, res, next) {
   res.render("home/checkout", { title: "Checkout" });
-});
-
-router.get("/customer", function (req, res, next) {
-  res.render("home/customer", { title: "customer" });
 });
 
 module.exports = router;

@@ -2488,7 +2488,6 @@ textarea.form-control.is-invalid {
 }
 
 .input-quanlity {
-  
 }
 
 .btn {
@@ -6239,6 +6238,7 @@ a.close.disabled {
 }
 
 .carousel-inner {
+  border-radius: 20px;
   position: relative;
   width: 100%;
   overflow: hidden;
@@ -9989,6 +9989,7 @@ h6 {
 }
 
 .product-offer {
+  border-radius: 20px;
   position: relative;
   overflow: hidden;
 }
@@ -10133,4 +10134,72 @@ h6 {
   100% {
     transform: translateY(-15px);
   }
+}
+
+.wrapFrom {
+  display: flex;
+  background-color: white;
+  width: 100%;
+  height: 90%;
+  align-items: center;
+  justify-content: center;
+}
+
+.form-login {
+  width: 60%;
+  height: 500px;
+  display: flex;
+  justify-content: center;
+  background-color: white;
+  flex-direction: column;
+  padding: 20px;
+  border-radius: 0px 20px 20px 0px;
+}
+
+.form-login > input {
+  border-radius: 5px;
+  border: 1px solid gray;
+}
+
+.containerBtn > button {
+  margin: 10px 0;
+  width: 25%;
+  border-radius: 10px;
+  background-color: #ffd333;
+  border: 0;
+  height: 35px;
+  font-weight: 500;
+}
+
+.containerBtn > button:hover {
+  transition: 200ms ease-out scale;
+  scale: 1.05;
+}
+
+.containerBtn > a {
+  margin: 10px 0;
+}
+.containerBtn {
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-top: 10px;
+  padding-right: 10px;
+}
+.containerFormLogin {
+  width: 50%;
+  height: 500px;
+  display: flex;
+  background-color: gainsboro;
+  border-radius: 20px 20px 20px 20px;
+  filter: drop-shadow(2px 2px 15px black);
+}
+
+.containerFormLogin > img {
+  object-fit: cover;
+  width: 40%;
+  height: 500px;
+  border-radius: 20px 0px 0px 20px;
 }

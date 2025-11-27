@@ -158,6 +158,24 @@
                     style="padding-bottom: 2px;"
                   >0</span>
                 </a>
+                {{#if user}}
+                  <div class="btn text-black fw-bold bg-primary px-3 ml-3">
+                    Xin chào,
+                    {{user.fullname}}
+                  </div>
+                {{else}}
+                  <a
+                    href="/login"
+                    class="btn text-black fw-bold bg-primary px-3 ml-3"
+                    style="font-weight: bold; color:black"
+                  >
+                    LOGIN
+                  </a>
+                  <a href="/register" class="btn text-white px-0 ml-3">
+                    Register
+                  </a>
+                {{/if}}
+
               </div>
             </div>
           </nav>
