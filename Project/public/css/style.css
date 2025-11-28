@@ -10093,6 +10093,7 @@ h6 {
 }
 .product-img {
   min-height: 280px;
+  border-radius: 20px;
 }
 
 .product-item .product-img img {
