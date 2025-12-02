@@ -8,8 +8,10 @@ const session = require("express-session");
 
 var indexRouter = require("./routes/index");
 var adminRouter = require("./routes/admin");
+
 const { default: mongoose } = require("mongoose");
 const urlDb = "mongodb://127.0.0.1:27017/test";
+
 var app = express();
 
 app.engine(
