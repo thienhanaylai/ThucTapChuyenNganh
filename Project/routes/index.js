@@ -2,6 +2,7 @@ var express = require("express");
 const User = require("../models/user.model");
 var router = express.Router();
 const bcryptjs = require("bcryptjs");
+const Role = require("../models/role.model");
 
 const productList = [
   {
@@ -76,11 +77,105 @@ router.get("/register", (req, res) => {
 });
 
 router.post("/register", (req, res) => {
+  if (!req.body.fullname) {
+    res.status(400).render("home/register", {
+      layout: false,
+      error: "Tên không được để trống !",
+      oldData: req.body,
+    });
+    return;
+  }
+  if (!req.body.username) {
+    res.status(400).render("home/register", {
+      layout: false,
+      error: "Tên người dùng không được để trống !",
+      oldData: req.body,
+    });
+    return;
+  }
+  if (!req.body.email) {
+    res.status(400).render("home/register", {
+      layout: false,
+      error: "Email không được để trống",
+      oldData: req.body,
+    });
+    return;
+  } else {
+    var emailRegex = /^\S+@\S+\.\S+$/;
+    if (!emailRegex.test(req.body.email)) {
+      res.status(400).render("home/register", {
+        layout: false,
+        error: "Email không đúng định dạng !",
+        oldData: req.body,
+      });
+      return;
+    }
+  }
+  if (!req.body.phone) {
+    res.status(400).render("home/register", {
+      layout: false,
+      error: "Số điện thoại không được để trống !",
+      oldData: req.body,
+    });
+    return;
+  } else {
+    var phoneRegex = /^0\d{9}$/;
+    if (!phoneRegex.test(req.body.phone)) {
+      res.status(400).render("home/register", {
+        layout: false,
+        error: "Số điện thoại phải là 10 số và bắt đầu bằng số 0!",
+        oldData: req.body,
+      });
+      return;
+    }
+  }
+  if (!req.body.address) {
+    res.status(400).render("home/register", {
+      layout: false,
+      error: "Địa chỉ không được để trống !",
+      oldData: req.body,
+    });
+    return;
+  }
+  if (!req.body.role) {
+    res.status(400).render("home/register", {
+      layout: false,
+      error: "Quyền của người dùng không được để trống !",
+      oldData: req.body,
+    });
+    return;
+  }
+  if (!req.body.password) {
+    res.status(400).render("home/register", {
+      layout: false,
+      error: "Mật khẩu không được để trống !",
+      oldData: req.body,
+    });
+    return;
+  } else {
+    if (!req.body.confirmPassword) {
+      res.status(400).render("home/register", {
+        layout: false,
+        error: "Mật khẩu xác nhận không được để trống !",
+        oldData: req.body,
+      });
+      return;
+    }
+    if (req.body.password != req.body.confirmPassword) {
+      res.status(400).render("home/register", {
+        layout: false,
+        error: "Mật khẩu không trùng khớp!",
+        oldData: req.body,
+      });
+      return;
+    }
+  }
   const newUser = new User();
   newUser.fullname = req.body.fullname;
   newUser.username = req.body.username;
   newUser.email = req.body.email;
   newUser.phone = req.body.phone;
+  newUser.address = req.body.address;
   newUser.password = req.body.password;
   bcryptjs.genSalt(10, function (err, salt) {
     bcryptjs.hash(newUser.password, salt, function (err, hash) {
@@ -88,7 +183,9 @@ router.post("/register", (req, res) => {
         return err;
       }
       newUser.password = hash;
-
+      // const role = new Role();
+      // role.name = req.body.role;
+      // role.save();
       newUser
         .save()
         .then(() => {
@@ -131,6 +228,21 @@ router.get("/login", (req, res) => {
 });
 
 router.post("/login", async (req, res) => {
+  if (!req.body.username) {
+    res.status(400).render("home/login", {
+      layout: false,
+      error: "Tên người dùng không được để trống !",
+      oldData: req.body,
+    });
+    return;
+  }
+  if (!req.body.password) {
+    res.status(400).render("home/login", {
+      layout: false,
+      error: "Mật khâur không được để trống !",
+    });
+    return;
+  }
   User.findOne({
     username: req.body.username,
   })

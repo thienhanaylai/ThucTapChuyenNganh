@@ -1,0 +1,14 @@
+.imageReview {
+  border: #cccccc solid 1px;
+  border-radius: 10px;
+}
+
+.inputFile {
+  height: 100%;
+  text-align: center;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  font-weight: 500;
+}
