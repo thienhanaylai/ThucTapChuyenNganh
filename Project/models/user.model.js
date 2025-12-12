@@ -7,19 +7,30 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: uuidv4,
     },
-    role_id: {
+    username: {
       type: String,
-      ref: "Role",
+      required: true,
+      trim: true,
+      unique: true,
+      index: true,
+      immutable: true,
     },
-    fullname: {
+    email: {
+      type: String,
+      required: false,
+      unique: true,
+      lowercase: true,
+      trim: true,
+      match: [/^\S+@\S+\.\S+$/, "Email không hợp lệ"], // Regex check email
+    },
+    password: {
       type: String,
       required: true,
       trim: true,
     },
-    email: {
+    fullname: {
       type: String,
       required: true,
-      unique: true,
       trim: true,
     },
     phone: {
@@ -27,11 +38,24 @@ const userSchema = new mongoose.Schema(
       trim: true,
       required: true,
       unique: true,
+      match: [
+        /^0\d{9}$/,
+        "Số điện thoại không hợp lệ! Phải có 10 số và bắt đầu bằng số 0.",
+      ],
     },
-    password: {
+    address: {
       type: String,
-      required: true,
       trim: true,
+      default: "",
+    },
+    role: {
+      type: String,
+      enum: ["user", "admin"],
+      default: "user",
+    },
+    cart: {
+      type: [],
+      default: [],
     },
   },
   { timestamps: true }
