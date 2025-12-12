@@ -50,15 +50,17 @@
             {{#if error}}
               <div class="alert alert-danger">{{error}}</div>
             {{/if}}
+            {{#if success}}
+              <div class="alert alert-success">{{success}}</div>
+            {{/if}}
             <form action="/login" method="post">
               <div class="form-group">
-                <label>Username</label>
+                <label>Email</label>
                 <input
                   type="text"
                   class="form-control"
-                  name="username"
-                  placeholder="Username"
-                  required
+                  name="email"
+                  placeholder="abc@gmail.com"
                   autofocus
                 />
               </div>
@@ -70,7 +72,6 @@
                   name="password"
                   class="form-control"
                   placeholder="Enter your password"
-                  required
                 />
               </div>
 
