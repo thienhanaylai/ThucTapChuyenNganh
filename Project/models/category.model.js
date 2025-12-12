@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const { v4: uuidv4 } = require("uuid");
 
-const roleSchema = new mongoose.Schema(
+const categorySchema = new mongoose.Schema(
   {
     _id: {
       type: String,
@@ -13,13 +13,9 @@ const roleSchema = new mongoose.Schema(
       unique: true,
       index: true,
     },
-    description: {
-      type: String,
-      default: "",
-    },
   },
   { timestamps: true }
 );
 
-const Role = mongoose.model("Role", roleSchema);
-module.exports = Role;
+const Category = mongoose.model("Category", categorySchema);
+module.exports = Category;

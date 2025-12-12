@@ -1,10 +1,7 @@
 var express = require("express");
 const User = require("../models/user.model");
-const Role = require("../models/role.model");
 var router = express.Router();
 const bcryptjs = require("bcryptjs");
-const { body, validationResult } = require("express-validator");
-const passport = require("passport");
 
 const productList = [
   {
@@ -62,75 +59,10 @@ const productDetail = {
 
 const requireLogin = (req, res, next) => {
   //midleware kiem tra login chua
-  if (req.isAuthenticated()) {
-    next();
+  if (!req.session.userId) {
+    return res.redirect("/login");
   }
-  res.redirect("/login");
-};
-
-const validateRegister = () => {
-  return [
-    body("fullname").notEmpty().withMessage("Tên không được để trống").trim(),
-    body("email")
-      .notEmpty()
-      .withMessage("Email không được để trống")
-      .isEmail()
-      .withMessage("Email không đúng định dạng"),
-    body("phone")
-      .notEmpty()
-      .withMessage("Số điện thoại không được để trống!")
-      .isMobilePhone("vi-VN")
-      .withMessage("Số điện thoại không hợp lệ!"),
-    body("password").notEmpty().withMessage("Mật khẩu không được để trống"),
-    body("confirmPassword")
-      .notEmpty()
-      .withMessage("Mật khẩu không được để trống")
-      .custom((value, { req }) => {
-        if (value !== req.body.password) {
-          throw new Error("Mật khẩu xác nhận không trùng khớp!");
-        }
-        return true;
-      }),
-    (req, res, next) => {
-      const errors = validationResult(req);
-      if (errors.isEmpty()) {
-        return next();
-      }
-      const ListError = errors.array().map((err) => err.msg);
-
-      return res.status(400).render("home/register", {
-        title: "Register",
-        layout: false,
-        error: ListError[0],
-        oldData: req.body,
-      });
-    },
-  ];
-};
-
-const validateLogin = () => {
-  return [
-    body("email")
-      .notEmpty()
-      .withMessage("Email không được để trống")
-      .isEmail()
-      .withMessage("Email không đúng định dạng"),
-    body("password").notEmpty().withMessage("Mật khẩu không được để trống"),
-    (req, res, next) => {
-      const errors = validationResult(req);
-      if (errors.isEmpty()) {
-        return next();
-      }
-      const ListError = errors.array().map((err) => err.msg);
-
-      return res.status(400).render("home/login", {
-        title: "Login",
-        layout: false,
-        error: ListError[0],
-        oldData: req.body,
-      });
-    },
-  ];
+  next();
 };
 
 router.all("/*", function (req, res, next) {
@@ -143,24 +75,23 @@ router.get("/register", (req, res) => {
   res.render("home/register", { title: "Register", layout: false });
 });
 
-router.post("/register", validateRegister(), async (req, res) => {
-  const role = await Role.findOne({ name: "user" }); //truyền thẳng req.body.role vào đây để cho người dùng chọn role
+router.post("/register", (req, res) => {
   const newUser = new User();
   newUser.fullname = req.body.fullname;
+  newUser.username = req.body.username;
   newUser.email = req.body.email;
   newUser.phone = req.body.phone;
   newUser.password = req.body.password;
-  newUser.role_id = role._id;
   bcryptjs.genSalt(10, function (err, salt) {
     bcryptjs.hash(newUser.password, salt, function (err, hash) {
       if (err) {
         return err;
       }
       newUser.password = hash;
+
       newUser
         .save()
         .then(() => {
-          req.flash("success", "Đăng ký thành công !");
           res.redirect("/login");
         })
         .catch((error) => {
@@ -170,6 +101,8 @@ router.post("/register", validateRegister(), async (req, res) => {
             if (field === "email") {
               errorMessage =
                 "Email này đã có người sử dụng, vui lòng chọn email khác.";
+            } else if (field === "username") {
+              errorMessage = "Username này đã tồn tại, vui lòng chọn tên khác.";
             } else if (field === "phone") {
               errorMessage = "Số điện thoại này đã được đăng ký.";
             } else {
@@ -197,19 +130,46 @@ router.get("/login", (req, res) => {
   res.render("home/login", { title: "Login", layout: false });
 });
 
-router.post("/login", validateLogin(), async (req, res, next) => {
-  passport.authenticate("local", {
-    successRedirect: "/",
-    failureRedirect: "/login",
-    failureFlash: true, //thogn bao loi qua flash
-  })(req, res, next);
+router.post("/login", async (req, res) => {
+  User.findOne({
+    username: req.body.username,
+  })
+    .then((user) => {
+      if (user) {
+        bcryptjs.compare(req.body.password, user.password, (e, matched) => {
+          if (e) res.send(e);
+          if (matched) {
+            req.session.userId = user._id;
+            req.session.user = user;
+            res.redirect("/");
+          } else {
+            e = "Mật khẩu không chính xác!";
+            console.log(e);
+            res.render("home/login", {
+              title: "Login",
+              error: e,
+              layout: false,
+            });
+          }
+        });
+      } else {
+        e = "Tài khoản không tồn tại!";
+        console.log(e);
+        res.render("home/login", {
+          title: "Login",
+          error: e,
+          layout: false,
+        });
+      }
+    })
+    .catch((e) => {
+      console.log(e);
+    });
 });
 
 router.get("/logout", (req, res) => {
-  req.logOut((e) => {
-    if (e) return next(e);
-    res.redirect("/");
-  });
+  req.session.destroy();
+  res.redirect("/");
 });
 
 /* GET home page. */
