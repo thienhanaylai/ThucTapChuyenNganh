@@ -4,15 +4,20 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 const { engine } = require("express-handlebars");
+
 const session = require("express-session");
+const flash = require("connect-flash");
+const passport = require("passport");
+const configPassport = require("./config/passport");
 
 var indexRouter = require("./routes/index");
 var adminRouter = require("./routes/admin");
 
 const { default: mongoose } = require("mongoose");
-const urlDb = "mongodb://127.0.0.1:27017/test";
+const urlDb = "mongodb://127.0.0.1:27017/test2";
 
 var app = express();
+configPassport();
 
 app.engine(
   "hbs",
@@ -44,7 +49,6 @@ async function connectDB() {
 }
 
 connectDB();
-
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "hbs");
@@ -68,9 +72,15 @@ app.use(
   })
 );
 
-//gán session vào local để luuw thong tin user
+app.use(passport.initialize()); //midleware cua passport
+app.use(passport.session());
+
+app.use(flash());
+
 app.use((req, res, next) => {
-  res.locals.user = req.session.user;
+  res.locals.user = req.user ? req.user.toObject() : null;
+  res.locals.success = req.flash("success");
+  res.locals.error = req.flash("error");
   next();
 });
 
