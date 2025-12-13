@@ -135,7 +135,6 @@ const validateLogin = () => {
 
 router.all("/*", function (req, res, next) {
   res.app.locals.layout = "home";
-  res.app.locals.user = req.session.user;
   next();
 });
 
@@ -144,7 +143,7 @@ router.get("/register", (req, res) => {
 });
 
 router.post("/register", validateRegister(), async (req, res) => {
-  const role = await Role.findOne({ name: "user" }); //truyền thẳng req.body.role vào đây để cho người dùng chọn role
+  const role = await Role.findOne({ name: "user" }); //truyền thẳng req.body.role vào đây nếu để cho người dùng chọn role
   const newUser = new User();
   newUser.fullname = req.body.fullname;
   newUser.email = req.body.email;
