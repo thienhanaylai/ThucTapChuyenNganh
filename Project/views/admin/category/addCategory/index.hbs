@@ -14,6 +14,9 @@
         </div>
         <div class="card-body">
           <form method="POST" action="/admin/category/add">
+            {{#if error}}
+              <div class="alert alert-danger">{{error}}</div>
+            {{/if}}
             <div class="form-group">
               <label for="brandName">Brand Name
                 <span class="text-danger">*</span></label>
@@ -21,28 +24,14 @@
                 type="text"
                 class="form-control"
                 id="brandName"
-                name="brandName"
+                name="categoryName"
                 placeholder="Enter brand name (e.g., Nike, Adidas, Puma)"
-                required
               />
               <small class="form-text text-muted">
                 Enter the name of the brand/category you want to add.
               </small>
             </div>
 
-            <div class="form-group">
-              <label for="description">Description (Optional)</label>
-              <textarea
-                class="form-control"
-                id="description"
-                name="description"
-                rows="4"
-                placeholder="Enter category description"
-              ></textarea>
-              <small class="form-text text-muted">
-                Brief description about this category.
-              </small>
-            </div>
             <hr />
             <div class="form-group mb-0">
               <button type="submit" class="btn btn-primary">

@@ -4,7 +4,7 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 const { engine } = require("express-handlebars");
-
+const methodOverride = require("method-override");
 const session = require("express-session");
 const flash = require("connect-flash");
 const passport = require("passport");
@@ -35,6 +35,18 @@ app.engine(
         }
         return init;
       },
+      formatDate: (date) => {
+        if (!date) return "";
+        return new Date(date).toLocaleString("vi-VN", {
+          timeZone: "Asia/Ho_Chi_Minh",
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: false,
+        });
+      },
     },
   })
 );
@@ -58,7 +70,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
-
+app.use(methodOverride("_method"));
 app.use(
   session({
     secret: "1622004",

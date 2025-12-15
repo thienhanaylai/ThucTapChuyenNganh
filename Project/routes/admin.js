@@ -3,6 +3,7 @@ var router = express.Router();
 const { body, validationResult } = require("express-validator");
 const passport = require("passport");
 const Role = require("../models/role.model");
+const Category = require("../models/category.model");
 const checkAdmin = async (req, res, next) => {
   //check user có role admin ko nếu ko thì ko vào admin được
   if (req.isAuthenticated()) {
@@ -119,16 +120,99 @@ router.get("/product/edit", checkAdmin, function (req, res, next) {
   res.render("admin/product/editProduct");
 });
 
-router.get("/category", checkAdmin, function (req, res, next) {
-  res.render("admin/category");
+router.get("/category", checkAdmin, async function (req, res, next) {
+  const categories = await Category.find({}).lean();
+  res.render("admin/category", { categories: categories });
 });
 
 router.get("/category/add", checkAdmin, function (req, res, next) {
   res.render("admin/category/addCategory");
 });
 
-router.get("/category/edit", checkAdmin, function (req, res, next) {
-  res.render("admin/category/editCategory");
+router.post("/category/add", checkAdmin, async function (req, res, next) {
+  const { categoryName } = req.body;
+  console.log(categoryName);
+  if (!categoryName || categoryName.trim().length === 0) {
+    const e = "Tên category không được để trống !";
+    return res.status(400).render("admin/category/addCategory", { error: e });
+  } else {
+    try {
+      const category = new Category();
+      category.name = req.body.categoryName;
+      await category.save();
+      return res.redirect("/admin/category");
+    } catch (error) {
+      let e = "Đã có lỗi ~";
+      if (error.code === 11000) {
+        const field = Object.keys(error.keyValue)[0];
+        if (field === "name") {
+          e = "Tên category đã có!";
+        }
+      }
+      return res.status(400).render("admin/category/addCategory", { error: e });
+    }
+  }
+});
+
+router.get("/category/edit/:id", checkAdmin, async function (req, res, next) {
+  try {
+    const category = await Category.findById(req.params.id);
+    if (category) {
+      res.render("admin/category/editCategory", {
+        categoryID: category._id,
+        categoryName: category.name,
+      });
+    } else {
+      return res.redirect("/admin/category");
+    }
+  } catch (e) {
+    console.log(e);
+  }
+});
+
+//còn thiếu trương fhopwj naem bị trống
+router.post("/category/edit/:id", checkAdmin, async function (req, res, next) {
+  const { categoryName } = req.body;
+  if (categoryName === "") {
+    const e = "Tên category không được để trống !";
+    return res.render(`admin/category/editCategory/`, {
+      error: e,
+      categoryID: req.params.id,
+    });
+  } else {
+    try {
+      await Category.findByIdAndUpdate(
+        req.params.id,
+        {
+          name: categoryName,
+        },
+        { new: true }
+      );
+      return res.redirect("/admin/category");
+    } catch (error) {
+      let e = "Đã có lỗi ~";
+      if (error.code === 11000) {
+        const field = Object.keys(error.keyValue)[0];
+        if (field === "name") {
+          e = "Tên category đã có!";
+        }
+      }
+      return res.status(400).render("admin/category/editCategory", {
+        error: e,
+        categoryID: req.params.id,
+      });
+    }
+  }
+});
+
+router.delete("/category/delete/:id", checkAdmin, async function (req, res) {
+  try {
+    await Category.findByIdAndDelete(req.params.id);
+    res.redirect("/admin/category");
+  } catch (e) {
+    console.log(e);
+    res.redirect("/admin/category");
+  }
 });
 
 router.get("/orders", checkAdmin, function (req, res, next) {
