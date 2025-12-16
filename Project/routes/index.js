@@ -180,8 +180,6 @@ router.post("/register", validateRegister(), async (req, res) => {
           } else {
             errorMessage = error.message;
           }
-          console.log(error);
-          console.log(errorMessage);
           res.status(400).render("home/register", {
             layout: false,
             error: errorMessage,

@@ -1,0 +1,125 @@
+<style>
+  td { vertical-align: middle; } .avatar-img { width: 40px; height: 40px;
+  object-fit: cover; border-radius: 50%; margin-right: 10px; }
+</style>
+
+<div class="container-fluid">
+  <h1 class="h3 mb-2 text-gray-800">Quản lý người dùng</h1>
+
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+      <h6 class="m-0 font-weight-bold text-primary">Danh sách người dùng</h6>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4">
+
+          <div class="row">
+            <div class="col-sm-12 col-md-6">
+              <div class="dataTables_length">
+                <a href="/admin/users/add">
+                  <button class="btn btn-primary mb-3">
+                    <i class="fas fa-plus fa-sm"></i>
+                    Thêm người dùng
+                  </button>
+                </a>
+              </div>
+            </div>
+            <div class="col-sm-12 col-md-6">
+              <div id="dataTable_filter" class="dataTables_filter"></div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-12">
+              <table
+                class="table table-bordered dataTable"
+                id="dataTable"
+                width="100%"
+                cellspacing="0"
+                role="grid"
+                style="width: 100%;"
+              >
+                <thead>
+                  <tr role="row">
+                    <th>Họ và Tên</th>
+                    <th>Email</th>
+                    <th>Số điện thoại</th>
+                    <th>Vai trò</th>
+                    <th>Ngày tham gia</th>
+                    <th>Trạng thái</th>
+                    <th style="width: 160px;">Hành động</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  {{#each user}}
+                    <tr class="odd">
+                      <td>
+                        {{this.fullname}}
+                      </td>
+                      <td>{{this.email}}</td>
+                      <td>{{this.phone}}</td>
+                      <td><span class="badge">{{this.role_name}}</span></td>
+                      <td>{{formatDate this.createdAt}}</td>
+                      <td><span
+                          this="badge badge-success"
+                        >{{this.status}}</span></td>
+                      <td class="d-flex flex-row">
+                        <a
+                          href="/admin/users/edit/{{this._id}}"
+                          class="btn btn-warning"
+                          style="height: fit-content;"
+                        >Sửa</a>
+                        |
+                        <form
+                          style="width: fit-content;"
+                          action="/admin/users/delete/{{this._id}}?_method=DELETE"
+                          method="post"
+                        ><button
+                            type="submit"
+                            class="btn btn-danger"
+                            onclick="return confirm('Bạn có chắc muốn xóa?')"
+                          >Delete</button></form>
+                      </td>
+                    </tr>
+                  {{/each}}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-12 col-md-5">
+              <div class="dataTables_info" role="status" aria-live="polite">Hiển
+                thị 1 đến 3 của 57 người dùng</div>
+            </div>
+            <div class="col-sm-12 col-md-7">
+              <div class="dataTables_paginate paging_simple_numbers">
+                <ul class="pagination">
+                  <li class="paginate_button page-item previous disabled"><a
+                      href="#"
+                      class="page-link"
+                    >Trước</a></li>
+                  <li class="paginate_button page-item active"><a
+                      href="#"
+                      class="page-link"
+                    >1</a></li>
+                  <li class="paginate_button page-item"><a
+                      href="#"
+                      class="page-link"
+                    >2</a></li>
+                  <li class="paginate_button page-item next"><a
+                      href="#"
+                      class="page-link"
+                    >Sau</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

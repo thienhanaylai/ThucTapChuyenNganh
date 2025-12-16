@@ -1,0 +1,101 @@
+<div class="container-fluid">
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+      <h6 class="m-0 font-weight-bold text-primary">Edit user</h6>
+    </div>
+    <div class="card-body">
+      {{#if error}}
+        <div class="alert alert-danger">{{error}}</div>
+      {{/if}}
+      <form action="/admin/users/edit/{{user._id}}" method="POST">
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="fullname" class="form-label">Full name</label>
+            <input
+              type="text"
+              class="form-control"
+              id="fullname"
+              name="fullname"
+              value="{{user.fullname}}"
+            />
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input
+              type="text"
+              class="form-control"
+              id="email"
+              name="email"
+              value="{{user.email}}"
+            />
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="phone" class="form-label">Phone</label>
+            <input
+              type="text"
+              class="form-control"
+              id="phone"
+              name="phone"
+              value="{{user.phone}}"
+            />
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <label for="role_id" class="form-label">Role</label>
+            <select class="form-control" id="role_id" name="role_id">
+              {{#each roles}}
+                <option value="{{this._id}}" {{#if this.isSelected}}selected{{/if}}>{{this.name}}</option>
+              {{/each}}
+            </select>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input
+              type="password"
+              class="form-control"
+              id="password"
+              name="password"
+            />
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <label for="confirm_password" class="form-label">Confirm Password</label>
+            <input
+              type="password"
+              class="form-control"
+              id="confirmPassword"
+              name="confirmPassword"
+            />
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 mb-3 mt-5">
+            <button type="submit" class="btn btn-primary">Update User</button>
+            <a href="/admin/users" class="btn btn-secondary">Cancel</a>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="status" class="form-label">Status</label>
+            <select class="form-control" id="status" name="status">
+              {{#if user.status}}
+                <option value="true" selected>Hoạt động</option>
+                <option value="false">Bị khóa</option>
+              {{else}}
+                <option value="true">Hoạt động</option>
+                <option value="false" selected>Bị khóa</option>
+              {{/if}}
+            </select>
+          </div>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>
