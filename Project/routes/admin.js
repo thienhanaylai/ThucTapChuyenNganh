@@ -9,7 +9,6 @@ const Role = require("../models/role.model");
 const Category = require("../models/category.model");
 const User = require("../models/user.model");
 const Product = require("../models/product.model");
-const ProductDetail = require("../models/productDetail.model");
 
 const multer = require("multer");
 const path = require("path");
