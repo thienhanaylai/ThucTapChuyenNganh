@@ -13,7 +13,11 @@
           <h6 class="m-0 font-weight-bold text-primary">Category Information</h6>
         </div>
         <div class="card-body">
-          <form method="POST" action="/admin/category/add">
+          <form
+            method="POST"
+            action="/admin/category/add"
+            enctype="multipart/form-data"
+          >
             {{#if error}}
               <div class="alert alert-danger">{{error}}</div>
             {{/if}}
@@ -31,8 +35,24 @@
                 Enter the name of the brand/category you want to add.
               </small>
             </div>
-
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label for="logo">Logo</label>
+                  <input
+                    type="file"
+                    class="form-control-file"
+                    id="logo"
+                    name="logo"
+                    accept="image/*"
+                  />
+                  <small class="form-text text-muted">Upload category logo (JPG,
+                    PNG, AVIF).</small>
+                </div>
+              </div>
+            </div>
             <hr />
+
             <div class="form-group mb-0">
               <button type="submit" class="btn btn-primary">
                 <i class="fas fa-plus-circle"></i>

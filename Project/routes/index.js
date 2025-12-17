@@ -5,6 +5,7 @@ var router = express.Router();
 const bcryptjs = require("bcryptjs");
 const { body, validationResult } = require("express-validator");
 const passport = require("passport");
+const Category = require("../models/category.model");
 
 const productList = [
   {
@@ -210,7 +211,8 @@ router.get("/logout", (req, res) => {
 });
 
 /* GET home page. */
-router.get("/", function (req, res, next) {
+router.get("/", async function (req, res, next) {
+  const categories = await Category.find({}).lean();
   res.render("home/index", { title: "Home", productList: productList });
 });
 

@@ -14,6 +14,10 @@ const categorySchema = new mongoose.Schema(
       index: true,
       trim: true,
     },
+    logo: {
+      type: String,
+      default: "",
+    },
   },
   { timestamps: true }
 );

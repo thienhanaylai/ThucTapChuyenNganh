@@ -195,7 +195,7 @@ const validateEditProduct = () => {
   ];
 };
 
-const storage = multer.diskStorage({
+const storageProduct = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "./public/images/products");
   },
@@ -205,7 +205,20 @@ const storage = multer.diskStorage({
     cb(null, randomNamefile + path.extname(file.originalname));
   },
 });
-const upload = multer({ storage: storage });
+
+const storageCategory = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "./public/images/categories");
+  },
+  filename: function (req, file, cb) {
+    const randomNamefile =
+      "category-" + Date.now() + "-" + Math.round(Math.random() * 1e3);
+    cb(null, randomNamefile + path.extname(file.originalname));
+  },
+});
+
+const uploadProduct = multer({ storage: storageProduct });
+const uploadCategory = multer({ storage: storageCategory });
 
 router.get("/login", function (req, res, next) {
   res.render("admin/login", { layout: false });
@@ -264,7 +277,7 @@ router.get("/product/add", checkAdmin, async function (req, res, next) {
 router.post(
   "/product/add",
   checkAdmin,
-  upload.single("image"),
+  uploadProduct.single("image"),
   validateAddProduct(),
   async function (req, res, next) {
     let { name, category_id, price, size, stock, description } = req.body;
@@ -353,7 +366,7 @@ router.get("/product/edit/:id", checkAdmin, async function (req, res, next) {
 router.post(
   "/product/edit/:id",
   checkAdmin,
-  upload.single("image"),
+  uploadProduct.single("image"),
   validateEditProduct(),
   async function (req, res, next) {
     let { name, category_id, price, size, stock, description } = req.body;
@@ -448,7 +461,16 @@ router.delete(
 );
 
 router.get("/category", checkAdmin, async function (req, res, next) {
-  const categories = await Category.find({}).lean();
+  let categories = await Category.find({}).lean();
+  categories = await Promise.all(
+    categories.map(async (cate) => {
+      const quantity = await Product.countDocuments({ category_id: cate._id });
+      return {
+        ...cate,
+        quantity: quantity,
+      };
+    })
+  );
   res.render("admin/category", { categories: categories });
 });
 
@@ -456,15 +478,29 @@ router.get("/category/add", checkAdmin, function (req, res, next) {
   res.render("admin/category/addCategory");
 });
 
-router.post("/category/add", checkAdmin, async function (req, res, next) {
-  const { categoryName } = req.body;
-  if (!categoryName || categoryName.trim().length === 0) {
-    const e = "Tên category không được để trống !";
-    return res.status(400).render("admin/category/addCategory", { error: e });
-  } else {
+router.post(
+  "/category/add",
+  checkAdmin,
+  uploadCategory.single("logo"),
+  async function (req, res, next) {
+    const { categoryName } = req.body;
+
+    if (!categoryName || categoryName.trim().length === 0) {
+      const e = "Tên category không được để trống !";
+      return res.status(400).render("admin/category/addCategory", { error: e });
+    }
+    let imagePath = "";
+    if (req.file) {
+      imagePath = "/public/images/categories/" + req.file.filename;
+    } else {
+      const e = "Logo không được để trống !";
+      return res.status(400).render("admin/category/addCategory", { error: e });
+    }
+
     try {
       const category = new Category();
       category.name = req.body.categoryName;
+      category.logo = imagePath;
       await category.save();
       return res.redirect("/admin/category");
     } catch (error) {
@@ -478,7 +514,7 @@ router.post("/category/add", checkAdmin, async function (req, res, next) {
       return res.status(400).render("admin/category/addCategory", { error: e });
     }
   }
-});
+);
 
 router.get("/category/edit/:id", checkAdmin, async function (req, res, next) {
   try {
@@ -496,20 +532,32 @@ router.get("/category/edit/:id", checkAdmin, async function (req, res, next) {
   }
 });
 
-router.post("/category/edit/:id", checkAdmin, async function (req, res, next) {
-  const { categoryName } = req.body;
-  if (!categoryName || categoryName.trim().length === 0) {
-    const e = "Tên category không được để trống !";
-    return res.render(`admin/category/editCategory/`, {
-      error: e,
-      categoryID: req.params.id,
-    });
-  } else {
+router.post(
+  "/category/edit/:id",
+  checkAdmin,
+  uploadCategory.single("logo"),
+  async function (req, res, next) {
+    const { categoryName } = req.body;
+    if (!categoryName || categoryName.trim().length === 0) {
+      const e = "Tên category không được để trống !";
+      return res.render(`admin/category/editCategory/`, {
+        error: e,
+        categoryID: req.params.id,
+      });
+    }
+    let imagePath = "";
+    if (req.file) {
+      imagePath = "/public/images/categories/" + req.file.filename;
+    } else {
+      const cate = await Category.findById(req.params.id).lean();
+      imagePath = cate.logo;
+    }
     try {
       await Category.findByIdAndUpdate(
         req.params.id,
         {
           name: categoryName,
+          logo: imagePath,
         },
         { new: true }
       );
@@ -528,7 +576,7 @@ router.post("/category/edit/:id", checkAdmin, async function (req, res, next) {
       });
     }
   }
-});
+);
 
 router.delete("/category/delete/:id", checkAdmin, async function (req, res) {
   try {

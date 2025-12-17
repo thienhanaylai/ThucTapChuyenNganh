@@ -74,7 +74,7 @@
                   {{#each categories}}
                     <tr class="">
                       <td class="sorting_1">{{this.name}}</td>
-                      <td>21</td>
+                      <td>{{this.quantity}}</td>
                       <td>{{formatDate this.createdAt}}</td>
                       <td class="d-flex flex-row">
                         <a href="/admin/category/edit/{{this._id}}">
@@ -94,16 +94,9 @@
                     </tr>
                   {{/each}}
                 </tbody>
-              </table></div></div><div class="row"><div
-              class="col-sm-12 col-md-5"
-            ><div
-                class="dataTables_info"
-                id="dataTable_info"
-                role="status"
-                aria-live="polite"
-              >Showing 1 to 10 of 57 entries</div></div><div
-              class="col-sm-12 col-md-7"
-            >
+              </table></div></div>
+          <div class="row">
+            <div class="col-sm-12 col-md-7">
               {{! <div
                 class="dataTables_paginate paging_simple_numbers"
                 id="dataTable_paginate"
