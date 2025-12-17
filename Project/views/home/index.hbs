@@ -167,123 +167,21 @@
       class="bg-secondary pr-3"
     >Categories</span></h2>
   <div class="row px-xl-5 pb-3">
+    {{#each categories}}
     <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
       <a class="text-decoration-none" href="">
         <div class="cat-item d-flex align-items-center mb-4">
           <div class="overflow-hidden" style="width: 100px; height: 100px;">
-            <img class="img-fluid" src="img/logoadidas.png" alt="" />
+            <img class="img-fluid" src="{{this.logo}}" alt="" />
           </div>
           <div class="flex-fill pl-3">
-            <h6>Adidas</h6>
-            <small class="text-body">24 Products</small>
+            <h6>{{this.name}}</h6>
+            {{!-- <small class="text-body">24 Products</small> --}}
           </div>
         </div>
       </a>
     </div>
-    <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-      <a class="text-decoration-none" href="">
-        <div class="cat-item img-zoom d-flex align-items-center mb-4">
-          <div class="overflow-hidden" style="width: 100px; height: 100px;">
-            <img class="img-fluid" src="img/logobalance.jpg" alt="" />
-          </div>
-          <div class="flex-fill pl-3">
-            <h6>New Balance</h6>
-            <small class="text-body">10 Products</small>
-          </div>
-        </div>
-      </a>
-    </div>
-    <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-      <a class="text-decoration-none" href="">
-        <div class="cat-item img-zoom d-flex align-items-center mb-4">
-          <div class="overflow-hidden" style="width: 100px; height: 100px;">
-            <img class="img-fluid" src="img/logoconverse.jpg" alt="" />
-          </div>
-          <div class="flex-fill pl-3">
-            <h6>Converse</h6>
-            <small class="text-body">19 Products</small>
-          </div>
-        </div>
-      </a>
-    </div>
-    <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-      <a class="text-decoration-none" href="">
-        <div class="cat-item img-zoom d-flex align-items-center mb-4">
-          <div class="overflow-hidden" style="width: 100px; height: 100px;">
-            <img class="img-fluid" src="img/logofila.png" alt="" />
-          </div>
-          <div class="flex-fill pl-3">
-            <h6>Fila</h6>
-            <small class="text-body">20 Products</small>
-          </div>
-        </div>
-      </a>
-    </div>
-    <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-      <a class="text-decoration-none" href="">
-        <div class="cat-item img-zoom d-flex align-items-center mb-4">
-          <div class="overflow-hidden" style="width: 100px; height: 100px;">
-            <img class="img-fluid" src="img/logohitech.png" alt="" />
-          </div>
-          <div class="flex-fill pl-3">
-            <h6>Hi-Tech</h6>
-            <small class="text-body">13 Products</small>
-          </div>
-        </div>
-      </a>
-    </div>
-    <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-      <a class="text-decoration-none" href="">
-        <div class="cat-item img-zoom d-flex align-items-center mb-4">
-          <div class="overflow-hidden" style="width: 100px; height: 100px;">
-            <img class="img-fluid" src="img/logojordan.png" alt="" />
-          </div>
-          <div class="flex-fill pl-3">
-            <h6>Jordan</h6>
-            <small class="text-body">16 Products</small>
-          </div>
-        </div>
-      </a>
-    </div>
-    <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-      <a class="text-decoration-none" href="">
-        <div class="cat-item img-zoom d-flex align-items-center mb-4">
-          <div class="overflow-hidden" style="width: 100px; height: 100px;">
-            <img class="img-fluid" src="img/logonike.png" alt="" />
-          </div>
-          <div class="flex-fill pl-3">
-            <h6>Nike</h6>
-            <small class="text-body">11 Products</small>
-          </div>
-        </div>
-      </a>
-    </div>
-    <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-      <a class="text-decoration-none" href="">
-        <div class="cat-item img-zoom d-flex align-items-center mb-4">
-          <div class="overflow-hidden" style="width: 100px; height: 100px;">
-            <img class="img-fluid" src="img/logopuma.png" alt="" />
-          </div>
-          <div class="flex-fill pl-3">
-            <h6>Puma</h6>
-            <small class="text-body">14 Products</small>
-          </div>
-        </div>
-      </a>
-    </div>
-    <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-      <a class="text-decoration-none" href="">
-        <div class="cat-item img-zoom d-flex align-items-center mb-4">
-          <div class="overflow-hidden" style="width: 100px; height: 100px;">
-            <img class="img-fluid" src="img/logovans.jpg" alt="" />
-          </div>
-          <div class="flex-fill pl-3">
-            <h6>Vans</h6>
-            <small class="text-body">22 Products</small>
-          </div>
-        </div>
-      </a>
-    </div>
+    {{/each}}
     </div>
   </div>
 </div>
@@ -299,8 +197,8 @@
    <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
       <div class="product-item bg-light mb-4">
         <div class="product-img  position-relative overflow-hidden">
-          <img class="img-fluid w-100" src="{{this.img}}" alt="" />
-          <div class="product-action">
+          <img class="img-fluid w-100" src="{{this.image}}" alt="" />
+          {{!-- <div class="product-action">
             <a class="btn btn-outline-dark btn-square" href=""><i
                 class="fa fa-shopping-cart"
               ></i></a>
@@ -313,22 +211,18 @@
             <a class="btn btn-outline-dark btn-square" href=""><i
                 class="fa fa-search"
               ></i></a>
-          </div>
+          </div> --}}
         </div>
-        <div class="card-item text-center py-4">
+        <div class="card-item text-center py-4" style="    display: flex;
+    flex-direction: column;
+    justify-content: space-around;">
           <a class="h6 text-decoration-none text-truncate" href="">{{this.name}}</a>
           <div class="d-flex align-items-center justify-content-center mt-2">
-            <h5>${{this.price}}</h5><h6 class="text-muted ml-2"><del>${{this.sale}}</del></h6>
+            <h5 style="color: rgb(230, 74, 74);">{{formatPrice this.price}}</h5>
           </div>
-          <div class="d-flex align-items-center justify-content-center mb-1">
-            {{#times this.rate}}
-            <small class="fa fa-star text-primary mr-1"></small>
-            {{/times}}
-            <small>({{this.reviews}})</small>
-          </div>
-        </div>
       </div>
       </div>
+    </div>
      {{/each}}
   </div>
 </div>

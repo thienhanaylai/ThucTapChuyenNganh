@@ -256,9 +256,10 @@ router.get("/product", checkAdmin, async function (req, res, next) {
       //lấy tên cate từ cate_id
       (category) => category._id === product.category_id
     );
+    console.log(category);
     return {
       ...product,
-      categoryName: category.name,
+      categoryName: category ? category.name : "",
     };
   });
   res.render("admin/product", {
@@ -283,7 +284,7 @@ router.post(
     let { name, category_id, price, size, stock, description } = req.body;
     let imagePath = "";
     if (req.file) {
-      imagePath = "/public/images/products/" + req.file.filename;
+      imagePath = "images/products/" + req.file.filename;
     }
     try {
       const errors = validationResult(req);
@@ -321,8 +322,9 @@ router.post(
           categories: categories,
         });
       }
+
       const newProduct = new Product();
-      newProduct.name = name;
+      newProduct.name = name.replaceAll("-", " ");
       newProduct.category_id = category_id;
       newProduct.image = imagePath;
       newProduct.price = price;
@@ -374,7 +376,7 @@ router.post(
     let categories = await Category.find({}).lean();
     let imagePath = "";
     if (req.file) {
-      imagePath = "/public/images/products/" + req.file.filename;
+      imagePath = "images/products/" + req.file.filename;
     } else {
       imagePath = product.image;
     }
@@ -491,7 +493,7 @@ router.post(
     }
     let imagePath = "";
     if (req.file) {
-      imagePath = "/public/images/categories/" + req.file.filename;
+      imagePath = "images/categories/" + req.file.filename;
     } else {
       const e = "Logo không được để trống !";
       return res.status(400).render("admin/category/addCategory", { error: e });
@@ -547,7 +549,7 @@ router.post(
     }
     let imagePath = "";
     if (req.file) {
-      imagePath = "/public/images/categories/" + req.file.filename;
+      imagePath = "images/categories/" + req.file.filename;
     } else {
       const cate = await Category.findById(req.params.id).lean();
       imagePath = cate.logo;

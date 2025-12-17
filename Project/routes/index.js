@@ -6,60 +6,7 @@ const bcryptjs = require("bcryptjs");
 const { body, validationResult } = require("express-validator");
 const passport = require("passport");
 const Category = require("../models/category.model");
-
-const productList = [
-  {
-    name: "Air Jordan 1 Low Golf White Aegean Storm",
-    price: 123.0,
-    sale: 153.0,
-    rate: 3,
-    reviews: 99,
-    img: "img/Air-Jordan-1-Low-Golf-White-Aegean-Storm.jpg",
-  },
-  {
-    name: "Air Jordan 1 Low TD Cleat Panda",
-    price: 123.0,
-    sale: 123.0,
-    rate: 4,
-    reviews: 99,
-    img: "img/Air-Jordan-1-Low-TD-Cleat-Panda.jpg",
-  },
-  {
-    name: "Crocs Classic Cozzzy Sandal Monsters Inc Sulley",
-    price: 133.0,
-    sale: 173.0,
-    rate: 4,
-    reviews: 99,
-    img: "img/Crocs-Classic-Cozzzy-Sandal-Monsters-Inc-Sulley.jpg",
-  },
-  {
-    name: "New Balance Numeric 933 Andrew Reynolds Black Olive",
-    price: 143.0,
-    sale: 183.0,
-    rate: 4,
-    reviews: 99,
-    img: "img/New-Balance-Numeric-933-Andrew-Reynolds-Black-Olive.jpg",
-  },
-  {
-    name: "Nike Manoa Haystack",
-    price: 113.0,
-    sale: 163.0,
-    rate: 5,
-    reviews: 99,
-    img: "img/Nike-Manoa-Haystack.jpg",
-  },
-];
-
-const productDetail = {
-  name: "Air Jordan 1 Low Golf White Aegean Storm",
-  price: 123.0,
-  sale: 153.0,
-  size: ["XS", "S", "M", "L", "XL"],
-  colors: ["Black", "White", "Blue"],
-  rate: 3,
-  reviews: 99,
-  img: "img/Air-Jordan-1-Low-Golf-White-Aegean-Storm.jpg", // có thể sẽ chuyển thành array để hiện thị thêm ảnh của giày
-};
+const Product = require("../models/product.model");
 
 const requireLogin = (req, res, next) => {
   //midleware kiem tra login chua
@@ -134,7 +81,9 @@ const validateLogin = () => {
   ];
 };
 
-router.all("/*", function (req, res, next) {
+router.all("/*", async function (req, res, next) {
+  const categories = await Category.find({}).lean();
+  res.locals.categories = categories;
   res.app.locals.layout = "home";
   next();
 });
@@ -213,15 +162,41 @@ router.get("/logout", (req, res) => {
 /* GET home page. */
 router.get("/", async function (req, res, next) {
   const categories = await Category.find({}).lean();
-  res.render("home/index", { title: "Home", productList: productList });
+  // lấy sản phẩm theo category
+  // const nameCate = "Nike";
+  // const cate = await Category.findOne({ name: nameCate }).lean();
+  // const products = await Product.find({ category_id: cate._id }).lean();
+
+  const productList = await Product.find({}).limit(8).lean();
+  res.render("home/index", {
+    title: "Home",
+    categories: categories,
+    productList: productList,
+  });
 });
 
-router.get("/shop", function (req, res, next) {
-  res.render("home/shop", { title: "Shop", productList: productList });
+router.get("/shop", async function (req, res, next) {
+  const productList = await Product.find({}).limit(8).lean();
+  let categories = await Category.find({}).lean();
+  categories = await Promise.all(
+    categories.map(async (cate) => {
+      const quantity = await Product.countDocuments({ category_id: cate._id });
+      return {
+        ...cate,
+        quantity: quantity,
+      };
+    })
+  );
+  res.render("home/shop", {
+    title: "Shop",
+    categories: categories,
+    productList: productList,
+  });
 });
 
-router.get("/detail", function (req, res, next) {
-  res.render("home/detail", { title: "Detail", productDetail: productDetail });
+router.get("/detail/:id", async function (req, res, next) {
+  const product = await Product.findById(req.params.id).lean();
+  res.render("home/detail", { title: "Detail", productDetail: product });
 });
 
 router.get("/contact", function (req, res, next) {
