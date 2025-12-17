@@ -34,6 +34,7 @@
                     id="name"
                     name="name"
                     placeholder="Enter product name"
+                    value="{{oldData.name}}"
                   />
                 </div>
               </div>
@@ -47,16 +48,16 @@
                     id="category_id"
                     name="category_id"
                   >
-                    {{#each categories}}
-                      <option value="{{this._id}}">{{this.name}}</option>
-                    {{/each}}
+                  {{#each categories}}
+                   <option value="{{this._id}}" {{#if this.isSelected}}selected{{/if}}>{{this.name}}</option>
+                  {{/each}}
                   </select>
                 </div>
               </div>
             </div>
 
             <div class="row">
-              <div class="col-md-4">
+              <div class="col-md-12">
                 <div class="form-group">
                   <label for="price">Price ($)
                     <span class="text-danger">*</span></label>
@@ -67,33 +68,97 @@
                     name="price"
                     placeholder="Enter price"
                     min="0"
+                    value="{{oldData.price}}"
                   />
                 </div>
               </div>
-              <div class="col-md-4">
-                <div class="form-group">
-                  <label for="size">Size</label>
+            </div>
+            
+            <div class="row" >
+              <div class="col-md-5">
+              <label for="size">Size
+                    <span class="text-danger">*</span></label>
+               {{#unless oldData.detail}} <input
+                  type="number"
+                  class="form-control"
+                  name="size[]"
+                  placeholder="Size (e.g., 38, 39, 40)"
+                />
+                {{/unless}}
+              </div>
+              <div class="col-md-5">
+                <label for="size">Stock
+                    <span class="text-danger">*</span></label>
+                {{#unless oldData.detail}} <input
+                  type="number"
+                  class="form-control"
+                  name="stock[]"
+                  placeholder="Stock"
+                  min="0"
+                />
+                {{/unless}}
+              </div>
+              <div class="col-md-2">
+                <button
+                  type="button"
+                  class="btn btn-danger btn-remove-variant"
+                  style="display:none;"
+                >&times;</button>
+              </div>
+            </div>
+            <div id="variant-section" >
+              {{#each oldData.detail}}
+              <div class="row my-2 variant-item">
+                <div class="col-md-5">
                   <input
                     type="number"
                     class="form-control"
-                    id="stock"
-                    name="stock"
-                    placeholder="Enter Size"
-                    min="1"
+                    name="size[]"
+                    placeholder="Size"
+                    value="{{this.size}}"
                   />
                 </div>
-              </div>
-              <div class="col-md-4">
-                <div class="form-group">
-                  <label for="stock">Stock Quantity</label>
+                <div class="col-md-5">
                   <input
                     type="number"
                     class="form-control"
-                    id="stock"
-                    name="stock"
-                    placeholder="Enter stock quantity"
+                    name="stock[]"
+                    placeholder="Stock"
                     min="0"
+                    value="{{this.stock}}"
                   />
+                </div>
+                <div class="col-md-2">
+                  <button
+                    type="button"
+                    class="btn btn-danger btn-remove-variant"
+                    onclick="this.closest('.variant-item').remove()"
+                  >&times;</button>
+                </div>
+              </div>
+              {{/each}}
+            </div> 
+            <div class="row my-1">
+              <div class="col-md-12 ">
+                <button
+                  type="button"
+                  class="btn btn-success btn-sm mt-2"
+                  id="btn-add-variant"
+                >
+                  <i class="fas fa-plus"></i>
+                  Add more size
+                </button>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label for="description">Product Description</label>
+                  <textarea
+                    class="form-control"
+                    name="description"
+                    id="description"
+                  >{{oldData.description}}</textarea>
                 </div>
               </div>
             </div>
@@ -133,3 +198,25 @@
     </div>
   </div>
 </div>
+
+<script>
+    document.getElementById('btn-add-variant').addEventListener('click', function() {
+        const container = document.getElementById('variant-section');
+        const newItem = document.createElement('div');
+       
+        newItem.innerHTML = `
+        <div class="row my-2 variant-item">
+            <div class="col-md-5">
+                <input type="number" class="form-control" name="size[]" placeholder="Size" >
+            </div>
+            <div class="col-md-5">
+                <input type="number" class="form-control" name="stock[]" placeholder="Stock" min="0" >
+            </div>
+            <div class="col-md-2">
+                <button type="button" class="btn btn-danger btn-remove-variant" onclick="this.closest('.variant-item').remove()">&times;</button>
+            </div>
+            </div>
+        `;
+        container.appendChild(newItem);
+    });
+</script>

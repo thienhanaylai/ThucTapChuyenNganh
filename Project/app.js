@@ -47,6 +47,13 @@ app.engine(
           hour12: false,
         });
       },
+      formatPrice: (price) => {
+        if (!price) return "";
+        return new Number(price).toLocaleString("en-US", {
+          style: "currency",
+          currency: "USD",
+        });
+      },
     },
   })
 );

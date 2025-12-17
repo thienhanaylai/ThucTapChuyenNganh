@@ -45,7 +45,7 @@
                       rowspan="1"
                       colspan="1"
                       aria-sort="ascending"
-                      style="width: 424.2px;"
+                      style="width: 300.2px;"
                     >Name</th>
                     <th
                       class="sorting"
@@ -53,7 +53,7 @@
                       aria-controls="dataTable"
                       rowspan="1"
                       colspan="1"
-                      style="width: 42.2px;"
+                      style="width: 90.2px;"
                     >Brand</th>
                     <th
                       class="sorting"
@@ -61,16 +61,8 @@
                       aria-controls="dataTable"
                       rowspan="1"
                       colspan="1"
-                      style="width: 42.2px;"
+                      style="width: 220.2px;"
                     >Size</th>
-                    <th
-                      class="sorting"
-                      tabindex="0"
-                      aria-controls="dataTable"
-                      rowspan="1"
-                      colspan="1"
-                      style="width: 70.2px;"
-                    >Color</th>
                     <th
                       class="sorting"
                       tabindex="0"
@@ -99,209 +91,43 @@
                 </thead>
 
                 <tbody>
-                  <tr class="odd">
-                    <td class="sorting_1">Air Jordan 1 Low Golf White Aegean
-                      Storm</td>
-                    <td>Jordan</td>
-                    <td>XXL</td>
-                    <td>White</td>
-                    <td>9/11/2025</td>
-                    <td>$162,700</td>
-                    <td><a href="/admin/product/edit"><button
+                  {{#each products}}
+                    <tr>
+                      <td>{{this.name}}</td>
+                      <td>{{this.categoryName}}</td>
+                      <td>
+                        {{#each this.detail}}
+                          <div class="badge badge-primary m-1">Size:
+                            {{this.size}}
+                            | Stock:
+                            {{this.stock}}</div>
+                        {{/each}}
+                      </td>
+                      <td>{{formatDate this.createdAt}}</td>
+                      <td>{{formatPrice this.price}}</td>
+                      <td class="d-flex flex-row"><a
                           class="btn btn-warning"
-                        >Edit</button></a>
-                      |
-                      <button class="btn btn-danger">Delete</button>
-                    </td>
-                  </tr><tr class="even">
-                    <td class="sorting_1">Air Jordan 1 Low Golf White Aegean
-                      Storm</td>
-                    <td>Jordan</td>
-                    <td>XXL</td>
-                    <td>White</td>
-                    <td>9/11/2025</td>
-                    <td>$162,700</td>
-                    <td><a href="/admin/product/edit"><button
-                          class="btn btn-warning"
-                        >Edit</button></a>
-                      |
-                      <button class="btn btn-danger">Delete</button>
-                    </td>
-                  </tr>
-                  <tr class="odd">
-                    <td class="sorting_1">Air Jordan 1 Low Golf White Aegean
-                      Storm</td>
-                    <td>Jordan</td>
-                    <td>XXL</td>
-                    <td>White</td>
-                    <td>9/11/2025</td>
-                    <td>$162,700</td>
-                    <td><a href="/admin/product/edit"><button
-                          class="btn btn-warning"
-                        >Edit</button></a>
-                      |
-                      <button class="btn btn-danger">Delete</button>
-                    </td>
-                  </tr><tr class="even">
-                    <td class="sorting_1">Air Jordan 1 Low Golf White Aegean
-                      Storm</td>
-                    <td>Jordan</td>
-                    <td>XXL</td>
-                    <td>White</td>
-                    <td>9/11/2025</td>
-                    <td>$162,700</td>
-                    <td><a href="/admin/product/edit"><button
-                          class="btn btn-warning"
-                        >Edit</button></a>
-                      |
-                      <button class="btn btn-danger">Delete</button>
-                    </td>
-                  </tr>
-                  <tr class="odd">
-                    <td class="sorting_1">Air Jordan 1 Low Golf White Aegean
-                      Storm</td>
-                    <td>Jordan</td>
-                    <td>XXL</td>
-                    <td>White</td>
-                    <td>9/11/2025</td>
-                    <td>$162,700</td>
-                    <td><a href="/admin/product/edit"><button
-                          class="btn btn-warning"
-                        >Edit</button></a>
-                      |
-                      <button class="btn btn-danger">Delete</button>
-                    </td>
-                  </tr><tr class="even">
-                    <td class="sorting_1">Air Jordan 1 Low Golf White Aegean
-                      Storm</td>
-                    <td>Jordan</td>
-                    <td>XXL</td>
-                    <td>White</td>
-                    <td>9/11/2025</td>
-                    <td>$162,700</td>
-                    <td><a href="/admin/product/edit"><button
-                          class="btn btn-warning"
-                        >Edit</button></a>
-                      |
-                      <button class="btn btn-danger">Delete</button></td>
-                  </tr>
-                  <tr class="odd">
-                    <td class="sorting_1">Air Jordan 1 Low Golf White Aegean
-                      Storm</td>
-                    <td>Jordan</td>
-                    <td>XXL</td>
-                    <td>White</td>
-                    <td>9/11/2025</td>
-                    <td>$162,700</td>
-                    <td><a href="/admin/product/edit"><button
-                          class="btn btn-warning"
-                        >Edit</button></a>
-                      |
-                      <button class="btn btn-danger">Delete</button>
-                    </td>
-                  </tr><tr class="even">
-                    <td class="sorting_1">Air Jordan 1 Low Golf White Aegean
-                      Storm</td>
-                    <td>Jordan</td>
-                    <td>XXL</td>
-                    <td>White</td>
-                    <td>9/11/2025</td>
-                    <td>$162,700</td>
-                    <td>
-                      <a href="/admin/product/edit"><button
-                          class="btn btn-warning"
-                        >Edit</button></a>
-                      |
-                      <button class="btn btn-danger">Delete</button>
-                    </td>
-                  </tr>
+                          style="height: fit-content;"
+                          href="/admin/product/edit/{{this._id}}"
+                        >Edit</a>
+                        |
+                        <form
+                          style="width: fit-content;"
+                          action="/admin/product/delete/{{this._id}}?_method=DELETE"
+                          method="post"
+                        ><button
+                            type="submit"
+                            class="btn btn-danger"
+                            onclick="return confirm('Bạn có chắc muốn xóa?')"
+                          >Delete</button></form>
+                      </td>
+                    </tr>
+                  {{/each}}
                 </tbody>
               </table>
             </div>
-          </div><div class="row">
-            <div class="col-sm-12 col-md-5"><div
-                class="dataTables_info"
-                id="dataTable_info"
-                role="status"
-                aria-live="polite"
-              >Showing 1 to 10 of 57 entries</div>
-            </div><div class="col-sm-12 col-md-7"><div
-                class="dataTables_paginate paging_simple_numbers"
-                id="dataTable_paginate"
-              ><ul class="pagination">
-                  <li
-                    class="paginate_button page-item previous disabled"
-                    id="dataTable_previous"
-                  ><a
-                      href="#"
-                      aria-controls="dataTable"
-                      data-dt-idx="0"
-                      tabindex="0"
-                      class="page-link"
-                    >Previous</a>
-                  </li>
-                  <li class="paginate_button page-item active"><a
-                      href="#"
-                      aria-controls="dataTable"
-                      data-dt-idx="1"
-                      tabindex="0"
-                      class="page-link"
-                    >1</a>
-                  </li><li class="paginate_button page-item"><a
-                      href="#"
-                      aria-controls="dataTable"
-                      data-dt-idx="2"
-                      tabindex="0"
-                      class="page-link"
-                    >2</a>
-                  </li>
-                  <li class="paginate_button page-item"><a
-                      href="#"
-                      aria-controls="dataTable"
-                      data-dt-idx="3"
-                      tabindex="0"
-                      class="page-link"
-                    >3</a>
-                  </li>
-                  <li class="paginate_button page-item"><a
-                      href="#"
-                      aria-controls="dataTable"
-                      data-dt-idx="4"
-                      tabindex="0"
-                      class="page-link"
-                    >4</a>
-                  </li>
-                  <li class="paginate_button page-item"><a
-                      href="#"
-                      aria-controls="dataTable"
-                      data-dt-idx="5"
-                      tabindex="0"
-                      class="page-link"
-                    >5</a>
-                  </li>
-                  <li class="paginate_button page-item"><a
-                      href="#"
-                      aria-controls="dataTable"
-                      data-dt-idx="6"
-                      tabindex="0"
-                      class="page-link"
-                    >6</a>
-                  </li>
-                  <li
-                    class="paginate_button page-item next"
-                    id="dataTable_next"
-                  ><a
-                      href="#"
-                      aria-controls="dataTable"
-                      data-dt-idx="7"
-                      tabindex="0"
-                      class="page-link"
-                    >Next</a>
-                  </li>
-                </ul>
-              </div>
-            </div>
           </div>
+
         </div>
       </div>
     </div>

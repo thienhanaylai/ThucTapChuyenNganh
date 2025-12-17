@@ -1,11 +1,19 @@
 var express = require("express");
 var router = express.Router();
+
 const { body, validationResult } = require("express-validator");
 const passport = require("passport");
+const bcryptjs = require("bcryptjs");
+
 const Role = require("../models/role.model");
 const Category = require("../models/category.model");
 const User = require("../models/user.model");
-const bcryptjs = require("bcryptjs");
+const Product = require("../models/product.model");
+const ProductDetail = require("../models/productDetail.model");
+
+const multer = require("multer");
+const path = require("path");
+
 const checkAdmin = async (req, res, next) => {
   //check user có role admin ko nếu ko thì ko vào admin được
   if (req.isAuthenticated()) {
@@ -103,6 +111,103 @@ const validateEditUser = () => {
   ];
 };
 
+const validateAddProduct = () => {
+  return [
+    body("name")
+      .notEmpty()
+      .withMessage("Tên sản phẩm không được để trống")
+      .trim(),
+    body("category_id").notEmpty().withMessage("Brand không được để trống"),
+    body("price")
+      .notEmpty()
+      .withMessage("Giá không được để trống!")
+      .isFloat()
+      .withMessage("Giá sản phẩm phải là số !"),
+    body("size")
+      .isArray({ min: 1 })
+      .withMessage("Vui lòng nhập ít nhất 1 size")
+      .custom((value) => {
+        if (!value) return true;
+        const unique = new Set(value); //Set đảm bảo size ko bị trùng
+        if (unique.size !== value.length) {
+          throw new Error("Danh sách Size không được trùng lặp!");
+        }
+        return true;
+      }),
+    body("size.*")
+      .notEmpty()
+      .withMessage("Size không được để trống")
+      .isInt({ gt: 37 })
+      .withMessage("Size sản phẩm phải là số và lớn hơn 37 !"),
+    body("stock.*")
+      .notEmpty()
+      .withMessage("Vui lòng nhập số lương sản phẩm")
+      .isInt({ gt: 0 })
+      .withMessage("Vui lòng nhập só lượng hợp lệ!"),
+    body("description")
+      .notEmpty()
+      .withMessage("Vui lòng nhập thông tin mô tả!"),
+    body("image").custom((value, { req }) => {
+      //kiemt ra da upload file len chúa
+      if (!req.file) {
+        throw new Error("Vui lòng upload ảnh cho sản phẩm !");
+      }
+      return true;
+    }),
+  ];
+};
+
+const validateEditProduct = () => {
+  return [
+    body("name")
+      .notEmpty()
+      .withMessage("Tên sản phẩm không được để trống")
+      .trim(),
+    body("category_id").notEmpty().withMessage("Brand không được để trống"),
+    body("price")
+      .notEmpty()
+      .withMessage("Giá không được để trống!")
+      .isFloat()
+      .withMessage("Giá sản phẩm phải là số !"),
+    body("size")
+      .isArray({ min: 1 })
+      .withMessage("Vui lòng nhập ít nhất 1 size")
+      .custom((value) => {
+        if (!value) return true;
+        const unique = new Set(value); //Set đảm bảo size ko bị trùng
+        if (unique.size !== value.length) {
+          throw new Error("Danh sách Size không được trùng lặp!");
+        }
+        return true;
+      }),
+    body("size.*")
+      .notEmpty()
+      .withMessage("Size không được để trống")
+      .isInt({ gt: 37 })
+      .withMessage("Size sản phẩm phải là số và lớn hơn 37 !"),
+    body("stock.*")
+      .notEmpty()
+      .withMessage("Vui lòng nhập số lương sản phẩm")
+      .isInt({ gt: 0 })
+      .withMessage("Vui lòng nhập só lượng hợp lệ!"),
+    body("description")
+      .notEmpty()
+      .withMessage("Vui lòng nhập thông tin mô tả!"),
+  ];
+};
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "./public/images/products");
+  },
+  filename: function (req, file, cb) {
+    const randomNamefile =
+      "product-" + Date.now() + "-" + Math.round(Math.random() * 1e3);
+    cb(null, randomNamefile + path.extname(file.originalname));
+  },
+});
+const upload = multer({ storage: storage });
+
 router.get("/login", function (req, res, next) {
   res.render("admin/login", { layout: false });
 });
@@ -114,40 +219,6 @@ router.post("/loginAdmin", validateLogin(), async (req, res, next) => {
     failureFlash: true, //thogn bao loi qua flash
   })(req, res, next);
 });
-
-// router.post("/loginAdmin", (req, res, next) => {
-//   User.findOne({ username: req.body.username })
-//     .then((user) => {
-//       bcryptjs.compare(req.body.password, user.password, (e, result) => {
-//         console.log(req.body);
-//         if (e) res.send(e);
-//         if (user.role != "admin") {
-//           e = "Không có quyền truy cập!";
-//           res.render("admin/login", {
-//             title: "Login",
-//             error: e,
-//             layout: false,
-//           });
-//           return;
-//         }
-//         if (result) {
-//           req.session.userId = user._id;
-//           req.session.user = user;
-//           res.redirect("/admin");
-//         } else {
-//           e = "Mật khẩu không chính xác!";
-//           res.render("admin/login", {
-//             title: "Login",
-//             error: e,
-//             layout: false,
-//           });
-//         }
-//       });
-//     })
-//     .catch((e) => {
-//       res.send(e);
-//     });
-// });
 
 router.get("/logoutAdmin", (req, res) => {
   req.logOut((e) => {
@@ -165,8 +236,22 @@ router.get("/", checkAdmin, function (req, res, next) {
   res.render("admin");
 });
 
-router.get("/product", checkAdmin, function (req, res, next) {
-  res.render("admin/product");
+router.get("/product", checkAdmin, async function (req, res, next) {
+  let products = await Product.find({}).lean();
+  const categories = await Category.find({}).lean();
+  products = products.map((product) => {
+    const category = categories.find(
+      //lấy tên cate từ cate_id
+      (category) => category._id === product.category_id
+    );
+    return {
+      ...product,
+      categoryName: category.name,
+    };
+  });
+  res.render("admin/product", {
+    products: products,
+  });
 });
 
 router.get("/product/add", checkAdmin, async function (req, res, next) {
@@ -177,10 +262,191 @@ router.get("/product/add", checkAdmin, async function (req, res, next) {
   });
 });
 
-//edit sẽ truyền thêm id sản phẩm
-router.get("/product/edit", checkAdmin, function (req, res, next) {
-  res.render("admin/product/editProduct");
+router.post(
+  "/product/add",
+  checkAdmin,
+  upload.single("image"),
+  validateAddProduct(),
+  async function (req, res, next) {
+    let { name, category_id, price, size, stock, description } = req.body;
+    let imagePath = "";
+    if (req.file) {
+      imagePath = "/public/images/products/" + req.file.filename;
+    }
+    try {
+      const errors = validationResult(req);
+      let details = [];
+      if (Array.isArray(size)) {
+        for (let i = 0; i < size.length; i++) {
+          if (size[i] && stock[i]) {
+            details.push({
+              size: size[i],
+              stock: stock[i],
+            });
+          }
+        }
+      } else {
+        details.push({
+          size: size,
+          stock: stock,
+        });
+      }
+      if (!errors.isEmpty()) {
+        let categories = await Category.find({}).lean();
+        categories = categories.map((cate) => {
+          if (
+            req.body.category_id &&
+            cate._id.toString() === req.body.category_id.toString()
+          ) {
+            cate.isSelected = true;
+          }
+          return cate;
+        });
+        req.body.detail = details;
+        return res.render("admin/product/addProduct", {
+          error: errors.array()[0].msg,
+          oldData: req.body,
+          categories: categories,
+        });
+      }
+      const newProduct = new Product();
+      newProduct.name = name;
+      newProduct.category_id = category_id;
+      newProduct.image = imagePath;
+      newProduct.price = price;
+      newProduct.description = description;
+      newProduct.detail = details;
+      await newProduct.save();
+
+      return res.redirect("/admin/product");
+    } catch (error) {
+      let e = "Đã có lỗi!";
+      if (error.code === 11000) {
+        const field = Object.keys(error.keyValue)[0];
+        if (field === "name") {
+          e = "Tên sản phẩm này đã tồn tại!";
+        }
+      }
+      return res.status(400).render("admin/product/addProduct", { error: e });
+    }
+  }
+);
+
+router.get("/product/edit/:id", checkAdmin, async function (req, res, next) {
+  const product = await Product.findById(req.params.id).lean();
+  let categories = await Category.find({}).lean();
+  categories = categories.map((cate) => {
+    //lấy ra cate hiện tại của sản phẩm
+    if (
+      product.category_id &&
+      cate._id.toString() === product.category_id.toString()
+    ) {
+      cate.isSelected = true;
+    }
+    return cate;
+  });
+  res.render("admin/product/editProduct", {
+    oldData: product,
+    categories: categories,
+  });
 });
+
+router.post(
+  "/product/edit/:id",
+  checkAdmin,
+  upload.single("image"),
+  validateEditProduct(),
+  async function (req, res, next) {
+    let { name, category_id, price, size, stock, description } = req.body;
+    let product = await Product.findById(req.params.id).lean();
+    let categories = await Category.find({}).lean();
+    let imagePath = "";
+    if (req.file) {
+      imagePath = "/public/images/products/" + req.file.filename;
+    } else {
+      imagePath = product.image;
+    }
+
+    let details = [];
+    if (Array.isArray(size)) {
+      for (let i = 0; i < size.length; i++) {
+        if (size[i] && stock[i]) {
+          details.push({
+            size: size[i],
+            stock: stock[i],
+          });
+        }
+      }
+    } else {
+      details.push({
+        size: size,
+        stock: stock,
+      });
+    }
+
+    categories = categories.map((cate) => {
+      if (
+        req.body.category_id &&
+        cate._id.toString() === req.body.category_id.toString()
+      ) {
+        cate.isSelected = true;
+      }
+      return cate;
+    });
+    req.body.detail = details;
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        req.body._id = req.params.id;
+        return res.render("admin/product/editProduct", {
+          error: errors.array()[0].msg,
+          oldData: req.body,
+          categories: categories,
+        });
+      }
+      await Product.findByIdAndUpdate(
+        req.params.id,
+        {
+          name: name,
+          category_id: category_id,
+          image: imagePath,
+          price: price,
+          description: description,
+          detail: details,
+        },
+        { new: true }
+      );
+      return res.redirect("/admin/product");
+    } catch (error) {
+      let e = "Đã có lỗi!";
+      if (error.code === 11000) {
+        const field = Object.keys(error.keyValue)[0];
+        if (field === "name") {
+          e = "Tên sản phẩm này đã tồn tại!";
+        }
+      }
+      return res.status(400).render("admin/product/editProduct", {
+        error: e,
+        oldData: req.body,
+        categories: categories,
+      });
+    }
+  }
+);
+
+router.delete(
+  "/product/delete/:id",
+  checkAdmin,
+  async function (req, res, next) {
+    try {
+      await Product.findByIdAndDelete(req.params.id);
+      res.redirect("/admin/product");
+    } catch (e) {
+      console.log(e);
+      res.redirect("/admin/product");
+    }
+  }
+);
 
 router.get("/category", checkAdmin, async function (req, res, next) {
   const categories = await Category.find({}).lean();
@@ -273,10 +539,6 @@ router.delete("/category/delete/:id", checkAdmin, async function (req, res) {
     console.log(e);
     res.redirect("/admin/category");
   }
-});
-
-router.get("/orders", checkAdmin, function (req, res, next) {
-  res.render("admin/orders");
 });
 
 router.get("/users", checkAdmin, async function (req, res, next) {

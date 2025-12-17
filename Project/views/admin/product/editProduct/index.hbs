@@ -3,9 +3,10 @@
     <h1 class="h3 mb-0 text-gray-800">Edit Product</h1>
     <a href="/admin/product" class="btn btn-secondary btn-sm">
       <i class="fas fa-arrow-left"></i>
-      Back to Product List
+      Back to product List
     </a>
   </div>
+
   <div class="row">
     <div class="col-lg-12">
       <div class="card shadow mb-4">
@@ -13,157 +14,157 @@
           <h6 class="m-0 font-weight-bold text-primary">Product Information</h6>
         </div>
         <div class="card-body">
+          {{#if error}}
+            <div class="alert alert-danger">{{error}}</div>
+          {{/if}}
+
           <form
             method="POST"
-            action="/admin/product/edit"
+            action="/admin/product/edit/{{oldData._id}}"
             enctype="multipart/form-data"
           >
             <div class="row">
               <div class="col-md-6">
                 <div class="form-group">
-                  <label for="productName">Product Name
+                  <label for="name">Product Name
                     <span class="text-danger">*</span></label>
                   <input
                     type="text"
                     class="form-control"
-                    id="productName"
-                    name="productName"
+                    id="name"
+                    name="name"
                     placeholder="Enter product name"
-                    value="Air Jordan 1 Low Golf White Aegean Storm"
-                    required
+                    value="{{oldData.name}}"
                   />
-                  <small class="form-text text-muted">
-                    Enter the full name of the product.
-                  </small>
                 </div>
               </div>
 
               <div class="col-md-6">
                 <div class="form-group">
-                  <label for="category">Category/Brand
+                  <label for="category_id">Category/Brand
                     <span class="text-danger">*</span></label>
                   <select
                     class="form-control"
-                    id="category"
-                    name="category"
-                    required
+                    id="category_id"
+                    name="category_id"
                   >
-                    <option value="">-- Select Category --</option>
-                    <option value="Nike">Nike</option>
-                    <option value="Adidas">Adidas</option>
-                    <option value="Puma">Puma</option>
-                    <option value="New Balance">New Balance</option>
-                    <option value="Converse">Converse</option>
-                    <option value="Vans">Vans</option>
-                    <option selected value="Jordan">Jordan</option>
-                    <option value="Fila">Fila</option>
-                    <option value="Hi-Tech">Hi-Tech</option>
+                  {{#each categories}}
+                   <option value="{{this._id}}" {{#if this.isSelected}}selected{{/if}}>{{this.name}}</option>
+                  {{/each}}
                   </select>
                 </div>
               </div>
             </div>
 
             <div class="row">
-              <div class="col-md-4">
+              <div class="col-md-12">
                 <div class="form-group">
-                  <label for="size">Size
-                    <span class="text-danger">*</span></label>
-                  <select class="form-control" id="size" name="size" required>
-                    <option value="">-- Select Size --</option>
-                    <option value="XS">XS</option>
-                    <option value="S">S</option>
-                    <option value="M">M</option>
-                    <option value="L">L</option>
-                    <option value="XL">XL</option>
-                    <option selected value="XXL">XXL</option>
-                    <option value="XXXL">XXXL</option>
-                  </select>
-                </div>
-              </div>
-
-              <div class="col-md-4">
-                <div class="form-group">
-                  <label for="color">Color
-                    <span class="text-danger">*</span></label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="color"
-                    name="color"
-                    placeholder="Enter color (e.g., White, Black, Red)"
-                    value="White"
-                    required
-                  />
-                </div>
-              </div>
-
-              <div class="col-md-4">
-                <div class="form-group">
-                  <label for="amount">Price (Amount)
+                  <label for="price">Price ($)
                     <span class="text-danger">*</span></label>
                   <input
                     type="number"
                     class="form-control"
-                    id="amount"
-                    name="amount"
+                    id="price"
+                    name="price"
                     placeholder="Enter price"
-                    step="0.01"
                     min="0"
-                    value="162.700"
-                    required
+                    value="{{oldData.price}}"
                   />
-                  <small class="form-text text-muted">
-                    Enter price in USD ($).
-                  </small>
                 </div>
               </div>
             </div>
 
             <div class="row">
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label for="stock">Stock Quantity</label>
+              <div class="col-md-5">
+                <label for="size">Size
+                  <span class="text-danger">*</span></label>
+              </div>
+              <div class="col-md-5">
+                <label for="size">Stock
+                  <span class="text-danger">*</span></label>
+              </div>
+              <div class="col-md-2">
+                <button
+                  type="button"
+                  class="btn btn-danger btn-remove-variant"
+                  style="display:none;"
+                >&times;</button>
+              </div>
+            </div>
+            <div id="variant-section">
+              {{#each oldData.detail}}
+              <div class="row my-2 variant-item">
+                <div class="col-md-5">
                   <input
                     type="number"
                     class="form-control"
-                    id="stock"
-                    name="stock"
-                    placeholder="Enter stock quantity"
-                    min="0"
-                    value="0"
+                    name="size[]"
+                    placeholder="Size"
+                    value="{{this.size}}"
                   />
                 </div>
+                <div class="col-md-5">
+                  <input
+                    type="number"
+                    class="form-control"
+                    name="stock[]"
+                    placeholder="Stock"
+                    min="0"
+                    value="{{this.stock}}"
+                  />
+                </div>
+                <div class="col-md-2">
+                  <button
+                    type="button"
+                    class="btn btn-danger btn-remove-variant"
+                    onclick="this.closest('.variant-item').remove()"
+                  >&times;</button>
+                </div>
               </div>
+              {{/each}}
+            </div>
 
-              {{! <div class="col-md-6">
+            <div class="row my-1">
+              <div class="col-md-12">
+                <button
+                  type="button"
+                  class="btn btn-success btn-sm mt-2"
+                  id="btn-add-variant"
+                >
+                  <i class="fas fa-plus"></i>
+                  Add more size
+                </button>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-12">
                 <div class="form-group">
-                  <label for="productImage">Product Image</label>
+                  <label for="description">Product Description</label>
+                  <textarea
+                    class="form-control"
+                    name="description"
+                    id="description"
+                  >{{oldData.description}}</textarea>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label for="image">Product Image</label>
                   <input
                     type="file"
                     class="form-control-file"
-                    id="productImage"
-                    name="productImage"
+                    id="image"
+                    name="image"
                     accept="image/*"
                   />
-                  <small class="form-text text-muted">
-                    Upload product image (JPG, PNG, AVIF).
-                  </small>
+                  <small class="form-text text-muted">Upload product image (JPG,
+                    PNG, AVIF).</small>
                 </div>
-              </div> }}
-            </div>
-
-            <div class="form-group">
-              <label for="description">Description (Optional)</label>
-              <textarea
-                class="form-control"
-                id="description"
-                name="description"
-                rows="4"
-                placeholder="Enter product description"
-              ></textarea>
-              <small class="form-text text-muted">
-                Detailed description about the product.
-              </small>
+              </div>
             </div>
 
             <hr />
@@ -171,7 +172,7 @@
             <div class="form-group mb-0">
               <button type="submit" class="btn btn-primary">
                 <i class="fas fa-plus-circle"></i>
-                Edit Product
+                Add Product
               </button>
               <a href="/admin/product" class="btn btn-secondary">
                 <i class="fas fa-times"></i>
@@ -184,3 +185,16 @@
     </div>
   </div>
 </div>
+
+<script>
+  document.getElementById('btn-add-variant').addEventListener('click',
+  function() { const container = document.getElementById('variant-section');
+  const newItem = document.createElement('div'); newItem.innerHTML = ` <div
+  class="row my-2 variant-item"> <div class="col-md-5"> <input type="number"
+  class="form-control" name="size[]" placeholder="Size" > </div> <div
+  class="col-md-5"> <input type="number" class="form-control" name="stock[]"
+  placeholder="Stock" min="0" > </div> <div class="col-md-2"> <button
+  type="button" class="btn btn-danger btn-remove-variant"
+  onclick="this.closest('.variant-item').remove()">&times;</button> </div>
+  </div> `; container.appendChild(newItem); });
+</script>
