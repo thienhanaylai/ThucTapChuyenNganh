@@ -169,8 +169,12 @@ router.get("/product", checkAdmin, function (req, res, next) {
   res.render("admin/product");
 });
 
-router.get("/product/add", checkAdmin, function (req, res, next) {
-  res.render("admin/product/addProduct");
+router.get("/product/add", checkAdmin, async function (req, res, next) {
+  const categories = await Category.find({}).lean();
+  res.render("admin/product/addProduct", {
+    title: "Add Product",
+    categories: categories,
+  });
 });
 
 //edit sẽ truyền thêm id sản phẩm
@@ -391,15 +395,13 @@ router.post(
       }
       let { fullname, email, phone, password, role_id, status } = req.body;
 
-      if (password) {
-        bcryptjs.genSalt(10, function (err, salt) {
-          bcryptjs.hash(password, salt, function (err, hash) {
-            if (err) {
-              return err;
-            }
-            password = hash;
-          });
-        });
+      if (!password || password.trim().length === 0) {
+        //nếu ko thay đổi mk sẽ dùng lại mk cũ
+        password = user.password;
+      } else {
+        //đợi hash password trước khi típ tục
+        const salt = await bcryptjs.genSalt(10);
+        password = await bcryptjs.hash(password, salt);
       }
       await User.findByIdAndUpdate(req.params.id, {
         fullname,

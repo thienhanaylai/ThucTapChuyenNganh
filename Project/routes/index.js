@@ -117,7 +117,7 @@ const validateLogin = () => {
       .withMessage("Email không đúng định dạng"),
     body("password").notEmpty().withMessage("Mật khẩu không được để trống"),
     (req, res, next) => {
-      const errors = validationResult(req);
+      let errors = validationResult(req);
       if (errors.isEmpty()) {
         return next();
       }

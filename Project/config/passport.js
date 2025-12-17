@@ -17,6 +17,11 @@ module.exports = function configPassport() {
           if (!user) {
             return done(null, false, { message: "Không tồn tại tài khoản." });
           }
+          if (!user.status) {
+            return done(null, false, {
+              message: "Tài khoản đã bị khoá. Vui lòng liên hệ quản trị viên!",
+            });
+          }
           const matched = await bcrypt.compare(password, user.password);
           if (matched) {
             return done(null, user);
@@ -44,6 +49,11 @@ module.exports = function configPassport() {
           const role = await Role.findById(user.role_id);
           if (role.name !== "admin") {
             return done(null, false, { message: "Không có quyền truy cập!" });
+          }
+          if (!user.status) {
+            return done(null, false, {
+              message: "Tài khoản đã bị khoá. Vui lòng liên hệ quản trị viên!",
+            });
           }
           const matched = await bcrypt.compare(password, user.password);
           if (matched) {

@@ -4,11 +4,13 @@
 </style>
 
 <div class="container-fluid">
-  <h1 class="h3 mb-2 text-gray-800">Quản lý người dùng</h1>
+  <div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-2 text-gray-800">User List</h1>
+  </div>
 
   <div class="card shadow mb-4">
     <div class="card-header py-3">
-      <h6 class="m-0 font-weight-bold text-primary">Danh sách người dùng</h6>
+      <h6 class="m-0 font-weight-bold text-primary">All Users</h6>
     </div>
     <div class="card-body">
       <div class="table-responsive">
@@ -19,8 +21,7 @@
               <div class="dataTables_length">
                 <a href="/admin/users/add">
                   <button class="btn btn-primary mb-3">
-                    <i class="fas fa-plus fa-sm"></i>
-                    Thêm người dùng
+                    Add User
                   </button>
                 </a>
               </div>
@@ -42,13 +43,13 @@
               >
                 <thead>
                   <tr role="row">
-                    <th>Họ và Tên</th>
+                    <th>Full name</th>
                     <th>Email</th>
-                    <th>Số điện thoại</th>
-                    <th>Vai trò</th>
-                    <th>Ngày tham gia</th>
-                    <th>Trạng thái</th>
-                    <th style="width: 160px;">Hành động</th>
+                    <th>Phone</th>
+                    <th>Role</th>
+                    <th>Create At</th>
+                    <th>Status</th>
+                    <th style="width: 160px;">Action</th>
                   </tr>
                 </thead>
 
@@ -86,35 +87,6 @@
                   {{/each}}
                 </tbody>
               </table>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-sm-12 col-md-5">
-              <div class="dataTables_info" role="status" aria-live="polite">Hiển
-                thị 1 đến 3 của 57 người dùng</div>
-            </div>
-            <div class="col-sm-12 col-md-7">
-              <div class="dataTables_paginate paging_simple_numbers">
-                <ul class="pagination">
-                  <li class="paginate_button page-item previous disabled"><a
-                      href="#"
-                      class="page-link"
-                    >Trước</a></li>
-                  <li class="paginate_button page-item active"><a
-                      href="#"
-                      class="page-link"
-                    >1</a></li>
-                  <li class="paginate_button page-item"><a
-                      href="#"
-                      class="page-link"
-                    >2</a></li>
-                  <li class="paginate_button page-item next"><a
-                      href="#"
-                      class="page-link"
-                    >Sau</a></li>
-                </ul>
-              </div>
             </div>
           </div>
 
