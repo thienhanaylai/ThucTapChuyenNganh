@@ -2,7 +2,6 @@ const LocalStrategy = require("passport-local").Strategy;
 const bcrypt = require("bcryptjs");
 const User = require("../models/user.model");
 const passport = require("passport");
-const Role = require("../models/role.model");
 
 module.exports = function configPassport() {
   passport.use(
@@ -47,8 +46,7 @@ module.exports = function configPassport() {
           if (!user) {
             return done(null, false, { message: "Không tồn tại tài khoản." });
           }
-          const role = await Role.findById(user.role_id);
-          if (role.name !== "admin") {
+          if (!user.isAdmin) {
             return done(null, false, { message: "Không có quyền truy cập!" });
           }
           if (!user.status) {

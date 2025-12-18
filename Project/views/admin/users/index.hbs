@@ -61,7 +61,12 @@
                       </td>
                       <td>{{this.email}}</td>
                       <td>{{this.phone}}</td>
-                      <td><span class="badge">{{this.role_name}}</span></td>
+                      <td><span class="badge">
+                          {{#if this.isAdmin}}
+                            Admin
+                          {{else}}
+                            User
+                          {{/if}}</span></td>
                       <td>{{formatDate this.createdAt}}</td>
                       <td><span
                           this="badge badge-success"

@@ -5,7 +5,6 @@ const { body, validationResult } = require("express-validator");
 const passport = require("passport");
 const bcryptjs = require("bcryptjs");
 
-const Role = require("../models/role.model");
 const Category = require("../models/category.model");
 const User = require("../models/user.model");
 const Product = require("../models/product.model");
@@ -14,10 +13,9 @@ const multer = require("multer");
 const path = require("path");
 
 const checkAdmin = async (req, res, next) => {
-  //check user có role admin ko nếu ko thì ko vào admin được
+  //check user có phair admin ko nếu ko thì ko vào admin được
   if (req.isAuthenticated()) {
-    const role = await Role.findById(req.user.role_id);
-    if (role.name === "admin") next();
+    if (req.user.isAdmin) next();
     else {
       res.send(
         `Bạn không có quyền truy cập trang này! Vui lòng đăng nhập tài khoản quản trị! <a href="/admin/login">Đăng nhập admin tại đây !</a>`
@@ -77,7 +75,7 @@ const validateAddUser = () => {
         }
         return true;
       }),
-    body("role_id").notEmpty().withMessage("Vui lòng chọn role !"),
+    body("isAdmin").notEmpty().withMessage("Vui lòng chọn role !"),
     body("status")
       .notEmpty()
       .withMessage("Vui lòng chọn trạng thái cho tài khoản !"),
@@ -103,7 +101,7 @@ const validateEditUser = () => {
       }
       return true;
     }),
-    body("role_id").notEmpty().withMessage("Vui lòng chọn role !"),
+    body("isAdmin").notEmpty().withMessage("Vui lòng chọn role !"),
     body("status")
       .notEmpty()
       .withMessage("Vui lòng chọn trạng thái cho tài khoản !"),
@@ -592,22 +590,18 @@ router.delete("/category/delete/:id", checkAdmin, async function (req, res) {
 
 router.get("/users", checkAdmin, async function (req, res, next) {
   let users = await User.find({}).lean();
-  const roles = await Role.find({}).lean();
-
   users = users.map((user) => {
-    const role = roles.find((role) => role._id === user.role_id);
     return {
       ...user,
       status: user.status === true ? "Hoạt động" : "Bị khóa",
-      role_name: role ? role.name : "Chưa cấp quyền",
     };
   });
+  console.log(users);
   res.render("admin/users", { user: users });
 });
 
 router.get("/users/add", checkAdmin, async function (req, res, next) {
-  const roles = await Role.find({}).lean();
-  res.render("admin/users/addUser", { roles: roles });
+  res.render("admin/users/addUser");
 });
 
 router.post(
@@ -617,21 +611,19 @@ router.post(
   async function (req, res, next) {
     try {
       const errors = validationResult(req);
-      const roles = await Role.find({}).lean();
       if (!errors.isEmpty()) {
         return res.render("admin/users/addUser", {
-          roles: roles,
           error: errors.array()[0].msg,
           oldData: req.body,
         });
       }
-      const { fullname, email, phone, password, role_id, status } = req.body;
+      const { fullname, email, phone, password, isAdmin, status } = req.body;
       const newUser = new User();
       newUser.fullname = fullname;
       newUser.email = email;
       newUser.phone = phone;
       newUser.password = password;
-      newUser.role_id = role_id;
+      newUser.isAdmin = isAdmin;
       newUser.status = status;
       bcryptjs.genSalt(10, function (err, salt) {
         bcryptjs.hash(newUser.password, salt, function (err, hash) {
@@ -663,7 +655,6 @@ router.post(
                 errorMessage = error.message;
               }
               res.status(400).render("admin/users/addUser", {
-                roles: roles,
                 error: errorMessage,
                 oldData: req.body,
               });
@@ -677,15 +668,8 @@ router.post(
 );
 
 router.get("/users/edit/:id", checkAdmin, async function (req, res, next) {
-  let roles = await Role.find({}).lean();
   const user = await User.findById(req.params.id).lean();
-  roles = roles.map((role) => {
-    return {
-      ...role,
-      isSelected: role._id === user.role_id,
-    };
-  });
-  res.render("admin/users/editUser", { user: user, roles: roles });
+  res.render("admin/users/editUser", { user: user });
 });
 
 router.post(
@@ -695,16 +679,14 @@ router.post(
   async function (req, res, next) {
     try {
       const errors = validationResult(req);
-      const roles = await Role.find({}).lean();
       const user = await User.findById(req.params.id).lean();
       if (!errors.isEmpty()) {
         return res.render("admin/users/editUser", {
-          roles: roles,
           error: errors.array()[0].msg,
           user: user,
         });
       }
-      let { fullname, email, phone, password, role_id, status } = req.body;
+      let { fullname, email, phone, password, isAdmin, status } = req.body;
 
       if (!password || password.trim().length === 0) {
         //nếu ko thay đổi mk sẽ dùng lại mk cũ
@@ -719,7 +701,7 @@ router.post(
         email,
         phone,
         password,
-        role_id,
+        isAdmin,
         status,
       })
         .then(() => {

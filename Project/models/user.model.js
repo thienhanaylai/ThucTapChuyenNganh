@@ -7,9 +7,9 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: uuidv4,
     },
-    role_id: {
-      type: String,
-      ref: "Role",
+    isAdmin: {
+      type: Boolean,
+      default: false,
     },
     fullname: {
       type: String,

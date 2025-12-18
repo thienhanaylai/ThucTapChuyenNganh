@@ -1,6 +1,5 @@
 var express = require("express");
 const User = require("../models/user.model");
-const Role = require("../models/role.model");
 var router = express.Router();
 const bcryptjs = require("bcryptjs");
 const { body, validationResult } = require("express-validator");
@@ -93,13 +92,12 @@ router.get("/register", (req, res) => {
 });
 
 router.post("/register", validateRegister(), async (req, res) => {
-  const role = await Role.findOne({ name: "user" }); //truyền thẳng req.body.role vào đây nếu để cho người dùng chọn role
   const newUser = new User();
   newUser.fullname = req.body.fullname;
   newUser.email = req.body.email;
   newUser.phone = req.body.phone;
   newUser.password = req.body.password;
-  newUser.role_id = role._id;
+  newUser.isAdmin = false;
   bcryptjs.genSalt(10, function (err, salt) {
     bcryptjs.hash(newUser.password, salt, function (err, hash) {
       if (err) {
