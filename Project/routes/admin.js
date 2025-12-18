@@ -26,9 +26,23 @@ router.all("/*", function (req, res, next) {
   res.app.locals.layout = "admin";
   next();
 });
+//;
+router.get("/", auth.checkAdmin, async function (req, res, next) {
+  const totalProduct = await Product.find({}).countDocuments();
+  const totalCategory = await Category.find({}).countDocuments();
+  const totalUser = await User.find({}).countDocuments();
 
-router.get("/", auth.checkAdmin, function (req, res, next) {
-  res.render("admin");
+  const newProducts = await Product.find().sort({ createdAt: -1 }).limit(6).lean();
+  const newCategories = await Category.find().sort({ createdAt: -1 }).limit(6).lean();
+  const newUsers = await User.find().sort({ createdAt: -1 }).limit(6).lean();
+  res.render("admin", {
+    totalCategory: totalCategory,
+    totalProduct: totalProduct,
+    totalUser: totalUser,
+    newProducts: newProducts,
+    newCategories: newCategories,
+    newUsers: newUsers,
+  });
 });
 
 router.get("/product", auth.checkAdmin, product.getAllProduct);
