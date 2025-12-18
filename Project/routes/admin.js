@@ -1,7 +1,7 @@
 var express = require("express");
 var router = express.Router();
 
-const { body, validationResult } = require("express-validator");
+const { validationResult } = require("express-validator");
 const passport = require("passport");
 const bcryptjs = require("bcryptjs");
 
@@ -9,189 +9,11 @@ const Category = require("../models/category.model");
 const User = require("../models/user.model");
 const Product = require("../models/product.model");
 
+const auth = require("../middleware/auth.middleware");
+const validateForm = require("../middleware/validateForm.middleware");
+
 const multer = require("multer");
 const path = require("path");
-
-const checkAdmin = async (req, res, next) => {
-  //check user có phair admin ko nếu ko thì ko vào admin được
-  if (req.isAuthenticated()) {
-    if (req.user.isAdmin) next();
-    else {
-      res.send(
-        `Bạn không có quyền truy cập trang này! Vui lòng đăng nhập tài khoản quản trị! <a href="/admin/login">Đăng nhập admin tại đây !</a>`
-      );
-    }
-  } else {
-    res.send(
-      `Vui lòng đăng nhập tài khoản quản trị! <a href="/admin/login">Đăng nhập admin tại đây !</a>`
-    );
-  }
-};
-
-const validateLogin = () => {
-  return [
-    body("email")
-      .notEmpty()
-      .withMessage("Email không được để trống")
-      .isEmail()
-      .withMessage("Email không đúng định dạng"),
-    body("password").notEmpty().withMessage("Mật khẩu không được để trống"),
-    (req, res, next) => {
-      const errors = validationResult(req);
-      if (errors.isEmpty()) {
-        return next();
-      }
-      const ListError = errors.array().map((err) => err.msg);
-
-      return res.status(400).render("admin/login", {
-        title: "Login Dashboard",
-        layout: false,
-        error: ListError[0],
-      });
-    },
-  ];
-};
-
-const validateAddUser = () => {
-  return [
-    body("fullname").notEmpty().withMessage("Tên không được để trống").trim(),
-    body("email")
-      .notEmpty()
-      .withMessage("Email không được để trống")
-      .isEmail()
-      .withMessage("Email không đúng định dạng"),
-    body("phone")
-      .notEmpty()
-      .withMessage("Số điện thoại không được để trống!")
-      .isMobilePhone("vi-VN")
-      .withMessage("Số điện thoại không hợp lệ!"),
-    body("password").notEmpty().withMessage("Mật khẩu không được để trống"),
-    body("confirmPassword")
-      .notEmpty()
-      .withMessage("Mật khẩu không được để trống")
-      .custom((value, { req }) => {
-        if (value !== req.body.password) {
-          throw new Error("Mật khẩu xác nhận không trùng khớp!");
-        }
-        return true;
-      }),
-    body("isAdmin").notEmpty().withMessage("Vui lòng chọn role !"),
-    body("status")
-      .notEmpty()
-      .withMessage("Vui lòng chọn trạng thái cho tài khoản !"),
-  ];
-};
-
-const validateEditUser = () => {
-  return [
-    body("fullname").notEmpty().withMessage("Tên không được để trống").trim(),
-    body("email")
-      .notEmpty()
-      .withMessage("Email không được để trống")
-      .isEmail()
-      .withMessage("Email không đúng định dạng"),
-    body("phone")
-      .notEmpty()
-      .withMessage("Số điện thoại không được để trống!")
-      .isMobilePhone("vi-VN")
-      .withMessage("Số điện thoại không hợp lệ!"),
-    body("confirmPassword").custom((value, { req }) => {
-      if (value !== req.body.password) {
-        throw new Error("Mật khẩu xác nhận không trùng khớp!");
-      }
-      return true;
-    }),
-    body("isAdmin").notEmpty().withMessage("Vui lòng chọn role !"),
-    body("status")
-      .notEmpty()
-      .withMessage("Vui lòng chọn trạng thái cho tài khoản !"),
-  ];
-};
-
-const validateAddProduct = () => {
-  return [
-    body("name")
-      .notEmpty()
-      .withMessage("Tên sản phẩm không được để trống")
-      .trim(),
-    body("category_id").notEmpty().withMessage("Brand không được để trống"),
-    body("price")
-      .notEmpty()
-      .withMessage("Giá không được để trống!")
-      .isFloat()
-      .withMessage("Giá sản phẩm phải là số !"),
-    body("size")
-      .isArray({ min: 1 })
-      .withMessage("Vui lòng nhập ít nhất 1 size")
-      .custom((value) => {
-        if (!value) return true;
-        const unique = new Set(value); //Set đảm bảo size ko bị trùng
-        if (unique.size !== value.length) {
-          throw new Error("Danh sách Size không được trùng lặp!");
-        }
-        return true;
-      }),
-    body("size.*")
-      .notEmpty()
-      .withMessage("Size không được để trống")
-      .isInt({ gt: 37 })
-      .withMessage("Size sản phẩm phải là số và lớn hơn 37 !"),
-    body("stock.*")
-      .notEmpty()
-      .withMessage("Vui lòng nhập số lương sản phẩm")
-      .isInt({ gt: 0 })
-      .withMessage("Vui lòng nhập só lượng hợp lệ!"),
-    body("description")
-      .notEmpty()
-      .withMessage("Vui lòng nhập thông tin mô tả!"),
-    body("image").custom((value, { req }) => {
-      //kiemt ra da upload file len chúa
-      if (!req.file) {
-        throw new Error("Vui lòng upload ảnh cho sản phẩm !");
-      }
-      return true;
-    }),
-  ];
-};
-
-const validateEditProduct = () => {
-  return [
-    body("name")
-      .notEmpty()
-      .withMessage("Tên sản phẩm không được để trống")
-      .trim(),
-    body("category_id").notEmpty().withMessage("Brand không được để trống"),
-    body("price")
-      .notEmpty()
-      .withMessage("Giá không được để trống!")
-      .isFloat()
-      .withMessage("Giá sản phẩm phải là số !"),
-    body("size")
-      .isArray({ min: 1 })
-      .withMessage("Vui lòng nhập ít nhất 1 size")
-      .custom((value) => {
-        if (!value) return true;
-        const unique = new Set(value); //Set đảm bảo size ko bị trùng
-        if (unique.size !== value.length) {
-          throw new Error("Danh sách Size không được trùng lặp!");
-        }
-        return true;
-      }),
-    body("size.*")
-      .notEmpty()
-      .withMessage("Size không được để trống")
-      .isInt({ gt: 37 })
-      .withMessage("Size sản phẩm phải là số và lớn hơn 37 !"),
-    body("stock.*")
-      .notEmpty()
-      .withMessage("Vui lòng nhập số lương sản phẩm")
-      .isInt({ gt: 0 })
-      .withMessage("Vui lòng nhập só lượng hợp lệ!"),
-    body("description")
-      .notEmpty()
-      .withMessage("Vui lòng nhập thông tin mô tả!"),
-  ];
-};
 
 const storageProduct = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -222,13 +44,17 @@ router.get("/login", function (req, res, next) {
   res.render("admin/login", { layout: false });
 });
 
-router.post("/loginAdmin", validateLogin(), async (req, res, next) => {
-  passport.authenticate("admin", {
-    successRedirect: "/admin",
-    failureRedirect: "/admin/login",
-    failureFlash: true, //thogn bao loi qua flash
-  })(req, res, next);
-});
+router.post(
+  "/loginAdmin",
+  validateForm.validateLoginAdmin(),
+  async (req, res, next) => {
+    passport.authenticate("admin", {
+      successRedirect: "/admin",
+      failureRedirect: "/admin/login",
+      failureFlash: true, //thogn bao loi qua flash
+    })(req, res, next);
+  }
+);
 
 router.get("/logoutAdmin", (req, res) => {
   req.logOut((e) => {
@@ -242,11 +68,11 @@ router.all("/*", function (req, res, next) {
   next();
 });
 
-router.get("/", checkAdmin, function (req, res, next) {
+router.get("/", auth.checkAdmin, function (req, res, next) {
   res.render("admin");
 });
 
-router.get("/product", checkAdmin, async function (req, res, next) {
+router.get("/product", auth.checkAdmin, async function (req, res, next) {
   let products = await Product.find({}).lean();
   const categories = await Category.find({}).lean();
   products = products.map((product) => {
@@ -265,7 +91,7 @@ router.get("/product", checkAdmin, async function (req, res, next) {
   });
 });
 
-router.get("/product/add", checkAdmin, async function (req, res, next) {
+router.get("/product/add", auth.checkAdmin, async function (req, res, next) {
   const categories = await Category.find({}).lean();
   res.render("admin/product/addProduct", {
     title: "Add Product",
@@ -275,9 +101,9 @@ router.get("/product/add", checkAdmin, async function (req, res, next) {
 
 router.post(
   "/product/add",
-  checkAdmin,
+  auth.checkAdmin,
   uploadProduct.single("image"),
-  validateAddProduct(),
+  validateForm.validateAddProduct(),
   async function (req, res, next) {
     let { name, category_id, price, size, stock, description } = req.body;
     let imagePath = "";
@@ -344,30 +170,34 @@ router.post(
   }
 );
 
-router.get("/product/edit/:id", checkAdmin, async function (req, res, next) {
-  const product = await Product.findById(req.params.id).lean();
-  let categories = await Category.find({}).lean();
-  categories = categories.map((cate) => {
-    //lấy ra cate hiện tại của sản phẩm
-    if (
-      product.category_id &&
-      cate._id.toString() === product.category_id.toString()
-    ) {
-      cate.isSelected = true;
-    }
-    return cate;
-  });
-  res.render("admin/product/editProduct", {
-    oldData: product,
-    categories: categories,
-  });
-});
+router.get(
+  "/product/edit/:id",
+  auth.checkAdmin,
+  async function (req, res, next) {
+    const product = await Product.findById(req.params.id).lean();
+    let categories = await Category.find({}).lean();
+    categories = categories.map((cate) => {
+      //lấy ra cate hiện tại của sản phẩm
+      if (
+        product.category_id &&
+        cate._id.toString() === product.category_id.toString()
+      ) {
+        cate.isSelected = true;
+      }
+      return cate;
+    });
+    res.render("admin/product/editProduct", {
+      oldData: product,
+      categories: categories,
+    });
+  }
+);
 
 router.post(
   "/product/edit/:id",
-  checkAdmin,
+  auth.checkAdmin,
   uploadProduct.single("image"),
-  validateEditProduct(),
+  validateForm.validateEditProduct(),
   async function (req, res, next) {
     let { name, category_id, price, size, stock, description } = req.body;
     let product = await Product.findById(req.params.id).lean();
@@ -431,6 +261,7 @@ router.post(
       return res.redirect("/admin/product");
     } catch (error) {
       let e = "Đã có lỗi!";
+      console.log(error);
       if (error.code === 11000) {
         const field = Object.keys(error.keyValue)[0];
         if (field === "name") {
@@ -438,7 +269,7 @@ router.post(
         }
       }
       return res.status(400).render("admin/product/editProduct", {
-        error: e,
+        error: error,
         oldData: req.body,
         categories: categories,
       });
@@ -448,7 +279,7 @@ router.post(
 
 router.delete(
   "/product/delete/:id",
-  checkAdmin,
+  auth.checkAdmin,
   async function (req, res, next) {
     try {
       await Product.findByIdAndDelete(req.params.id);
@@ -460,7 +291,7 @@ router.delete(
   }
 );
 
-router.get("/category", checkAdmin, async function (req, res, next) {
+router.get("/category", auth.checkAdmin, async function (req, res, next) {
   let categories = await Category.find({}).lean();
   categories = await Promise.all(
     categories.map(async (cate) => {
@@ -474,13 +305,13 @@ router.get("/category", checkAdmin, async function (req, res, next) {
   res.render("admin/category", { categories: categories });
 });
 
-router.get("/category/add", checkAdmin, function (req, res, next) {
+router.get("/category/add", auth.checkAdmin, function (req, res, next) {
   res.render("admin/category/addCategory");
 });
 
 router.post(
   "/category/add",
-  checkAdmin,
+  auth.checkAdmin,
   uploadCategory.single("logo"),
   async function (req, res, next) {
     const { categoryName } = req.body;
@@ -516,25 +347,29 @@ router.post(
   }
 );
 
-router.get("/category/edit/:id", checkAdmin, async function (req, res, next) {
-  try {
-    const category = await Category.findById(req.params.id);
-    if (category) {
-      res.render("admin/category/editCategory", {
-        categoryID: category._id,
-        categoryName: category.name,
-      });
-    } else {
-      return res.redirect("/admin/category");
+router.get(
+  "/category/edit/:id",
+  auth.checkAdmin,
+  async function (req, res, next) {
+    try {
+      const category = await Category.findById(req.params.id);
+      if (category) {
+        res.render("admin/category/editCategory", {
+          categoryID: category._id,
+          categoryName: category.name,
+        });
+      } else {
+        return res.redirect("/admin/category");
+      }
+    } catch (e) {
+      console.log(e);
     }
-  } catch (e) {
-    console.log(e);
   }
-});
+);
 
 router.post(
   "/category/edit/:id",
-  checkAdmin,
+  auth.checkAdmin,
   uploadCategory.single("logo"),
   async function (req, res, next) {
     const { categoryName } = req.body;
@@ -578,17 +413,21 @@ router.post(
   }
 );
 
-router.delete("/category/delete/:id", checkAdmin, async function (req, res) {
-  try {
-    await Category.findByIdAndDelete(req.params.id);
-    res.redirect("/admin/category");
-  } catch (e) {
-    console.log(e);
-    res.redirect("/admin/category");
+router.delete(
+  "/category/delete/:id",
+  auth.checkAdmin,
+  async function (req, res) {
+    try {
+      await Category.findByIdAndDelete(req.params.id);
+      res.redirect("/admin/category");
+    } catch (e) {
+      console.log(e);
+      res.redirect("/admin/category");
+    }
   }
-});
+);
 
-router.get("/users", checkAdmin, async function (req, res, next) {
+router.get("/users", auth.checkAdmin, async function (req, res, next) {
   let users = await User.find({}).lean();
   users = users.map((user) => {
     return {
@@ -600,14 +439,14 @@ router.get("/users", checkAdmin, async function (req, res, next) {
   res.render("admin/users", { user: users });
 });
 
-router.get("/users/add", checkAdmin, async function (req, res, next) {
+router.get("/users/add", auth.checkAdmin, async function (req, res, next) {
   res.render("admin/users/addUser");
 });
 
 router.post(
   "/users/add",
-  checkAdmin,
-  validateAddUser(),
+  auth.checkAdmin,
+  validateForm.validateAddUser(),
   async function (req, res, next) {
     try {
       const errors = validationResult(req);
@@ -667,15 +506,15 @@ router.post(
   }
 );
 
-router.get("/users/edit/:id", checkAdmin, async function (req, res, next) {
+router.get("/users/edit/:id", auth.checkAdmin, async function (req, res, next) {
   const user = await User.findById(req.params.id).lean();
   res.render("admin/users/editUser", { user: user });
 });
 
 router.post(
   "/users/edit/:id",
-  checkAdmin,
-  validateEditUser(),
+  auth.checkAdmin,
+  validateForm.validateEditUser(),
   async function (req, res, next) {
     try {
       const errors = validationResult(req);
@@ -737,7 +576,7 @@ router.post(
   }
 );
 
-router.delete("/users/delete/:id", checkAdmin, async function (req, res) {
+router.delete("/users/delete/:id", auth.checkAdmin, async function (req, res) {
   try {
     await User.findByIdAndDelete(req.params.id);
     res.redirect("/admin/users");

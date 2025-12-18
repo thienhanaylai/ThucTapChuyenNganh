@@ -1,84 +1,16 @@
 var express = require("express");
-const User = require("../models/user.model");
 var router = express.Router();
+
+const { validationResult } = require("express-validator");
 const bcryptjs = require("bcryptjs");
-const { body, validationResult } = require("express-validator");
 const passport = require("passport");
+
+const User = require("../models/user.model");
 const Category = require("../models/category.model");
 const Product = require("../models/product.model");
 
-const requireLogin = (req, res, next) => {
-  //midleware kiem tra login chua
-  if (req.isAuthenticated()) {
-    return next();
-  }
-  return res.redirect("/login");
-};
-
-const validateRegister = () => {
-  return [
-    body("fullname").notEmpty().withMessage("Tên không được để trống").trim(),
-    body("email")
-      .notEmpty()
-      .withMessage("Email không được để trống")
-      .isEmail()
-      .withMessage("Email không đúng định dạng"),
-    body("phone")
-      .notEmpty()
-      .withMessage("Số điện thoại không được để trống!")
-      .isMobilePhone("vi-VN")
-      .withMessage("Số điện thoại không hợp lệ!"),
-    body("password").notEmpty().withMessage("Mật khẩu không được để trống"),
-    body("confirmPassword")
-      .notEmpty()
-      .withMessage("Mật khẩu không được để trống")
-      .custom((value, { req }) => {
-        if (value !== req.body.password) {
-          throw new Error("Mật khẩu xác nhận không trùng khớp!");
-        }
-        return true;
-      }),
-    (req, res, next) => {
-      const errors = validationResult(req);
-      if (errors.isEmpty()) {
-        return next();
-      }
-      const ListError = errors.array().map((err) => err.msg);
-
-      return res.status(400).render("home/register", {
-        title: "Register",
-        layout: false,
-        error: ListError[0],
-        oldData: req.body,
-      });
-    },
-  ];
-};
-
-const validateLogin = () => {
-  return [
-    body("email")
-      .notEmpty()
-      .withMessage("Email không được để trống")
-      .isEmail()
-      .withMessage("Email không đúng định dạng"),
-    body("password").notEmpty().withMessage("Mật khẩu không được để trống"),
-    (req, res, next) => {
-      let errors = validationResult(req);
-      if (errors.isEmpty()) {
-        return next();
-      }
-      const ListError = errors.array().map((err) => err.msg);
-
-      return res.status(400).render("home/login", {
-        title: "Login",
-        layout: false,
-        error: ListError[0],
-        oldData: req.body,
-      });
-    },
-  ];
-};
+const auth = require("../middleware/auth.middleware");
+const validateForm = require("../middleware/validateForm.middleware");
 
 router.all("/*", async function (req, res, next) {
   const categories = await Category.find({}).lean();
@@ -91,7 +23,7 @@ router.get("/register", (req, res) => {
   res.render("home/register", { title: "Register", layout: false });
 });
 
-router.post("/register", validateRegister(), async (req, res) => {
+router.post("/register", validateForm.validateRegister(), async (req, res) => {
   const newUser = new User();
   newUser.fullname = req.body.fullname;
   newUser.email = req.body.email;
@@ -142,7 +74,7 @@ router.get("/login", (req, res) => {
   res.render("home/login", { title: "Login", layout: false });
 });
 
-router.post("/login", validateLogin(), async (req, res, next) => {
+router.post("/login", validateForm.validateLogin(), async (req, res, next) => {
   passport.authenticate("local", {
     successRedirect: "/",
     failureRedirect: "/login",
@@ -218,12 +150,12 @@ router.get("/contact", function (req, res, next) {
   res.render("home/contact", { title: "Contact" });
 });
 
-router.get("/cart", requireLogin, function (req, res, next) {
+router.get("/cart", auth.checkLogin, function (req, res, next) {
   console.log("User hiện tại:", req.user);
   res.render("home/cart", { title: "Cart" });
 });
 
-router.get("/checkout", requireLogin, function (req, res, next) {
+router.get("/checkout", auth.checkLogin, function (req, res, next) {
   res.render("home/checkout", { title: "Checkout" });
 });
 
