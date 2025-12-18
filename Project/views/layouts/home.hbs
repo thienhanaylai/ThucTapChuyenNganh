@@ -97,7 +97,10 @@
           >
             <div class="navbar-nav w-100">
               {{#each categories}}
-                <a href="" class="nav-item nav-link">{{this.name}}</a>
+                <a
+                  href="/shop?category={{this.name}}"
+                  class="nav-item nav-link"
+                >{{this.name}}</a>
               {{/each}}
             </div>
           </nav>

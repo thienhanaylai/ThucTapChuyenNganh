@@ -11,9 +11,9 @@ const Product = require("../models/product.model");
 const requireLogin = (req, res, next) => {
   //midleware kiem tra login chua
   if (req.isAuthenticated()) {
-    next();
+    return next();
   }
-  res.redirect("/login");
+  return res.redirect("/login");
 };
 
 const validateRegister = () => {
@@ -161,11 +161,16 @@ router.get("/logout", (req, res) => {
 
 /* GET home page. */
 router.get("/", async function (req, res, next) {
-  const categories = await Category.find({}).lean();
-  // lấy sản phẩm theo category
-  // const nameCate = "Nike";
-  // const cate = await Category.findOne({ name: nameCate }).lean();
-  // const products = await Product.find({ category_id: cate._id }).lean();
+  let categories = await Category.find({}).lean();
+  categories = await Promise.all(
+    categories.map(async (cate) => {
+      const quantity = await Product.countDocuments({ category_id: cate._id });
+      return {
+        ...cate,
+        quantity: quantity,
+      };
+    })
+  );
 
   const productList = await Product.find({}).limit(8).lean();
   res.render("home/index", {
@@ -176,7 +181,19 @@ router.get("/", async function (req, res, next) {
 });
 
 router.get("/shop", async function (req, res, next) {
-  const productList = await Product.find({}).limit(8).lean();
+  const categoryQuery = req.query.category;
+  let filter = {};
+  if (categoryQuery) {
+    const categoryList = Array.isArray(categoryQuery)
+      ? categoryQuery
+      : [categoryQuery];
+    const categoriesData = await Category.find({
+      name: { $in: categoryList },
+    }).lean();
+    const categoryIds = categoriesData.map((cate) => cate._id);
+    filter.category_id = { $in: categoryIds };
+  }
+  const productList = await Product.find(filter).lean();
   let categories = await Category.find({}).lean();
   categories = await Promise.all(
     categories.map(async (cate) => {
@@ -204,6 +221,7 @@ router.get("/contact", function (req, res, next) {
 });
 
 router.get("/cart", requireLogin, function (req, res, next) {
+  console.log("User hiện tại:", req.user);
   res.render("home/cart", { title: "Cart" });
 });
 

@@ -13,7 +13,7 @@ module.exports = function configPassport() {
       },
       async (email, password, done) => {
         try {
-          const user = await User.findOne({ email: email });
+          let user = await User.findOne({ email: email });
           if (!user) {
             return done(null, false, { message: "Không tồn tại tài khoản." });
           }
@@ -24,6 +24,7 @@ module.exports = function configPassport() {
           }
           const matched = await bcrypt.compare(password, user.password);
           if (matched) {
+            delete user.password;
             return done(null, user);
           } else {
             return done(null, false, { message: "Mật khẩu không chính xác!" });
@@ -42,7 +43,7 @@ module.exports = function configPassport() {
       },
       async (email, password, done) => {
         try {
-          const user = await User.findOne({ email: email });
+          let user = await User.findOne({ email: email });
           if (!user) {
             return done(null, false, { message: "Không tồn tại tài khoản." });
           }
@@ -57,6 +58,7 @@ module.exports = function configPassport() {
           }
           const matched = await bcrypt.compare(password, user.password);
           if (matched) {
+            delete user.password;
             return done(null, user);
           } else {
             return done(null, false, { message: "Mật khẩu không chính xác!" });

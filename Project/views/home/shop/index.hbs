@@ -21,7 +21,7 @@
           class="bg-secondary pr-3"
         >Filter by category</span></h5>
       <div class="bg-light p-4 mb-30">
-        <form>
+        <form action="/shop" method="get">
           {{#each categories}}
             <div
               class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3"
@@ -29,7 +29,10 @@
               <input
                 type="checkbox"
                 class="custom-control-input"
+                name="category"
                 id="{{this.name}}"
+                value="{{this.name}}"
+                onchange="this.form.submit()"
               />
               <label
                 class="custom-control-label"
@@ -92,3 +95,15 @@
   </div>
 </div>
 <!-- Shop End -->
+<script>
+
+  document.querySelectorAll('.custom-control-input').forEach(checkbox => {
+  checkbox.addEventListener('change', function() { const form =
+  this.closest('form'); const formData = new FormData(form); const params = new
+  URLSearchParams(); formData.getAll('category').forEach(val => {
+  params.append('category', val); }); window.location.href =
+  `${window.location.pathname}?${params.toString()}`; }); }); const urlParams =
+  new URLSearchParams(window.location.search); const selectedCates =
+  urlParams.getAll('category'); selectedCates.forEach(cate => { const el =
+  document.getElementById(cate); if (el) el.checked = true; });
+</script>

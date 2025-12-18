@@ -65,7 +65,7 @@
                 >Converse knows what it takes to reach icon status. Timeless style, relentless innovation, and—you. That's why the Star Player 76 in full-grain leather was made for you and your lifestyle. The dialed-in, court shoe design of the Star Player 76 is entirely Converse, but still leaves room for your style to play.</p>
                 <a
                   class="btn btn-outline-light py-2 px-4 mt-3 animate__animated animate__fadeInUp"
-                  href="#"
+                  href="/shop"
                 >Shop Now</a>
               </div>
             </div>
@@ -88,7 +88,7 @@
                 >Special shop with all brand.</p>
                 <a
                   class="btn btn-outline-light py-2 px-4 mt-3 animate__animated animate__fadeInUp"
-                  href="#"
+                  href="/shop"
                 >Shop Now</a>
               </div>
             </div>
@@ -169,14 +169,14 @@
   <div class="row px-xl-5 pb-3">
     {{#each categories}}
     <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-      <a class="text-decoration-none" href="">
+      <a class="text-decoration-none" href="/shop?category={{this.name}}">
         <div class="cat-item d-flex align-items-center mb-4">
           <div class="overflow-hidden" style="width: 100px; height: 100px;">
             <img class="img-fluid" src="{{this.logo}}" alt="" />
           </div>
           <div class="flex-fill pl-3">
             <h6>{{this.name}}</h6>
-            {{!-- <small class="text-body">24 Products</small> --}}
+            <small class="text-body">{{this.quantity}} Products</small>
           </div>
         </div>
       </a>
