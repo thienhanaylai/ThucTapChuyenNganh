@@ -198,25 +198,12 @@
       <div class="product-item bg-light mb-4">
         <div class="product-img  position-relative overflow-hidden">
           <img class="img-fluid w-100" src="{{this.image}}" alt="" />
-          {{!-- <div class="product-action">
-            <a class="btn btn-outline-dark btn-square" href=""><i
-                class="fa fa-shopping-cart"
-              ></i></a>
-            <a class="btn btn-outline-dark btn-square" href=""><i
-                class="far fa-heart"
-              ></i></a>
-            <a class="btn btn-outline-dark btn-square" href=""><i
-                class="fa fa-sync-alt"
-              ></i></a>
-            <a class="btn btn-outline-dark btn-square" href=""><i
-                class="fa fa-search"
-              ></i></a>
-          </div> --}}
         </div>
-        <div class="card-item text-center py-4" style="    display: flex;
-    flex-direction: column;
-    justify-content: space-around;">
-          <a class="h6 text-decoration-none text-truncate" href="">{{this.name}}</a>
+        <div class="card-item text-center py-4" style="
+                    display: flex;
+                    flex-direction: column;
+                     justify-content: space-around;">
+          <a class="h6 text-decoration-none text-truncate" href="/detail/{{this._id}}">{{this.name}}</a>
           <div class="d-flex align-items-center justify-content-center mt-2">
             <h5 style="color: rgb(230, 74, 74);">{{formatPrice this.price}}</h5>
           </div>
@@ -262,30 +249,13 @@
   <div class="row px-xl-5">
     <div class="col">
       <div class="owl-carousel vendor-carousel">
+        {{#each categories}}
         <div class="bg-light p-4">
-          <img src="img/logoadidas.png" alt="" />
+          <a class="text-decoration-none" href="/shop?category={{this.name}}">
+          <img  src="{{this.logo}}" alt="" />
+          </a>
         </div>
-        <div class="bg-light p-4">
-          <img src="img/logobalance.jpg" alt="" />
-        </div>
-        <div class="bg-light p-4">
-          <img src="img/logoconverse.jpg" alt="" />
-        </div>
-        <div class="bg-light p-4">
-          <img src="img/logofila.png" alt="" />
-        </div>
-        <div class="bg-light p-4">
-          <img src="img/logohitech.png" alt="" />
-        </div>
-        <div class="bg-light p-4">
-          <img src="img/logonike.png" alt="" />
-        </div>
-        <div class="bg-light p-4">
-          <img src="img/logopuma.png" alt="" />
-        </div>
-        <div class="bg-light p-4">
-          <img src="img/logovans.jpg" alt="" />
-        </div>
+    {{/each}}
       </div>
     </div>
   </div>
