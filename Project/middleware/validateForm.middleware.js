@@ -3,11 +3,7 @@ const { body, validationResult } = require("express-validator");
 const validateRegister = () => {
   return [
     body("fullname").notEmpty().withMessage("Tên không được để trống").trim(),
-    body("email")
-      .notEmpty()
-      .withMessage("Email không được để trống")
-      .isEmail()
-      .withMessage("Email không đúng định dạng"),
+    body("email").notEmpty().withMessage("Email không được để trống").isEmail().withMessage("Email không đúng định dạng"),
     body("phone")
       .notEmpty()
       .withMessage("Số điện thoại không được để trống!")
@@ -28,7 +24,7 @@ const validateRegister = () => {
       if (errors.isEmpty()) {
         return next();
       }
-      const ListError = errors.array().map((err) => err.msg);
+      const ListError = errors.array().map(err => err.msg);
 
       return res.status(400).render("home/register", {
         title: "Register",
@@ -42,18 +38,14 @@ const validateRegister = () => {
 
 const validateLogin = () => {
   return [
-    body("email")
-      .notEmpty()
-      .withMessage("Email không được để trống")
-      .isEmail()
-      .withMessage("Email không đúng định dạng"),
+    body("email").notEmpty().withMessage("Email không được để trống").isEmail().withMessage("Email không đúng định dạng"),
     body("password").notEmpty().withMessage("Mật khẩu không được để trống"),
     (req, res, next) => {
       let errors = validationResult(req);
       if (errors.isEmpty()) {
         return next();
       }
-      const ListError = errors.array().map((err) => err.msg);
+      const ListError = errors.array().map(err => err.msg);
 
       return res.status(400).render("home/login", {
         title: "Login",
@@ -67,18 +59,14 @@ const validateLogin = () => {
 
 const validateLoginAdmin = () => {
   return [
-    body("email")
-      .notEmpty()
-      .withMessage("Email không được để trống")
-      .isEmail()
-      .withMessage("Email không đúng định dạng"),
+    body("email").notEmpty().withMessage("Email không được để trống").isEmail().withMessage("Email không đúng định dạng"),
     body("password").notEmpty().withMessage("Mật khẩu không được để trống"),
     (req, res, next) => {
       const errors = validationResult(req);
       if (errors.isEmpty()) {
         return next();
       }
-      const ListError = errors.array().map((err) => err.msg);
+      const ListError = errors.array().map(err => err.msg);
 
       return res.status(400).render("admin/login", {
         title: "Login Dashboard",
@@ -92,11 +80,7 @@ const validateLoginAdmin = () => {
 const validateAddUser = () => {
   return [
     body("fullname").notEmpty().withMessage("Tên không được để trống").trim(),
-    body("email")
-      .notEmpty()
-      .withMessage("Email không được để trống")
-      .isEmail()
-      .withMessage("Email không đúng định dạng"),
+    body("email").notEmpty().withMessage("Email không được để trống").isEmail().withMessage("Email không đúng định dạng"),
     body("phone")
       .notEmpty()
       .withMessage("Số điện thoại không được để trống!")
@@ -113,20 +97,14 @@ const validateAddUser = () => {
         return true;
       }),
     body("isAdmin").notEmpty().withMessage("Vui lòng chọn role !"),
-    body("status")
-      .notEmpty()
-      .withMessage("Vui lòng chọn trạng thái cho tài khoản !"),
+    body("status").notEmpty().withMessage("Vui lòng chọn trạng thái cho tài khoản !"),
   ];
 };
 
 const validateEditUser = () => {
   return [
     body("fullname").notEmpty().withMessage("Tên không được để trống").trim(),
-    body("email")
-      .notEmpty()
-      .withMessage("Email không được để trống")
-      .isEmail()
-      .withMessage("Email không đúng định dạng"),
+    body("email").notEmpty().withMessage("Email không được để trống").isEmail().withMessage("Email không đúng định dạng"),
     body("phone")
       .notEmpty()
       .withMessage("Số điện thoại không được để trống!")
@@ -139,28 +117,19 @@ const validateEditUser = () => {
       return true;
     }),
     body("isAdmin").notEmpty().withMessage("Vui lòng chọn role !"),
-    body("status")
-      .notEmpty()
-      .withMessage("Vui lòng chọn trạng thái cho tài khoản !"),
+    body("status").notEmpty().withMessage("Vui lòng chọn trạng thái cho tài khoản !"),
   ];
 };
 
 const validateAddProduct = () => {
   return [
-    body("name")
-      .notEmpty()
-      .withMessage("Tên sản phẩm không được để trống")
-      .trim(),
+    body("name").notEmpty().withMessage("Tên sản phẩm không được để trống").trim(),
     body("category_id").notEmpty().withMessage("Brand không được để trống"),
-    body("price")
-      .notEmpty()
-      .withMessage("Giá không được để trống!")
-      .isFloat()
-      .withMessage("Giá sản phẩm phải là số !"),
+    body("price").notEmpty().withMessage("Giá không được để trống!").isFloat().withMessage("Giá sản phẩm phải là số !"),
     body("size")
       .isArray({ min: 1 })
       .withMessage("Vui lòng nhập ít nhất 1 size")
-      .custom((value) => {
+      .custom(value => {
         if (!value) return true;
         const unique = new Set(value); //Set đảm bảo size ko bị trùng
         if (unique.size !== value.length) {
@@ -178,9 +147,7 @@ const validateAddProduct = () => {
       .withMessage("Vui lòng nhập số lương sản phẩm")
       .isInt({ gt: 0 })
       .withMessage("Vui lòng nhập só lượng hợp lệ!"),
-    body("description")
-      .notEmpty()
-      .withMessage("Vui lòng nhập thông tin mô tả!"),
+    body("description").notEmpty().withMessage("Vui lòng nhập thông tin mô tả!"),
     body("image").custom((value, { req }) => {
       //kiemt ra da upload file len chúa
       if (!req.file) {
@@ -193,20 +160,13 @@ const validateAddProduct = () => {
 
 const validateEditProduct = () => {
   return [
-    body("name")
-      .notEmpty()
-      .withMessage("Tên sản phẩm không được để trống")
-      .trim(),
+    body("name").notEmpty().withMessage("Tên sản phẩm không được để trống").trim(),
     body("category_id").notEmpty().withMessage("Brand không được để trống"),
-    body("price")
-      .notEmpty()
-      .withMessage("Giá không được để trống!")
-      .isFloat()
-      .withMessage("Giá sản phẩm phải là số !"),
+    body("price").notEmpty().withMessage("Giá không được để trống!").isFloat().withMessage("Giá sản phẩm phải là số !"),
     body("size")
       .isArray({ min: 1 })
       .withMessage("Vui lòng nhập ít nhất 1 size")
-      .custom((value) => {
+      .custom(value => {
         if (!value) return true;
         const unique = new Set(value); //Set đảm bảo size ko bị trùng
         if (unique.size !== value.length) {
@@ -224,9 +184,7 @@ const validateEditProduct = () => {
       .withMessage("Vui lòng nhập số lương sản phẩm")
       .isInt({ gt: 0 })
       .withMessage("Vui lòng nhập só lượng hợp lệ!"),
-    body("description")
-      .notEmpty()
-      .withMessage("Vui lòng nhập thông tin mô tả!"),
+    body("description").notEmpty().withMessage("Vui lòng nhập thông tin mô tả!"),
   ];
 };
 

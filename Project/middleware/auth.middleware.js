@@ -8,9 +8,7 @@ const checkAdmin = async (req, res, next) => {
       );
     }
   } else {
-    res.send(
-      `Vui lòng đăng nhập tài khoản quản trị! <a href="/admin/login">Đăng nhập admin tại đây !</a>`
-    );
+    res.send(`Vui lòng đăng nhập tài khoản quản trị! <a href="/admin/login">Đăng nhập admin tại đây !</a>`);
   }
 };
 

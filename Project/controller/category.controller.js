@@ -4,7 +4,7 @@ const Product = require("../models/product.model");
 const allCategory = async function (req, res, next) {
   let categories = await Category.find({}).lean();
   categories = await Promise.all(
-    categories.map(async (cate) => {
+    categories.map(async cate => {
       const quantity = await Product.countDocuments({ category_id: cate._id });
       return {
         ...cate,

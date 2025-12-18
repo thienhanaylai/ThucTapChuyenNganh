@@ -22,13 +22,12 @@ const register = async (req, res) => {
           req.flash("success", "Đăng ký thành công !");
           res.redirect("/login");
         })
-        .catch((error) => {
+        .catch(error => {
           let errorMessage = "Đã có lỗi xảy ra, vui lòng thử lại.";
           if (error.code === 11000) {
             const field = Object.keys(error.keyValue)[0]; // trả về trường bị lỗi
             if (field === "email") {
-              errorMessage =
-                "Email này đã có người sử dụng, vui lòng chọn email khác.";
+              errorMessage = "Email này đã có người sử dụng, vui lòng chọn email khác.";
             } else if (field === "phone") {
               errorMessage = "Số điện thoại này đã được đăng ký.";
             } else {
@@ -67,14 +66,14 @@ const loginAdmin = async (req, res, next) => {
 };
 
 const logout = (req, res) => {
-  req.logOut((e) => {
+  req.logOut(e => {
     if (e) return next(e);
     res.redirect("/");
   });
 };
 
 const logoutAdmin = (req, res) => {
-  req.logOut((e) => {
+  req.logOut(e => {
     if (e) return next(e);
     res.redirect("/admin/login");
   });
@@ -82,7 +81,7 @@ const logoutAdmin = (req, res) => {
 
 const userLists = async (req, res, next) => {
   let users = await User.find({}).lean();
-  users = users.map((user) => {
+  users = users.map(user => {
     return {
       ...user,
       status: user.status === true ? "Hoạt động" : "Bị khóa",
@@ -119,13 +118,12 @@ const userAdd = async (req, res, next) => {
           .then(() => {
             res.redirect("/admin/users");
           })
-          .catch((error) => {
+          .catch(error => {
             let errorMessage = "Đã có lỗi xảy ra, vui lòng thử lại.";
             if (error.code === 11000) {
               const field = Object.keys(error.keyValue)[0]; // trả về trường bị lỗi
               if (field === "email") {
-                errorMessage =
-                  "Email này đã có người sử dụng, vui lòng chọn email khác.";
+                errorMessage = "Email này đã có người sử dụng, vui lòng chọn email khác.";
               } else if (field === "phone") {
                 errorMessage = "Số điện thoại này đã được đăng ký.";
               } else {
@@ -180,13 +178,12 @@ const userEdit = async (req, res, next) => {
       .then(() => {
         res.redirect("/admin/users");
       })
-      .catch((error) => {
+      .catch(error => {
         let errorMessage = "Đã có lỗi xảy ra, vui lòng thử lại.";
         if (error.code === 11000) {
           const field = Object.keys(error.keyValue)[0]; // trả về trường bị lỗi
           if (field === "email") {
-            errorMessage =
-              "Email này đã có người sử dụng, vui lòng chọn email khác.";
+            errorMessage = "Email này đã có người sử dụng, vui lòng chọn email khác.";
           } else if (field === "phone") {
             errorMessage = "Số điện thoại này đã được đăng ký.";
           } else {

@@ -5,7 +5,7 @@ const { validationResult } = require("express-validator");
 const productAndCate = async (req, res, next) => {
   let categories = await Category.find({}).lean();
   categories = await Promise.all(
-    categories.map(async (cate) => {
+    categories.map(async cate => {
       const quantity = await Product.countDocuments({ category_id: cate._id });
       return {
         ...cate,
@@ -25,19 +25,17 @@ const productAll = async (req, res, next) => {
   const categoryQuery = req.query.category;
   let filter = {};
   if (categoryQuery) {
-    const categoryList = Array.isArray(categoryQuery)
-      ? categoryQuery
-      : [categoryQuery];
+    const categoryList = Array.isArray(categoryQuery) ? categoryQuery : [categoryQuery];
     const categoriesData = await Category.find({
       name: { $in: categoryList },
     }).lean();
-    const categoryIds = categoriesData.map((cate) => cate._id);
+    const categoryIds = categoriesData.map(cate => cate._id);
     filter.category_id = { $in: categoryIds };
   }
   const productList = await Product.find(filter).lean();
   let categories = await Category.find({}).lean();
   categories = await Promise.all(
-    categories.map(async (cate) => {
+    categories.map(async cate => {
       const quantity = await Product.countDocuments({ category_id: cate._id });
       return {
         ...cate,
@@ -60,10 +58,10 @@ const productDetail = async (req, res, next) => {
 const getAllProduct = async (req, res, next) => {
   let products = await Product.find({}).lean();
   const categories = await Category.find({}).lean();
-  products = products.map((product) => {
+  products = products.map(product => {
     const category = categories.find(
       //lấy tên cate từ cate_id
-      (category) => category._id === product.category_id
+      category => category._id === product.category_id
     );
     console.log(category);
     return {
@@ -102,11 +100,8 @@ const productAdd = async (req, res, next) => {
     }
     if (!errors.isEmpty()) {
       let categories = await Category.find({}).lean();
-      categories = categories.map((cate) => {
-        if (
-          req.body.category_id &&
-          cate._id.toString() === req.body.category_id.toString()
-        ) {
+      categories = categories.map(cate => {
+        if (req.body.category_id && cate._id.toString() === req.body.category_id.toString()) {
           cate.isSelected = true;
         }
         return cate;
@@ -169,11 +164,8 @@ const productEdit = async (req, res, next) => {
     });
   }
 
-  categories = categories.map((cate) => {
-    if (
-      req.body.category_id &&
-      cate._id.toString() === req.body.category_id.toString()
-    ) {
+  categories = categories.map(cate => {
+    if (req.body.category_id && cate._id.toString() === req.body.category_id.toString()) {
       cate.isSelected = true;
     }
     return cate;

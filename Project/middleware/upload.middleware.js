@@ -6,8 +6,7 @@ const storageProduct = multer.diskStorage({
     cb(null, "./public/images/products");
   },
   filename: function (req, file, cb) {
-    const randomNamefile =
-      "product-" + Date.now() + "-" + Math.round(Math.random() * 1e3);
+    const randomNamefile = "product-" + Date.now() + "-" + Math.round(Math.random() * 1e3);
     cb(null, randomNamefile + path.extname(file.originalname));
   },
 });
@@ -17,8 +16,7 @@ const storageCategory = multer.diskStorage({
     cb(null, "./public/images/categories");
   },
   filename: function (req, file, cb) {
-    const randomNamefile =
-      "category-" + Date.now() + "-" + Math.round(Math.random() * 1e3);
+    const randomNamefile = "category-" + Date.now() + "-" + Math.round(Math.random() * 1e3);
     cb(null, randomNamefile + path.extname(file.originalname));
   },
 });

@@ -49,28 +49,21 @@ router.post(
   product.productAdd
 );
 
-router.get(
-  "/product/edit/:id",
-  auth.checkAdmin,
-  async function (req, res, next) {
-    const product = await Product.findById(req.params.id).lean();
-    let categories = await Category.find({}).lean();
-    categories = categories.map((cate) => {
-      //lấy ra cate hiện tại của sản phẩm
-      if (
-        product.category_id &&
-        cate._id.toString() === product.category_id.toString()
-      ) {
-        cate.isSelected = true;
-      }
-      return cate;
-    });
-    res.render("admin/product/editProduct", {
-      oldData: product,
-      categories: categories,
-    });
-  }
-);
+router.get("/product/edit/:id", auth.checkAdmin, async function (req, res, next) {
+  const product = await Product.findById(req.params.id).lean();
+  let categories = await Category.find({}).lean();
+  categories = categories.map(cate => {
+    //lấy ra cate hiện tại của sản phẩm
+    if (product.category_id && cate._id.toString() === product.category_id.toString()) {
+      cate.isSelected = true;
+    }
+    return cate;
+  });
+  res.render("admin/product/editProduct", {
+    oldData: product,
+    categories: categories,
+  });
+});
 
 router.post(
   "/product/edit/:id",
@@ -88,39 +81,25 @@ router.get("/category/add", auth.checkAdmin, function (req, res, next) {
   res.render("admin/category/addCategory");
 });
 
-router.post(
-  "/category/add",
-  auth.checkAdmin,
-  upload.uploadImageCategory.single("logo"),
-  category.categoryAdd
-);
+router.post("/category/add", auth.checkAdmin, upload.uploadImageCategory.single("logo"), category.categoryAdd);
 
-router.get(
-  "/category/edit/:id",
-  auth.checkAdmin,
-  async function (req, res, next) {
-    try {
-      const category = await Category.findById(req.params.id);
-      if (category) {
-        res.render("admin/category/editCategory", {
-          categoryID: category._id,
-          categoryName: category.name,
-        });
-      } else {
-        return res.redirect("/admin/category");
-      }
-    } catch (e) {
-      console.log(e);
+router.get("/category/edit/:id", auth.checkAdmin, async function (req, res, next) {
+  try {
+    const category = await Category.findById(req.params.id);
+    if (category) {
+      res.render("admin/category/editCategory", {
+        categoryID: category._id,
+        categoryName: category.name,
+      });
+    } else {
+      return res.redirect("/admin/category");
     }
+  } catch (e) {
+    console.log(e);
   }
-);
+});
 
-router.post(
-  "/category/edit/:id",
-  auth.checkAdmin,
-  upload.uploadImageCategory.single("logo"),
-  category.categoryEdit
-);
+router.post("/category/edit/:id", auth.checkAdmin, upload.uploadImageCategory.single("logo"), category.categoryEdit);
 
 router.delete("/category/delete/:id", auth.checkAdmin, category.categoryDelete);
 
@@ -130,24 +109,14 @@ router.get("/users/add", auth.checkAdmin, async function (req, res, next) {
   res.render("admin/users/addUser");
 });
 
-router.post(
-  "/users/add",
-  auth.checkAdmin,
-  validateForm.validateAddUser(),
-  user.userAdd
-);
+router.post("/users/add", auth.checkAdmin, validateForm.validateAddUser(), user.userAdd);
 
 router.get("/users/edit/:id", auth.checkAdmin, async function (req, res, next) {
   const user = await User.findById(req.params.id).lean();
   res.render("admin/users/editUser", { user: user });
 });
 
-router.post(
-  "/users/edit/:id",
-  auth.checkAdmin,
-  validateForm.validateEditUser(),
-  user.userEdit
-);
+router.post("/users/edit/:id", auth.checkAdmin, validateForm.validateEditUser(), user.userEdit);
 
 router.delete("/users/delete/:id", auth.checkAdmin, user.userDelete);
 
