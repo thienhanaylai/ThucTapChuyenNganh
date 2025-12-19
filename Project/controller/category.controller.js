@@ -91,6 +91,11 @@ const categoryEdit = async (req, res, next) => {
 
 const categoryDelete = async (req, res) => {
   try {
+    let numberProduct = await Product.find({ category_id: req.params.id }).countDocuments();
+    if (numberProduct) {
+      req.flash("error", "Đang có sản phẩm thuộc category này không thể xoá!");
+      return res.redirect("/admin/category");
+    }
     await Category.findByIdAndDelete(req.params.id);
     return res.redirect("/admin/category");
   } catch (e) {
