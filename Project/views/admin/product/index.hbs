@@ -3,6 +3,12 @@
 </style>
 <div class="container-fluid">
   <h1 class="h3 mb-2 text-gray-800">Product</h1>
+  {{#if error}}
+    <div class="alert alert-danger">{{error}}</div>
+  {{/if}}
+  {{#if success}}
+    <div class="alert alert-success">{{success}}</div>
+  {{/if}}
   <div class="card shadow mb-4">
     <div class="card-header py-3">
       <h6 class="m-0 font-weight-bold text-primary">All Products</h6>
@@ -18,10 +24,7 @@
                 </a>
               </div>
             </div>
-            <div class="col-sm-12 col-md-6"><div
-                id="dataTable_filter"
-                class="dataTables_filter"
-              >
+            <div class="col-sm-12 col-md-6"><div id="dataTable_filter" class="dataTables_filter">
               </div>
             </div>
           </div>

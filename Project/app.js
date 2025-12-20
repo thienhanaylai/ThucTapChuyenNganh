@@ -35,7 +35,7 @@ app.engine(
         }
         return init;
       },
-      formatDate: (date) => {
+      formatDate: date => {
         if (!date) return "";
         return new Date(date).toLocaleString("vi-VN", {
           timeZone: "Asia/Ho_Chi_Minh",
@@ -47,7 +47,7 @@ app.engine(
           hour12: false,
         });
       },
-      formatPrice: (price) => {
+      formatPrice: price => {
         if (!price) return "";
         return new Number(price).toLocaleString("en-US", {
           style: "currency",
@@ -116,7 +116,6 @@ app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get("env") === "development" ? err : {};
-
   res.status(err.status || 500);
   res.render("error", { errStatus: err.status });
 });

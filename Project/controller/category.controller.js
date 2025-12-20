@@ -97,6 +97,7 @@ const categoryDelete = async (req, res) => {
       return res.redirect("/admin/category");
     }
     await Category.findByIdAndDelete(req.params.id);
+    req.flash("success", "Xoá thành công!");
     return res.redirect("/admin/category");
   } catch (e) {
     console.log(e);

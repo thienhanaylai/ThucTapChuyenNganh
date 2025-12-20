@@ -1,11 +1,17 @@
 <style>
-  td { vertical-align: middle; } .avatar-img { width: 40px; height: 40px;
-  object-fit: cover; border-radius: 50%; margin-right: 10px; }
+  td { vertical-align: middle; } .avatar-img { width: 40px; height: 40px; object-fit: cover; border-radius: 50%; margin-right:
+  10px; }
 </style>
 
 <div class="container-fluid">
   <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-2 text-gray-800">User List</h1>
+    {{#if error}}
+      <div class="alert alert-danger">{{error}}</div>
+    {{/if}}
+    {{#if success}}
+      <div class="alert alert-success">{{success}}</div>
+    {{/if}}
   </div>
 
   <div class="card shadow mb-4">
@@ -68,15 +74,9 @@
                             User
                           {{/if}}</span></td>
                       <td>{{formatDate this.createdAt}}</td>
-                      <td><span
-                          this="badge badge-success"
-                        >{{this.status}}</span></td>
+                      <td><span this="badge badge-success">{{this.status}}</span></td>
                       <td class="d-flex flex-row">
-                        <a
-                          href="/admin/users/edit/{{this._id}}"
-                          class="btn btn-warning"
-                          style="height: fit-content;"
-                        >Edit</a>
+                        <a href="/admin/users/edit/{{this._id}}" class="btn btn-warning" style="height: fit-content;">Edit</a>
                         |
                         <form
                           style="width: fit-content;"

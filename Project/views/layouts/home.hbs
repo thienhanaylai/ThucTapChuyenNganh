@@ -129,6 +129,9 @@
                               margin-top: 0px;
                               right: 0;"
                     >
+                      {{#if user.isAdmin}}
+                        <a class="dropdown-item" href="/admin">Dashboard</a>
+                      {{/if}}
                       <a class="dropdown-item" href="/logout">Logout</a>
                     </div>
                   </div>
