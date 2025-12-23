@@ -15,6 +15,20 @@ const allCategory = async function (req, res, next) {
   res.render("admin/category", { categories: categories });
 };
 
+const allCategoryShop = async function (req, res, next) {
+  let categories = await Category.find({}).lean();
+  categories = await Promise.all(
+    categories.map(async cate => {
+      const quantity = await Product.countDocuments({ category_id: cate._id });
+      return {
+        ...cate,
+        quantity: quantity,
+      };
+    })
+  );
+  res.render("home/category", { categories: categories });
+};
+
 const categoryAdd = async (req, res, next) => {
   const { categoryName } = req.body;
 
@@ -110,6 +124,7 @@ const category = {
   categoryAdd,
   categoryEdit,
   categoryDelete,
+  allCategoryShop,
 };
 
 module.exports = category;

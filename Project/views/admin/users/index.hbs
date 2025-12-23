@@ -67,12 +67,12 @@
                       </td>
                       <td>{{this.email}}</td>
                       <td>{{this.phone}}</td>
-                      <td><span class="badge">
-                          {{#if this.isAdmin}}
-                            Admin
-                          {{else}}
-                            User
-                          {{/if}}</span></td>
+                      <td>
+                        {{#if this.isAdmin}}
+                          <span class="badge badge-primary">Admin</span>
+                        {{else}}
+                          <span class="badge badge-secondary">Customer</span>
+                        {{/if}}</td>
                       <td>{{formatDate this.createdAt}}</td>
                       <td><span this="badge badge-success">{{this.status}}</span></td>
                       <td class="d-flex flex-row">

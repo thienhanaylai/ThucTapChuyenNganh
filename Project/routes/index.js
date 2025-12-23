@@ -5,6 +5,7 @@ const Category = require("../models/category.model");
 
 const user = require("../controller/user.controller");
 const product = require("../controller/product.controller");
+const category = require("../controller/category.controller");
 
 const auth = require("../middleware/auth.middleware");
 const validateForm = require("../middleware/validateForm.middleware");
@@ -33,6 +34,8 @@ router.get("/logout", user.logout);
 router.get("/", product.productAndCate);
 
 router.get("/shop", product.productAll);
+
+router.get("/category", category.allCategoryShop);
 
 router.get("/detail/:id", product.productDetail);
 

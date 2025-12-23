@@ -17,15 +17,11 @@
     <!-- Shop Sidebar Start -->
     <div class="col-lg-3 col-md-4">
       <!-- Size Start -->
-      <h5 class="section-title position-relative text-uppercase mb-3"><span
-          class="bg-secondary pr-3"
-        >Filter by category</span></h5>
+      <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Filter by category</span></h5>
       <div class="bg-light p-4 mb-30">
         <form action="/shop" method="get">
           {{#each categories}}
-            <div
-              class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3"
-            >
+            <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
               <input
                 type="checkbox"
                 class="custom-control-input"
@@ -34,13 +30,8 @@
                 value="{{this.name}}"
                 onchange="this.form.submit()"
               />
-              <label
-                class="custom-control-label"
-                for="{{this.name}}"
-              >{{this.name}}</label>
-              <span
-                class="badge border font-weight-normal"
-              >{{this.quantity}}</span>
+              <label class="custom-control-label" for="{{this.name}}">{{this.name}}</label>
+              <span class="badge border font-weight-normal">{{this.quantity}}</span>
             </div>
           {{/each}}
         </form>
@@ -57,6 +48,11 @@
 
           </div>
         </div>
+        {{#unless productList}}
+          <div class="w-100 d-flex justify-content-center align-items-center h-50">
+            <h4>Không có sản phẩm nào!</h4>
+          </div>
+        {{/unless}}
         {{#each productList}}
           <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
             <div class="product-item bg-light mb-4">
@@ -65,13 +61,8 @@
 
               </div>
               <div class="card-item text-center py-4">
-                <a
-                  class="h6 text-decoration-none text-truncate"
-                  href="/detail/{{this._id}}"
-                >{{this.name}}</a>
-                <div
-                  class="d-flex align-items-center justify-content-center mt-2"
-                >
+                <a class="h6 text-decoration-none text-truncate" href="/detail/{{this._id}}">{{this.name}}</a>
+                <div class="d-flex align-items-center justify-content-center mt-2">
                   <h5>{{formatPrice this.price}}</h5>
                 </div>
               </div>
@@ -97,13 +88,10 @@
 <!-- Shop End -->
 <script>
 
-  document.querySelectorAll('.custom-control-input').forEach(checkbox => {
-  checkbox.addEventListener('change', function() { const form =
-  this.closest('form'); const formData = new FormData(form); const params = new
-  URLSearchParams(); formData.getAll('category').forEach(val => {
-  params.append('category', val); }); window.location.href =
-  `${window.location.pathname}?${params.toString()}`; }); }); const urlParams =
-  new URLSearchParams(window.location.search); const selectedCates =
-  urlParams.getAll('category'); selectedCates.forEach(cate => { const el =
-  document.getElementById(cate); if (el) el.checked = true; });
+  document.querySelectorAll('.custom-control-input').forEach(checkbox => { checkbox.addEventListener('change', function() { const
+  form = this.closest('form'); const formData = new FormData(form); const params = new URLSearchParams();
+  formData.getAll('category').forEach(val => { params.append('category', val); }); window.location.href =
+  `${window.location.pathname}?${params.toString()}`; }); }); const urlParams = new URLSearchParams(window.location.search); const
+  selectedCates = urlParams.getAll('category'); selectedCates.forEach(cate => { const el = document.getElementById(cate); if (el)
+  el.checked = true; });
 </script>
