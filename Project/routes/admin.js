@@ -20,7 +20,7 @@ router.get("/login", function (req, res, next) {
 
 router.post("/loginAdmin", validateForm.validateLoginAdmin(), user.loginAdmin);
 
-router.get("/logoutAdmin", user.logout);
+router.get("/logoutAdmin", user.logoutAdmin);
 
 router.all("/*", function (req, res, next) {
   res.app.locals.layout = "admin";

@@ -208,6 +208,20 @@ const userEdit = async (req, res, next) => {
 
 const userDelete = async (req, res, next) => {
   try {
+    if (req.user._id === req.params.id) {
+      let errorMessage = "Không thể xoá tài khoản đang sử dụng!";
+      let users = await User.find({}).lean();
+      users = users.map(user => {
+        return {
+          ...user,
+          status: user.status === true ? "Hoạt động" : "Bị khóa",
+        };
+      });
+      return res.render("admin/users", {
+        error: errorMessage,
+        user: users,
+      });
+    }
     await User.findByIdAndDelete(req.params.id);
     res.redirect("/admin/users");
   } catch (e) {
