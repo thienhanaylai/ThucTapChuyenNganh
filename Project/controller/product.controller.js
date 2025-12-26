@@ -1,5 +1,7 @@
 const Product = require("../models/product.model");
 const Category = require("../models/category.model");
+const fs = require("fs");
+const path = require("path");
 const { validationResult } = require("express-validator");
 
 const productAndCate = async (req, res, next) => {
@@ -63,7 +65,6 @@ const getAllProduct = async (req, res, next) => {
       //lấy tên cate từ cate_id
       category => category._id === product.category_id
     );
-    console.log(category);
     return {
       ...product,
       categoryName: category ? category.name : "",
@@ -213,6 +214,11 @@ const productEdit = async (req, res, next) => {
 
 const productDelete = async (req, res, next) => {
   try {
+    const product = await Product.findById(req.params.id);
+    const imagePath = path.join(__dirname, "../public", product.image);
+    if (fs.existsSync(imagePath)) {
+      fs.unlinkSync(imagePath);
+    }
     await Product.findByIdAndDelete(req.params.id);
     res.redirect("/admin/product");
   } catch (e) {

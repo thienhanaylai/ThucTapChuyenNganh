@@ -1,6 +1,7 @@
 const Category = require("../models/category.model");
 const Product = require("../models/product.model");
-
+const fs = require("fs");
+const path = require("path");
 const allCategory = async function (req, res, next) {
   let categories = await Category.find({}).lean();
   categories = await Promise.all(
@@ -109,6 +110,11 @@ const categoryDelete = async (req, res) => {
     if (numberProduct) {
       req.flash("error", "Đang có sản phẩm thuộc category này không thể xoá!");
       return res.redirect("/admin/category");
+    }
+    const category = await Category.findById(req.params.id);
+    const logoPath = path.join(__dirname, "../public", category.logo);
+    if (fs.existsSync(logoPath)) {
+      fs.unlinkSync(logoPath);
     }
     await Category.findByIdAndDelete(req.params.id);
     req.flash("success", "Xoá thành công!");
