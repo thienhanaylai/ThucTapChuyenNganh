@@ -227,6 +227,17 @@ const productDelete = async (req, res, next) => {
   }
 };
 
+const updateStatusProduct = async (req, res, next) => {
+  try {
+    const product = await Product.findById(req.params.id);
+    await Product.findByIdAndUpdate(req.params.id, { isShow: !product.isShow });
+    res.redirect("/admin/product");
+  } catch (e) {
+    console.log(e);
+    res.redirect("/admin/product");
+  }
+};
+
 const product = {
   productAndCate,
   productAll,
@@ -235,5 +246,6 @@ const product = {
   productAdd,
   productEdit,
   productDelete,
+  updateStatusProduct,
 };
 module.exports = product;

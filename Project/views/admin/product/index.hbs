@@ -88,6 +88,14 @@
                       aria-controls="dataTable"
                       rowspan="1"
                       colspan="1"
+                      style="width: 42.2px;"
+                    >Show</th>
+                    <th
+                      class="sorting"
+                      tabindex="0"
+                      aria-controls="dataTable"
+                      rowspan="1"
+                      colspan="1"
                       style="width: 150.2px;"
                     >Action</th>
                   </tr>
@@ -108,6 +116,20 @@
                       </td>
                       <td>{{formatDate this.createdAt}}</td>
                       <td>{{formatPrice this.price}}</td>
+                      <td>
+                        <form action="/admin/product/updateStatus/{{this._id}}" method="POST" style="display: inline-block;">
+                              <label class="switch">
+                                  <input 
+                                      type="checkbox" 
+                                      name="status" 
+                                      value="true"
+                                      onchange="this.form.submit()"
+                                      {{#if this.isShow}}checked{{/if}}
+                                  >
+                                  <span class="slider round"></span>
+                              </label>
+                          </form>
+                      </td>
                       <td class="d-flex flex-row"><a
                           class="btn btn-warning"
                           style="height: fit-content;"

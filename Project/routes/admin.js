@@ -87,6 +87,8 @@ router.post(
   product.productDetail
 );
 
+router.post("/product/updateStatus/:id", auth.checkAdmin, product.updateStatusProduct);
+
 router.delete("/product/delete/:id", auth.checkAdmin, product.productDelete);
 
 router.get("/category", auth.checkAdmin, category.allCategory);
@@ -114,6 +116,8 @@ router.get("/category/edit/:id", auth.checkAdmin, async function (req, res, next
 });
 
 router.post("/category/edit/:id", auth.checkAdmin, upload.uploadImageCategory.single("logo"), category.categoryEdit);
+
+router.post("/category/updateStatus/:id", auth.checkAdmin, category.updateStatusCategory);
 
 router.delete("/category/delete/:id", auth.checkAdmin, category.categoryDelete);
 

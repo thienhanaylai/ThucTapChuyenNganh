@@ -125,12 +125,25 @@ const categoryDelete = async (req, res) => {
   }
 };
 
+const updateStatusCategory = async (req, res) => {
+  try {
+    const cate = await Category.findById(req.params.id);
+    await Category.findByIdAndUpdate(req.params.id, { isShow: !cate.isShow });
+    return res.redirect("/admin/category");
+  } catch (e) {
+    console.log(e);
+    req.flash("error", "Lỗi không thấy category!");
+    return res.redirect("/admin/category");
+  }
+};
+
 const category = {
   allCategory,
   categoryAdd,
   categoryEdit,
   categoryDelete,
   allCategoryShop,
+  updateStatusCategory,
 };
 
 module.exports = category;

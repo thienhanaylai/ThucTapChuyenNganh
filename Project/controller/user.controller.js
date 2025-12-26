@@ -224,6 +224,7 @@ const userDelete = async (req, res, next) => {
       });
     }
     await User.findByIdAndDelete(req.params.id);
+    req.flash("success", "Xoá thành công!");
     res.redirect("/admin/users");
   } catch (e) {
     console.log(e);
