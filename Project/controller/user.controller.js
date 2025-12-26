@@ -151,13 +151,13 @@ const userAdd = async (req, res, next) => {
 const userEdit = async (req, res, next) => {
   try {
     const errors = validationResult(req);
-    const userEdit = await User.findById(req.params.id).lean();
     if (!errors.isEmpty()) {
       return res.render("admin/users/editUser", {
         error: errors.array()[0].msg,
         userEdit: userEdit,
       });
     }
+    const userEdit = await User.findById(req.params.id).lean();
     let { fullname, email, phone, password, isAdmin, status } = req.body;
 
     if (!password || password.trim().length === 0) {
@@ -232,6 +232,60 @@ const userDelete = async (req, res, next) => {
   }
 };
 
+const profile = async (req, res, next) => {
+  try {
+    res.render("home/profile");
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+const updateProfile = async (req, res, next) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.render("home/profile", {
+        error: errors.array()[0].msg,
+      });
+    }
+    const { fullname, email, phone } = req.body;
+    await User.findByIdAndUpdate(req.user._id, { fullname: fullname, email: email, phone: phone });
+    req.flash("success", "Cập nhật thông tin thành công");
+    return res.redirect("/profile");
+  } catch (e) {
+    console.log(e);
+    req.flash("error", "Cập nhật thất bại!");
+    return res.redirect("/profile");
+  }
+};
+
+const changePassword = async (req, res, next) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.render("home/profile", {
+        error: errors.array()[0].msg,
+      });
+    }
+    let { password, oldPassword } = req.body;
+    const user = await User.findById(req.user._id);
+    const matched = await bcryptjs.compare(oldPassword, user.password);
+    if (!matched) {
+      req.flash("error", "Mật khẩu không chính xác!");
+      return res.redirect("/profile");
+    }
+    const salt = await bcryptjs.genSalt(10);
+    password = await bcryptjs.hash(password, salt);
+    await User.findByIdAndUpdate(req.user._id, { password: password });
+    req.flash("success", "Cập nhật mật khẩu thành công");
+    return res.redirect("/profile");
+  } catch (e) {
+    console.log(e);
+    req.flash("error", "Cập nhật thất bại!");
+    return res.redirect("/profile");
+  }
+};
+
 const user = {
   register,
   login,
@@ -242,6 +296,9 @@ const user = {
   userAdd,
   userEdit,
   userDelete,
+  profile,
+  updateProfile,
+  changePassword,
 };
 
 module.exports = user;

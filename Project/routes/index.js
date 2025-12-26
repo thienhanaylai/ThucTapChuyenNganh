@@ -8,6 +8,7 @@ const product = require("../controller/product.controller");
 const category = require("../controller/category.controller");
 
 const validateForm = require("../middleware/validateForm.middleware");
+const auth = require("../middleware/auth.middleware");
 
 router.all("/*", async function (req, res, next) {
   const categories = await Category.find({}).lean();
@@ -42,4 +43,9 @@ router.get("/contact", function (req, res, next) {
   res.render("home/contact", { title: "Contact" });
 });
 
+router.get("/profile", auth.checkLogin, user.profile);
+
+router.post("/profile/update", auth.checkLogin, validateForm.validateUpdateProfile(), user.updateProfile);
+
+router.post("/profile/changePassword", auth.checkLogin, validateForm.validateUpdatePassword(), user.changePassword);
 module.exports = router;

@@ -121,6 +121,33 @@ const validateEditUser = () => {
   ];
 };
 
+const validateUpdateProfile = () => {
+  return [
+    body("fullname").notEmpty().withMessage("Tên không được để trống").trim(),
+    body("phone")
+      .notEmpty()
+      .withMessage("Số điện thoại không được để trống!")
+      .isMobilePhone("vi-VN")
+      .withMessage("Số điện thoại không hợp lệ!"),
+  ];
+};
+
+const validateUpdatePassword = () => {
+  return [
+    body("oldPassword").notEmpty().withMessage("Mật khẩu cũ không được để trống"),
+    body("password").notEmpty().withMessage("Mật khẩu mới không được để trống"),
+    body("confirmPassword")
+      .notEmpty()
+      .withMessage("Mật khẩu xác nhận không được để trống")
+      .custom((value, { req }) => {
+        if (value !== req.body.password) {
+          throw new Error("Mật khẩu xác nhận không trùng khớp!");
+        }
+        return true;
+      }),
+  ];
+};
+
 const validateAddProduct = () => {
   return [
     body("name").notEmpty().withMessage("Tên sản phẩm không được để trống").trim(),
@@ -196,6 +223,8 @@ const validateForm = {
   validateEditUser,
   validateAddProduct,
   validateEditProduct,
+  validateUpdateProfile,
+  validateUpdatePassword,
 };
 
 module.exports = validateForm;
