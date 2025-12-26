@@ -26,7 +26,7 @@ router.all("/*", function (req, res, next) {
   res.app.locals.layout = "admin";
   next();
 });
-//;
+
 router.get("/", auth.checkAdmin, async function (req, res, next) {
   const totalProduct = await Product.find({}).countDocuments();
   const totalCategory = await Category.find({}).countDocuments();
@@ -127,7 +127,7 @@ router.post("/users/add", auth.checkAdmin, validateForm.validateAddUser(), user.
 
 router.get("/users/edit/:id", auth.checkAdmin, async function (req, res, next) {
   const user = await User.findById(req.params.id).lean();
-  res.render("admin/users/editUser", { user: user });
+  res.render("admin/users/editUser", { userEdit: user });
 });
 
 router.post("/users/edit/:id", auth.checkAdmin, validateForm.validateEditUser(), user.userEdit);

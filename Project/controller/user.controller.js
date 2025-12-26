@@ -53,7 +53,7 @@ const login = async (req, res, next) => {
   passport.authenticate("local", {
     successRedirect: "/",
     failureRedirect: "/login",
-    failureFlash: true, //thogn bao loi qua flash
+    failureFlash: true, //thong bao loi qua flash
   })(req, res, next);
 };
 
@@ -61,7 +61,7 @@ const loginAdmin = async (req, res, next) => {
   passport.authenticate("admin", {
     successRedirect: "/admin",
     failureRedirect: "/admin/login",
-    failureFlash: true, //thogn bao loi qua flash
+    failureFlash: true, //thong bao loi qua flash
   })(req, res, next);
 };
 
@@ -87,7 +87,8 @@ const userLists = async (req, res, next) => {
       status: user.status === true ? "Hoạt động" : "Bị khóa",
     };
   });
-  res.render("admin/users", { user: users });
+  const currentUserID = req.user._id;
+  res.render("admin/users", { users: users, currentUserID: currentUserID });
 };
 
 const userAdd = async (req, res, next) => {
@@ -150,11 +151,11 @@ const userAdd = async (req, res, next) => {
 const userEdit = async (req, res, next) => {
   try {
     const errors = validationResult(req);
-    const user = await User.findById(req.params.id).lean();
+    const userEdit = await User.findById(req.params.id).lean();
     if (!errors.isEmpty()) {
       return res.render("admin/users/editUser", {
         error: errors.array()[0].msg,
-        user: user,
+        userEdit: userEdit,
       });
     }
     let { fullname, email, phone, password, isAdmin, status } = req.body;

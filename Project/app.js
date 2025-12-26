@@ -27,6 +27,10 @@ app.engine(
     partialsDir: path.join(__dirname, "views", "partials"),
     layoutsDir: path.join(__dirname, "views", "layouts"),
     helpers: {
+      eq: (a, b) => {
+        console.log(a, " ", b);
+        return a === b;
+      },
       times: function (n, block) {
         // nhận vào số n vòng lặp sau đó render ra n số element
         let init = "";
