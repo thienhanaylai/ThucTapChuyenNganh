@@ -12,16 +12,7 @@ const checkAdmin = async (req, res, next) => {
   }
 };
 
-const checkLogin = (req, res, next) => {
-  //midleware kiem tra login chua
-  if (req.isAuthenticated()) {
-    return next();
-  }
-  return res.redirect("/login");
-};
-
 const auth = {
-  checkLogin,
   checkAdmin,
 };
 

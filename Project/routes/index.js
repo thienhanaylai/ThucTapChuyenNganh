@@ -7,7 +7,6 @@ const user = require("../controller/user.controller");
 const product = require("../controller/product.controller");
 const category = require("../controller/category.controller");
 
-const auth = require("../middleware/auth.middleware");
 const validateForm = require("../middleware/validateForm.middleware");
 
 router.all("/*", async function (req, res, next) {
@@ -41,15 +40,6 @@ router.get("/detail/:id", product.productDetail);
 
 router.get("/contact", function (req, res, next) {
   res.render("home/contact", { title: "Contact" });
-});
-
-router.get("/cart", auth.checkLogin, function (req, res, next) {
-  console.log("User hiện tại:", req.user);
-  res.render("home/cart", { title: "Cart" });
-});
-
-router.get("/checkout", auth.checkLogin, function (req, res, next) {
-  res.render("home/checkout", { title: "Checkout" });
 });
 
 module.exports = router;
