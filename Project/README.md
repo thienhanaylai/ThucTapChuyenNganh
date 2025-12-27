@@ -21,7 +21,7 @@ Trước khi cài đặt, đảm bảo máy tính của bạn đã cài đặt c
 **Bước 1: Clone dự án về máy**
 
 ```bash
-git clone <link-repo-cua-ban>
+git clone (https://github.com/thienhanaylai/ThucTapChuyenNganh)
 cd ThucTapChuyenNganh
 ```
 
@@ -36,3 +36,4 @@ npm install
 ```bash
 npm run dev
 ```
+
