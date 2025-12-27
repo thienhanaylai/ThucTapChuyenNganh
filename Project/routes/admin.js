@@ -13,6 +13,8 @@ const category = require("../controller/category.controller");
 
 const auth = require("../middleware/auth.middleware");
 const validateForm = require("../middleware/validateForm.middleware");
+const layout = require("../models/layout.model");
+const { updateLayoutSettings } = require("../controller/layout.controller");
 
 router.get("/login", function (req, res, next) {
   res.render("admin/login", { layout: false });
@@ -138,4 +140,17 @@ router.post("/users/edit/:id", auth.checkAdmin, validateForm.validateEditUser(),
 
 router.delete("/users/delete/:id", auth.checkAdmin, user.userDelete);
 
+router.get("/layout", auth.checkAdmin, async function (req, res, next) {
+  try {
+    const settings = await layout.getSettings();
+    res.render("admin/layout", {
+      settings: settings.toObject(),
+    });
+  } catch (err) {
+    console.log(err);
+    res.redirect("/admin/dashboard");
+  }
+});
+
+router.post("/layout", auth.checkAdmin, validateForm.validateLayoutSetting(), updateLayoutSettings);
 module.exports = router;

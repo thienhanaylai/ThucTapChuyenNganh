@@ -215,6 +215,42 @@ const validateEditProduct = () => {
   ];
 };
 
+const validateLayoutSetting = () => {
+  return [
+    body("siteTitle").notEmpty().withMessage("Tiêu đề trang không được để trống!").trim(),
+    body("hotline").notEmpty().withMessage("Hotline không được để trống!").trim(),
+    body("email")
+      .notEmpty()
+      .withMessage("Email liên hệ không được để trống!")
+      .isEmail()
+      .withMessage("Email không đúng định dạng!")
+      .trim(),
+    body("address").notEmpty().withMessage("Địa chỉ không được để trống!").trim(),
+    body("facebook")
+      .notEmpty()
+      .withMessage("Link Facebook không được để trống!")
+      .isURL()
+      .withMessage("Link Facebook không hợp lệ!")
+      .trim(),
+    body("instagram")
+      .notEmpty()
+      .withMessage("Link Instagram không được để trống!")
+      .isURL()
+      .withMessage("Link Instagram không hợp lệ!")
+      .trim(),
+    body("twitter")
+      .notEmpty()
+      .withMessage("Link Twitter không được để trống!")
+      .isURL()
+      .withMessage("Link Twitter không hợp lệ!")
+      .trim(),
+    body("quickShops.*.title").notEmpty().withMessage("Tên hiển thị Quick Shop không được để trống!").trim(),
+    body("quickShops.*.link").notEmpty().withMessage("Đường dẫn Quick Shop không được để trống!").trim(),
+    body("myAccounts.*.title").notEmpty().withMessage("Tên hiển thị My Account không được để trống!").trim(),
+    body("myAccounts.*.link").notEmpty().withMessage("Đường dẫn My Account không được để trống!").trim(),
+  ];
+};
+
 const validateForm = {
   validateRegister,
   validateLogin,
@@ -225,6 +261,7 @@ const validateForm = {
   validateEditProduct,
   validateUpdateProfile,
   validateUpdatePassword,
+  validateLayoutSetting,
 };
 
 module.exports = validateForm;

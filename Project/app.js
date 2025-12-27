@@ -14,6 +14,7 @@ var indexRouter = require("./routes/index");
 var adminRouter = require("./routes/admin");
 
 const { default: mongoose } = require("mongoose");
+const layouts = require("./controller/layout.controller");
 const urlDb = "mongodb://127.0.0.1:27017/test2";
 
 var app = express();
@@ -78,7 +79,7 @@ app.set("view engine", "hbs");
 
 app.use(logger("dev"));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(methodOverride("_method"));
@@ -99,7 +100,7 @@ app.use(passport.initialize()); //midleware cua passport
 app.use(passport.session());
 
 app.use(flash());
-
+app.use(layouts.getLayout);
 app.use((req, res, next) => {
   res.locals.user = req.user ? req.user.toObject() : null;
   res.locals.success = req.flash("success");
