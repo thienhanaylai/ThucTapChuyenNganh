@@ -21,18 +21,20 @@
       <div class="bg-light p-4 mb-30">
         <form action="/shop" method="get">
           {{#each categories}}
-            <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-              <input
-                type="checkbox"
-                class="custom-control-input"
-                name="category"
-                id="{{this.name}}"
-                value="{{this.name}}"
-                onchange="this.form.submit()"
-              />
-              <label class="custom-control-label" for="{{this.name}}">{{this.name}}</label>
-              <span class="badge border font-weight-normal">{{this.quantity}}</span>
-            </div>
+            {{#if this.isShow}}
+              <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                <input
+                  type="checkbox"
+                  class="custom-control-input"
+                  name="category"
+                  id="{{this.name}}"
+                  value="{{this.name}}"
+                  onchange="this.form.submit()"
+                />
+                <label class="custom-control-label" for="{{this.name}}">{{this.name}}</label>
+                <span class="badge border font-weight-normal">{{this.quantity}}</span>
+              </div>
+            {{/if}}
           {{/each}}
         </form>
       </div>

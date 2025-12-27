@@ -39,10 +39,6 @@ router.get("/category", category.allCategoryShop);
 
 router.get("/detail/:id", product.productDetail);
 
-router.get("/contact", function (req, res, next) {
-  res.render("home/contact", { title: "Contact" });
-});
-
 router.get("/profile", auth.checkLogin, user.profile);
 
 router.post("/profile/update", auth.checkLogin, validateForm.validateUpdateProfile(), user.updateProfile);

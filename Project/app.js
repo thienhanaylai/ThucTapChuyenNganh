@@ -90,7 +90,7 @@ app.use(
     cookie: {
       secure: false,
       httpOnly: true,
-      maxAge: 60 * 60 * 1000, //thời gian hết hạn của cookie (60 giây * 60 = 1 tiếng - tính bằng mili giây)
+      maxAge: 60 * 60 * 1000,
     },
   })
 );

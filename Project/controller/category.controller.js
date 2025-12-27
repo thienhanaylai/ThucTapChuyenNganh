@@ -50,6 +50,7 @@ const categoryAdd = async (req, res, next) => {
     category.name = req.body.categoryName;
     category.logo = imagePath;
     await category.save();
+    req.flash("success", "Thêm thành công category!");
     return res.redirect("/admin/category");
   } catch (error) {
     let e = "Đã có lỗi ~";
@@ -80,6 +81,7 @@ const categoryEdit = async (req, res, next) => {
     imagePath = cate.logo;
   }
   try {
+    req.flash("success", "Sửa category thành công!");
     await Category.findByIdAndUpdate(
       req.params.id,
       {
@@ -129,6 +131,13 @@ const updateStatusCategory = async (req, res) => {
   try {
     const cate = await Category.findById(req.params.id);
     await Category.findByIdAndUpdate(req.params.id, { isShow: !cate.isShow });
+    const products = await Product.find({ category_id: cate._id }).lean();
+    if (products) {
+      products.map(async product => {
+        await Product.findByIdAndUpdate(product._id, { isShow: !cate.isShow }); //cho trạng thái ẩn hiện đồng bộ với cate
+      });
+    }
+    req.flash("success", `Đã cập nhật trạng thái của ${cate.name} và các sản phẩm thuộc ${cate.name} !`);
     return res.redirect("/admin/category");
   } catch (e) {
     console.log(e);

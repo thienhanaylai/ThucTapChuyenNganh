@@ -167,8 +167,8 @@ const validateAddProduct = () => {
     body("size.*")
       .notEmpty()
       .withMessage("Size không được để trống")
-      .isInt({ gt: 37 })
-      .withMessage("Size sản phẩm phải là số và lớn hơn 37 !"),
+      .isInt({ gt: 37, lt: 50 })
+      .withMessage("Size sản phẩm phải là số và lớn hơn 37 và nhỏ hơn size 50 !"),
     body("stock.*")
       .notEmpty()
       .withMessage("Vui lòng nhập số lương sản phẩm")
@@ -204,8 +204,8 @@ const validateEditProduct = () => {
     body("size.*")
       .notEmpty()
       .withMessage("Size không được để trống")
-      .isInt({ gt: 37 })
-      .withMessage("Size sản phẩm phải là số và lớn hơn 37 !"),
+      .isInt({ gt: 37, lt: 50 })
+      .withMessage("Size sản phẩm phải là số và lớn hơn 37 và nhỏ hơn size 50 !"),
     body("stock.*")
       .notEmpty()
       .withMessage("Vui lòng nhập số lương sản phẩm")

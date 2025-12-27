@@ -177,6 +177,7 @@ const userEdit = async (req, res, next) => {
       status,
     })
       .then(() => {
+        req.flash("success", "Cập nhật tài khoản thành công!");
         res.redirect("/admin/users");
       })
       .catch(error => {

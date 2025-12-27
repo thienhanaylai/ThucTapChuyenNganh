@@ -84,7 +84,7 @@ router.post(
   auth.checkAdmin,
   upload.uploadImageProduct.single("image"),
   validateForm.validateEditProduct(),
-  product.productDetail
+  product.productEdit
 );
 
 router.post("/product/updateStatus/:id", auth.checkAdmin, product.updateStatusProduct);

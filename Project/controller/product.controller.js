@@ -15,7 +15,7 @@ const productAndCate = async (req, res, next) => {
       };
     })
   );
-  const productList = await Product.find({}).limit(8).lean();
+  const productList = await Product.find({}).sort({ createdAt: -1 }).limit(8).lean();
   res.render("home/index", {
     title: "Home",
     categories: categories,
@@ -123,7 +123,7 @@ const productAdd = async (req, res, next) => {
     newProduct.description = description;
     newProduct.detail = details;
     await newProduct.save();
-
+    req.flash("success", "Thêm thành công!");
     return res.redirect("/admin/product");
   } catch (error) {
     let e = "Đã có lỗi!";
@@ -182,6 +182,7 @@ const productEdit = async (req, res, next) => {
         categories: categories,
       });
     }
+    req.flash("success", "Sửa thành công!");
     await Product.findByIdAndUpdate(
       req.params.id,
       {
@@ -219,6 +220,7 @@ const productDelete = async (req, res, next) => {
     if (fs.existsSync(imagePath)) {
       fs.unlinkSync(imagePath);
     }
+    req.flash("success", "Xoá thành công!");
     await Product.findByIdAndDelete(req.params.id);
     res.redirect("/admin/product");
   } catch (e) {
@@ -231,6 +233,7 @@ const updateStatusProduct = async (req, res, next) => {
   try {
     const product = await Product.findById(req.params.id);
     await Product.findByIdAndUpdate(req.params.id, { isShow: !product.isShow });
+    req.flash("success", `Đã ẩn ${product.name} ra khỏi shop!`);
     res.redirect("/admin/product");
   } catch (e) {
     console.log(e);

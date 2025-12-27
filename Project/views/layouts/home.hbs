@@ -72,7 +72,9 @@
           >
             <div class="navbar-nav w-100">
               {{#each categories}}
-                <a href="/shop?category={{this.name}}" class="nav-item nav-link">{{this.name}}</a>
+                {{#if this.isShow}}
+                  <a href="/shop?category={{this.name}}" class="nav-item nav-link">{{this.name}}</a>
+                {{/if}}
               {{/each}}
             </div>
           </nav>

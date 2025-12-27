@@ -1,4 +1,4 @@
-<!-- Carousel Start -->
+
 <div class="container-fluid mb-3">
   <div class="row px-xl-5">
     <div class="col-lg-8">
@@ -116,9 +116,7 @@
     </div>
   </div>
 </div>
-<!-- Carousel End -->
 
-<!-- Featured Start -->
 <div class="container-fluid pt-5">
   <div class="row px-xl-5 pb-3">
     <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
@@ -159,15 +157,14 @@
     </div>
   </div>
 </div>
-<!-- Featured End -->
 
-<!-- Categories Start -->
 <div class="container-fluid pt-5">
   <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span
       class="bg-secondary pr-3"
     >Categories</span></h2>
   <div class="row px-xl-5 pb-3">
     {{#each categories}}
+    {{#if this.isShow}}
     <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
       <a class="text-decoration-none" href="/shop?category={{this.name}}">
         <div class="cat-item d-flex align-items-center mb-4">
@@ -181,19 +178,19 @@
         </div>
       </a>
     </div>
+    {{/if}}
     {{/each}}
     </div>
   </div>
 </div>
-<!-- Categories End -->
 
-<!-- Products Start -->
 <div class="container-fluid pt-5 pb-3">
   <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span
       class="bg-secondary pr-3"
     >Featured Products</span></h2>
   <div class="row px-xl-5">
     {{#each productList}}
+    {{#if this.isShow}}
    <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
       <div class="product-item bg-light mb-4">
         <div class="product-img  position-relative overflow-hidden">
@@ -210,12 +207,11 @@
       </div>
       </div>
     </div>
+    {{/if}}
      {{/each}}
   </div>
 </div>
-<!-- Products End -->
 
-<!-- Offer Start -->
 <div class="container-fluid pt-5 pb-3">
   <div class="row px-xl-5">
     <div class="col-md-6">
@@ -240,24 +236,21 @@
     </div>
   </div>
 </div>
-<!-- Offer End -->
 
-
-
-<!-- Vendor Start -->
 <div class="container-fluid py-5">
   <div class="row px-xl-5">
     <div class="col">
       <div class="owl-carousel vendor-carousel">
         {{#each categories}}
+        {{#if this.isShow}}
         <div class="bg-light p-4">
           <a class="text-decoration-none" href="/shop?category={{this.name}}">
           <img  src="{{this.logo}}" alt="" />
           </a>
         </div>
+        {{/if}}
     {{/each}}
       </div>
     </div>
   </div>
 </div>
-<!-- Vendor End -->
