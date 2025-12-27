@@ -76,9 +76,14 @@ const categoryEdit = async (req, res, next) => {
   let imagePath = "";
   if (req.file) {
     imagePath = "images/categories/" + req.file.filename;
+    const category = await Category.findById(req.params.id).lean();
+    const logoPath = path.join(__dirname, "../public", category.logo); //xoa logo cũ trước khi đổi logo mới
+    if (fs.existsSync(logoPath)) {
+      fs.unlinkSync(logoPath);
+    }
   } else {
-    const cate = await Category.findById(req.params.id).lean();
-    imagePath = cate.logo;
+    const category = await Category.findById(req.params.id).lean();
+    imagePath = category.logo;
   }
   try {
     req.flash("success", "Sửa category thành công!");

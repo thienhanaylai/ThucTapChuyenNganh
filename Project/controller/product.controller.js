@@ -144,6 +144,10 @@ const productEdit = async (req, res, next) => {
   let imagePath = "";
   if (req.file) {
     imagePath = "images/products/" + req.file.filename;
+    const oldImagePath = path.join(__dirname, "../public", product.image);
+    if (fs.existsSync(oldImagePath)) {
+      fs.unlinkSync(oldImagePath);
+    }
   } else {
     imagePath = product.image;
   }
