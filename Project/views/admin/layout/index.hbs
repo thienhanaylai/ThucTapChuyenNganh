@@ -152,10 +152,9 @@
 <script>
   function addItem(type) { const container = document.getElementById(type + '-container'); const index =
   container.children.length; const namePrefix = type === 'quickShop' ? 'quickShops' : 'myAccounts'; const html = ` <div class="row
-  mb-2 align-items-center item-row"> <div class="col-5"> <input type="text" class="form-control form-control-sm" placeholder="Tên
-  mới..." name="${namePrefix}[${index}][title]"> </div> <div class="col-5"> <input type="text" class="form-control
-  form-control-sm" placeholder="Link mới..." name="${namePrefix}[${index}][link]"> </div> <div class="col-2 text-center"> <button
-  type="button" class="btn btn-danger btn-sm" onclick="removeItem(this)"> <i class="fa fa-trash"></i> </button> </div> </div>`;
-  container.insertAdjacentHTML('beforeend', html); } function removeItem(button) {const row = button.closest('.item-row');
-  row.remove(); }
+  mb-2 align-items-center item-row"> <div class="col-5"> <input type="text" class="form-control form-control-sm"
+  name="${namePrefix}[${index}][title]"> </div> <div class="col-5"> <input type="text" class="form-control form-control-sm"
+  name="${namePrefix}[${index}][link]"> </div> <div class="col-2 text-center"> <button type="button" class="btn btn-danger btn-sm"
+  onclick="removeItem(this)"> <i class="fa fa-trash"></i> </button> </div> </div>`; container.insertAdjacentHTML('beforeend',
+  html); } function removeItem(button) {const row = button.closest('.item-row'); row.remove(); }
 </script>
