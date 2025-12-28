@@ -236,8 +236,13 @@ const productDelete = async (req, res, next) => {
 const updateStatusProduct = async (req, res, next) => {
   try {
     const product = await Product.findById(req.params.id);
+    const cate = await Category.findById(product.category_id);
+    if (cate && !cate.isShow) {
+      req.flash("error", `Category ${cate.name} đang ẩn vui lòng cập nhật lại trạng thái của ${cate.name} trước!`);
+      return res.redirect("/admin/product");
+    }
     await Product.findByIdAndUpdate(req.params.id, { isShow: !product.isShow });
-    req.flash("success", `Đã ẩn ${product.name} ra khỏi shop!`);
+    req.flash("success", `Đã cập nhật trạng thái ${product.name}!`);
     res.redirect("/admin/product");
   } catch (e) {
     console.log(e);
